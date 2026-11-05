@@ -1,0 +1,10 @@
+{
+  "name": "waraq-native",
+  "version": "0.1.0",
+  "description": "Waraq PDF reader and OCR bridge",
+  "main": "src/index.ts",
+  "private": true,
+  "peerDependencies": {
+    "expo": "*"
+  }
+}

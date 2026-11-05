@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "وَرَق",
+    "slug": "waraq",
+    "version": "2.3.7",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "waraq",
+    "userInterfaceStyle": "automatic",
+    "platforms": ["android", "web"],
+    "web": { "bundler": "metro" },
+    "android": {
+      "package": "com.waraq.app",
+      "versionCode": 15,
+      "allowBackup": false,
+      "permissions": [
+        "RECORD_AUDIO"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#FAF7F1"
+      },
+      "blockedPermissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.SYSTEM_ALERT_WINDOW",
+        "android.permission.VIBRATE",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#FAF7F1"
+        }
+      ],
+      "expo-font",
+      "expo-audio",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 24,
+            "compileSdkVersion": 37,
+            "targetSdkVersion": 36,
+            "enableProguardInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
+          }
+        }
+      ],
+      "./plugins/with-release-manifest",
+      "expo-system-ui"
+    ]
+  }
+}
