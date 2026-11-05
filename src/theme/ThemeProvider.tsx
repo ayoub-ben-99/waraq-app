@@ -2,10 +2,14 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import { MD3DarkTheme, MD3LightTheme, configureFonts, type MD3Theme } from 'react-native-paper';
-import { darkColors as md3DarkColors, fonts, lightColors as md3LightColors, spacing, radius } from './tokens';
+import { md3DarkColors } from './md3Dark';
+import { md3LightColors } from './md3Light';
+import { fonts, spacing, radius } from './tokens';
 import { getThemeMode, setThemeMode as persistThemeMode, type ThemeMode } from '../lib/prefs';
 
 export type Palette = { [K in keyof typeof md3LightColors]: string };
+
+export const shape = { s4: 4, s8: 8, s12: 12, s16: 16, s28: 28 } as const;
 
 type AppTheme = {
   mode: ThemeMode;
@@ -13,6 +17,7 @@ type AppTheme = {
   colors: Palette;
   spacing: typeof spacing;
   radius: typeof radius;
+  shape: typeof shape;
   fonts: typeof fonts;
   paper: MD3Theme;
   setMode: (mode: ThemeMode) => void;
@@ -47,26 +52,26 @@ function makePaperTheme(colors: Palette, dark: boolean): MD3Theme {
     fonts: configureFonts({ config: fontConfig }),
     colors: {
       ...base.colors,
-      primary: colors.accent,
-      onPrimary: colors.onAccent,
-      primaryContainer: colors.accentContainer,
-      onPrimaryContainer: colors.onAccentContainer,
-      secondary: colors.gold,
-      onSecondary: colors.onAccent,
-      secondaryContainer: colors.surfaceAlt,
-      onSecondaryContainer: colors.textPrimary,
-      tertiary: colors.accentVariant,
-      onTertiary: colors.onAccent,
-      background: colors.bg,
-      onBackground: colors.textPrimary,
+      primary: colors.primary,
+      onPrimary: colors.onPrimary,
+      primaryContainer: colors.primaryContainer,
+      onPrimaryContainer: colors.onPrimaryContainer,
+      secondary: colors.secondary,
+      onSecondary: colors.onPrimary,
+      secondaryContainer: colors.surfaceContainerHigh,
+      onSecondaryContainer: colors.onSurface,
+      tertiary: colors.tertiary,
+      onTertiary: colors.onPrimary,
+      background: colors.background,
+      onBackground: colors.onSurface,
       surface: colors.surface,
-      onSurface: colors.textPrimary,
-      surfaceVariant: colors.surfaceAlt,
-      onSurfaceVariant: colors.textSecondary,
+      onSurface: colors.onSurface,
+      surfaceVariant: colors.surfaceContainerHigh,
+      onSurfaceVariant: colors.onSurfaceVariant,
       outline: colors.outline,
       outlineVariant: colors.outline,
-      error: colors.danger,
-      onError: colors.onDanger,
+      error: colors.error,
+      onError: colors.onError,
       elevation: {
         ...base.colors.elevation,
         level0: 'transparent',
@@ -96,6 +101,7 @@ export function AppThemeProvider({ children }: { children: React.ReactNode }) {
       colors,
       spacing,
       radius,
+      shape,
       fonts,
       paper: makePaperTheme(colors, dark),
       setMode,

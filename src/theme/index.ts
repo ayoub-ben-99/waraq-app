@@ -5,7 +5,9 @@ import {
   configureFonts,
   type MD3Theme,
 } from 'react-native-paper';
-import { darkColors, fonts, lightColors, radius, spacing } from './tokens';
+import { md3DarkColors as darkColors } from './md3Dark';
+import { md3LightColors as lightColors } from './md3Light';
+import { fonts, radius, spacing } from './tokens';
 
 const fontConfig = {
   displayLarge: { fontFamily: fonts.semibold, fontSize: 54, fontWeight: '600' as const },
@@ -35,25 +37,25 @@ const makeTheme = (dark: boolean): MD3Theme => {
     fonts: configureFonts({ config: fontConfig }),
     colors: {
       ...base.colors,
-      primary: colors.accent,
-      onPrimary: colors.onAccent,
-      primaryContainer: colors.accentContainer,
-      onPrimaryContainer: colors.onAccentContainer,
-      secondary: colors.gold,
-      onSecondary: colors.onAccent,
-      secondaryContainer: colors.surfaceAlt,
-      onSecondaryContainer: colors.textPrimary,
-      tertiary: colors.accentVariant,
-      background: colors.bg,
-      onBackground: colors.textPrimary,
+      primary: colors.primary,
+      onPrimary: colors.onPrimary,
+      primaryContainer: colors.primaryContainer,
+      onPrimaryContainer: colors.onPrimaryContainer,
+      secondary: colors.secondary,
+      onSecondary: colors.onPrimary,
+      secondaryContainer: colors.surfaceContainerHigh,
+      onSecondaryContainer: colors.onSurface,
+      tertiary: colors.tertiary,
+      background: colors.background,
+      onBackground: colors.onSurface,
       surface: colors.surface,
-      onSurface: colors.textPrimary,
-      surfaceVariant: colors.surfaceAlt,
-      onSurfaceVariant: colors.textSecondary,
+      onSurface: colors.onSurface,
+      surfaceVariant: colors.surfaceContainerHigh,
+      onSurfaceVariant: colors.onSurfaceVariant,
       outline: colors.outline,
       outlineVariant: colors.outline,
-      error: colors.danger,
-      onError: colors.onDanger,
+      error: colors.error,
+      onError: colors.onError,
       elevation: {
         ...base.colors.elevation,
         level0: 'transparent',
