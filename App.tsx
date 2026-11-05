@@ -1,16 +1,20 @@
 // Ported from app/src/main/java/com/waraq/app/WaraqApp.java
 import React, { useCallback, useEffect, useState } from 'react';
-import { useColorScheme } from 'react-native';
+import { View, Text, StyleSheet, I18nManager } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { md3DarkColors } from './src/theme/md3Dark';
 import { md3LightColors } from './src/theme/md3Light';
+import { NavigationContainer, DefaultTheme as NavigationDefaultTheme, DarkTheme as NavigationDarkTheme } from '@react-navigation/native';
+import { adaptNavigationTheme } from 'react-native-paper';
 import { PaperProvider } from 'react-native-paper';
-import { AppThemeProvider, useAppTheme } from './src/theme/ThemeProvider';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { initializeDatabase } from './src/data/db/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AppThemeProvider, useAppTheme } from './src/theme/ThemeProvider';
+import { useColorScheme } from 'react-native';
 import { t } from './src/lib/strings';
 
 I18nManager.allowRTL(true);
@@ -32,10 +36,19 @@ const queryClient = new QueryClient({
 
 function Shell() {
   const { paper, dark } = useAppTheme();
+  const { LightTheme, DarkTheme } = adaptNavigationTheme({
+    reactNavigationLight: NavigationDefaultTheme,
+    reactNavigationDark: NavigationDarkTheme,
+    materialLight: paper,
+    materialDark: paper,
+  });
+  const navigationTheme = dark ? DarkTheme : LightTheme;
   return (
     <PaperProvider theme={paper}>
-      <StatusBar style={dark ? 'light' : 'dark'} />
-      <RootNavigator />
+      <NavigationContainer theme={navigationTheme}>
+        <StatusBar style={dark ? 'light' : 'dark'} />
+        <RootNavigator />
+      </NavigationContainer>
     </PaperProvider>
   );
 }
@@ -48,6 +61,7 @@ export default function App() {
     Amiri: require('./assets/fonts/amiri_regular.ttf'),
   });
   const [dbError, setDbError] = useState<string | null>(null);
+  const [dbReady, setDbReady] = useState(false);
   const scheme = useColorScheme();
   const colors = scheme === 'dark' ? md3DarkColors : md3LightColors;
 
@@ -75,8 +89,8 @@ export default function App() {
 
   if (dbError) {
     return (
-        <View style={[styles.errorContainer, { backgroundColor: colors.bg }]} onLayout={onLayout}>
-          <Text style={[styles.errorText, { color: colors.textPrimary }]}>{dbError}</Text>
+        <View style={[styles.errorContainer, { backgroundColor: colors.surface }]} onLayout={onLayout}>
+          <Text style={[styles.errorText, { color: colors.onSurface }]}>{dbError}</Text>
       </View>
     );
   }
