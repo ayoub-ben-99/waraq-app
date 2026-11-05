@@ -2,7 +2,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-paper';
-import { useAppTheme } from '../theme/ThemeProvider';
+import { shape, useAppTheme } from '../theme/ThemeProvider';
 
 export type FilterOption<T extends string | number> = { value: T; label: string };
 
@@ -36,14 +36,14 @@ export function FilterPills<T extends string | number>({
             style={[
               styles.pill,
               {
-                backgroundColor: selected ? colors.accent : colors.surfaceAlt,
-                borderColor: selected ? colors.accent : colors.outline,
+                backgroundColor: selected ? colors.primary : colors.surfaceContainerHigh,
+                borderColor: selected ? colors.primary : colors.outline,
               },
             ]}
           >
             <Text
               variant="labelMedium"
-              style={{ color: selected ? colors.onAccent : colors.textSecondary }}
+              style={{ color: selected ? colors.onPrimary : colors.onSurfaceVariant }}
             >
               {option.label}
             </Text>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   pill: {
     paddingHorizontal: 14,
     paddingVertical: 7,
-    borderRadius: 999,
+    borderRadius: shape.s28,
     borderWidth: StyleSheet.hairlineWidth,
   },
 });

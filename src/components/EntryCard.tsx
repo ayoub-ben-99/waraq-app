@@ -5,7 +5,7 @@ import { Text } from 'react-native-paper';
 import type { KnowledgeEntry } from '../data/db/schema';
 import { formatShort } from '../lib/dates';
 import { entryDisplayText, entryTypeLabel } from '../lib/labels';
-import { useAppTheme } from '../theme/ThemeProvider';
+import { shape, useAppTheme } from '../theme/ThemeProvider';
 
 export function EntryCard({
   entry,
@@ -31,15 +31,15 @@ export function EntryCard({
       style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.outline }]}
     >
       <View style={styles.top}>
-        <Text variant="labelSmall" style={{ color: colors.accent }}>
+        <Text variant="labelSmall" style={{ color: colors.primary }}>
           {entryTypeLabel(entry.type)}
         </Text>
-        <Text variant="labelSmall" style={{ color: colors.textSecondary }}>
+        <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
           {formatShort(entry.date)}
         </Text>
       </View>
       {entry.title?.trim() ? (
-        <Text variant="titleMedium" numberOfLines={2} style={{ color: colors.textPrimary, marginTop: spacing.xs }}>
+        <Text variant="titleMedium" numberOfLines={2} style={{ color: colors.onSurface, marginTop: spacing.xs }}>
           {entry.title}
         </Text>
       ) : null}
@@ -47,7 +47,7 @@ export function EntryCard({
         <Text
           numberOfLines={4}
           style={{
-            color: colors.textPrimary,
+            color: colors.onSurface,
             marginTop: spacing.xs,
             fontFamily: entry.type === 0 ? fonts.quote : fonts.regular,
             fontSize: entry.type === 0 ? 20 : 15,
@@ -60,19 +60,19 @@ export function EntryCard({
       ) : null}
       <View style={[styles.meta, { marginTop: spacing.s }]}>
         {entry.page != null ? (
-          <Text variant="labelSmall" style={{ color: colors.textSecondary }}>
+          <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
             صفحة {entry.page}
           </Text>
         ) : null}
         {bookName ? (
-          <Text variant="labelSmall" numberOfLines={1} style={{ color: colors.textSecondary, flexShrink: 1 }}>
+          <Text variant="labelSmall" numberOfLines={1} style={{ color: colors.onSurfaceVariant, flexShrink: 1 }}>
             {bookName}
           </Text>
         ) : null}
-        {hasAudio ? <Text style={{ color: colors.accent }}>◉</Text> : null}
-        {entry.favorite ? <Text style={{ color: colors.gold }}>★</Text> : null}
+        {hasAudio ? <Text style={{ color: colors.primary }}>◉</Text> : null}
+        {entry.favorite ? <Text style={{ color: colors.secondary }}>★</Text> : null}
         {tags?.length ? (
-          <Text variant="labelSmall" numberOfLines={1} style={{ color: colors.textSecondary, flexShrink: 1 }}>
+          <Text variant="labelSmall" numberOfLines={1} style={{ color: colors.onSurfaceVariant, flexShrink: 1 }}>
             {tags.map((x) => `#${x}`).join(' ')}
           </Text>
         ) : null}
@@ -84,7 +84,7 @@ export function EntryCard({
 const styles = StyleSheet.create({
   card: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
+    borderRadius: shape.s16,
     padding: 14,
     marginBottom: 10,
   },

@@ -6,7 +6,7 @@ import * as FS from 'expo-file-system/legacy';
 import type { Book } from '../data/db/schema';
 import { progressPercent } from '../data/repos/books';
 import { bookStatusLabel } from '../lib/labels';
-import { useAppTheme } from '../theme/ThemeProvider';
+import { shape, useAppTheme } from '../theme/ThemeProvider';
 
 export function coverUri(coverPath: string | null): string | null {
   if (!coverPath) return null;
@@ -23,7 +23,7 @@ export function BookCover({ book, size = 64 }: { book: Book; size?: number }) {
         {
           width: size,
           height: size * 1.4,
-          backgroundColor: colors.surfaceAlt,
+          backgroundColor: colors.surfaceContainerHigh,
           borderColor: colors.outline,
         },
       ]}
@@ -31,7 +31,7 @@ export function BookCover({ book, size = 64 }: { book: Book; size?: number }) {
       {uri ? (
         <Image source={{ uri }} style={styles.image} resizeMode="cover" />
       ) : (
-        <Text variant="headlineSmall" style={{ color: colors.accent, fontFamily: 'Amiri' }}>
+        <Text variant="headlineSmall" style={{ color: colors.primary, fontFamily: 'Amiri' }}>
           {book.title.trim().charAt(0) || 'و'}
         </Text>
       )}
@@ -50,7 +50,7 @@ export function BookCard({
   onPress: () => void;
   onLongPress?: () => void;
 }) {
-  const { colors, spacing, fonts } = useAppTheme();
+  const { colors, spacing, fonts, shape } = useAppTheme();
   const percent = progressPercent(book);
   if (grid) {
     return (
@@ -67,17 +67,17 @@ export function BookCard({
         <Text
           variant="titleSmall"
           numberOfLines={2}
-          style={{ color: colors.textPrimary, fontFamily: fonts.medium, marginTop: spacing.s, textAlign: 'right' }}
+          style={{ color: colors.onSurface, fontFamily: fonts.medium, marginTop: spacing.s, textAlign: 'right' }}
         >
           {book.title}
         </Text>
-        <Text variant="bodySmall" numberOfLines={1} style={{ color: colors.textSecondary, textAlign: 'right' }}>
+        <Text variant="bodySmall" numberOfLines={1} style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
           {book.author || bookStatusLabel(book.status)}
         </Text>
         {percent >= 0 ? (
           <View style={{ marginTop: 6 }}>
-            <View style={[styles.track, { backgroundColor: colors.surfaceAlt }]}>
-              <View style={[styles.fill, { width: `${percent}%`, backgroundColor: colors.accent }]} />
+            <View style={[styles.track, { backgroundColor: colors.surfaceContainerHigh }]}>
+              <View style={[styles.fill, { width: `${percent}%`, backgroundColor: colors.primary }]} />
             </View>
           </View>
         ) : null}
@@ -94,19 +94,19 @@ export function BookCard({
     >
       <BookCover book={book} />
       <View style={{ flex: 1, marginStart: spacing.m }}>
-        <Text variant="titleMedium" numberOfLines={2} style={{ color: colors.textPrimary }}>
+        <Text variant="titleMedium" numberOfLines={2} style={{ color: colors.onSurface }}>
           {book.title}
         </Text>
-        <Text variant="bodySmall" numberOfLines={1} style={{ color: colors.textSecondary, marginTop: 2 }}>
+        <Text variant="bodySmall" numberOfLines={1} style={{ color: colors.onSurfaceVariant, marginTop: 2 }}>
           {book.author || ''}
         </Text>
-        <Text variant="labelSmall" style={{ color: colors.textSecondary, marginTop: 6 }}>
+        <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, marginTop: 6 }}>
           {bookStatusLabel(book.status)}
           {percent >= 0 ? ` • ${percent}%` : ''}
         </Text>
       </View>
       {book.favorite ? (
-        <Text variant="bodyMedium" style={{ color: colors.gold }}>
+        <Text variant="bodyMedium" style={{ color: colors.secondary }}>
           ★
         </Text>
       ) : null}
@@ -116,7 +116,7 @@ export function BookCard({
 
 const styles = StyleSheet.create({
   cover: {
-    borderRadius: 10,
+    borderRadius: shape.s8,
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
     alignItems: 'center',
@@ -127,17 +127,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
+    borderRadius: shape.s16,
     padding: 12,
     marginBottom: 10,
   },
   grid: {
     flex: 1,
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
+    borderRadius: shape.s16,
     padding: 12,
     margin: 5,
   },
-  track: { height: 4, borderRadius: 2, overflow: 'hidden' },
-  fill: { height: 4, borderRadius: 2 },
+  track: { height: 4, borderRadius: shape.s4, overflow: 'hidden' },
+  fill: { height: 4, borderRadius: shape.s4 },
 });

@@ -2,7 +2,7 @@
 import React from 'react';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 import { ActivityIndicator, Text } from 'react-native-paper';
-import { useAppTheme } from '../theme/ThemeProvider';
+import { shape, useAppTheme } from '../theme/ThemeProvider';
 
 export function EmptyState({
   title,
@@ -15,14 +15,14 @@ export function EmptyState({
   action?: React.ReactNode;
   style?: ViewStyle;
 }) {
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, shape } = useAppTheme();
   return (
     <View style={[styles.empty, { padding: spacing.l, backgroundColor: colors.surface, borderColor: colors.outline }, style]}>
-      <Text variant="titleMedium" style={{ color: colors.textPrimary, textAlign: 'center' }}>
+      <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'center' }}>
         {title}
       </Text>
       {body ? (
-        <Text variant="bodyMedium" style={{ color: colors.textSecondary, textAlign: 'center', marginTop: spacing.s }}>
+        <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'center', marginTop: spacing.s }}>
           {body}
         </Text>
       ) : null}
@@ -32,12 +32,12 @@ export function EmptyState({
 }
 
 export function Loading({ label }: { label?: string }) {
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, shape } = useAppTheme();
   return (
     <View style={styles.loading}>
-      <ActivityIndicator color={colors.accent} />
+      <ActivityIndicator color={colors.primary} />
       {label ? (
-        <Text variant="bodySmall" style={{ color: colors.textSecondary, marginTop: spacing.s }}>
+        <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, marginTop: spacing.s }}>
           {label}
         </Text>
       ) : null}
@@ -46,14 +46,14 @@ export function Loading({ label }: { label?: string }) {
 }
 
 export function SectionHeader({ title, hint }: { title: string; hint?: string }) {
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, shape } = useAppTheme();
   return (
     <View style={{ marginBottom: spacing.s }}>
-      <Text variant="titleMedium" style={{ color: colors.textPrimary }}>
+      <Text variant="titleMedium" style={{ color: colors.onSurface }}>
         {title}
       </Text>
       {hint ? (
-        <Text variant="bodySmall" style={{ color: colors.textSecondary, marginTop: 2 }}>
+        <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, marginTop: 2 }}>
           {hint}
         </Text>
       ) : null}
@@ -78,14 +78,14 @@ export function Card({ children, style }: { children: React.ReactNode; style?: V
 const styles = StyleSheet.create({
   empty: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
+    borderRadius: shape.s16,
     alignItems: 'center',
     marginVertical: 12,
   },
   loading: { paddingVertical: 32, alignItems: 'center' },
   card: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 16,
+    borderRadius: shape.s16,
     padding: 16,
   },
 });

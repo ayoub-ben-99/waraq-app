@@ -23,7 +23,7 @@ export function ChoiceDialog<T extends string | number | null>({
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss} style={{ backgroundColor: colors.surface }}>
-        <Dialog.Title style={{ textAlign: 'right', color: colors.textPrimary }}>{title}</Dialog.Title>
+        <Dialog.Title style={{ textAlign: 'right', color: colors.onSurface }}>{title}</Dialog.Title>
         <Dialog.Content style={{ maxHeight: 420, paddingHorizontal: 0 }}>
           <ScrollView>
             {options.map((option) => (
@@ -36,12 +36,12 @@ export function ChoiceDialog<T extends string | number | null>({
                 style={{
                   paddingVertical: spacing.m,
                   paddingHorizontal: spacing.l,
-                  backgroundColor: option.value === value ? colors.accentContainer : 'transparent',
+                  backgroundColor: option.value === value ? colors.primaryContainer : 'transparent',
                 }}
               >
                 <Text
                   variant="bodyLarge"
-                  style={{ color: option.value === value ? colors.onAccentContainer : colors.textPrimary, textAlign: 'right' }}
+                  style={{ color: option.value === value ? colors.onPrimaryContainer : colors.onSurface, textAlign: 'right' }}
                 >
                   {option.label}
                 </Text>
@@ -75,14 +75,14 @@ export function ConfirmDialog({
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss} style={{ backgroundColor: colors.surface }}>
-        <Dialog.Title style={{ textAlign: 'right', color: colors.textPrimary }}>{title}</Dialog.Title>
+        <Dialog.Title style={{ textAlign: 'right', color: colors.onSurface }}>{title}</Dialog.Title>
         <Dialog.Content>
-          <Text variant="bodyMedium" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+          <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
             {message}
           </Text>
         </Dialog.Content>
         <Dialog.Actions>
-          <Text onPress={onDismiss} style={{ color: colors.textSecondary }}>
+          <Text onPress={onDismiss} style={{ color: colors.onSurfaceVariant }}>
             إلغاء
           </Text>
           <Text
@@ -90,7 +90,7 @@ export function ConfirmDialog({
               onConfirm();
               onDismiss();
             }}
-            style={{ color: destructive ? colors.danger : colors.accent, marginStart: 20 }}
+            style={{ color: destructive ? colors.error : colors.primary, marginStart: 20 }}
           >
             {confirmLabel}
           </Text>
@@ -121,7 +121,7 @@ export function FormDialog({
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={onDismiss} style={{ backgroundColor: colors.surface }}>
-        <Dialog.Title style={{ textAlign: 'right', color: colors.textPrimary }}>{title}</Dialog.Title>
+        <Dialog.Title style={{ textAlign: 'right', color: colors.onSurface }}>{title}</Dialog.Title>
         <Dialog.Content>
           <TextInput
             mode="outlined"
@@ -133,10 +133,10 @@ export function FormDialog({
           />
         </Dialog.Content>
         <Dialog.Actions>
-          <Text onPress={onDismiss} style={{ color: colors.textSecondary }}>
+          <Text onPress={onDismiss} style={{ color: colors.onSurfaceVariant }}>
             إلغاء
           </Text>
-          <Text onPress={onSave} style={{ color: colors.accent, marginStart: 20 }}>
+          <Text onPress={onSave} style={{ color: colors.primary, marginStart: 20 }}>
             حفظ
           </Text>
         </Dialog.Actions>
