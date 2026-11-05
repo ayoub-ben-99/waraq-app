@@ -8,7 +8,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { md3DarkColors } from './src/theme/md3Dark';
 import { md3LightColors } from './src/theme/md3Light';
 import { NavigationContainer, DefaultTheme as NavigationDefaultTheme, DarkTheme as NavigationDarkTheme } from '@react-navigation/native';
-import { adaptNavigationTheme } from 'react-native-paper';
 import { PaperProvider } from 'react-native-paper';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { initializeDatabase } from './src/data/db/client';
@@ -34,15 +33,9 @@ const queryClient = new QueryClient({
   },
 });
 
-function Shell() {
+function ThemedApp() {
   const { paper, dark } = useAppTheme();
-  const { LightTheme, DarkTheme } = adaptNavigationTheme({
-    reactNavigationLight: NavigationDefaultTheme,
-    reactNavigationDark: NavigationDarkTheme,
-    materialLight: paper,
-    materialDark: paper,
-  });
-  const navigationTheme = dark ? DarkTheme : LightTheme;
+  const navigationTheme = dark ? NavigationDarkTheme : NavigationDefaultTheme;
   return (
     <PaperProvider theme={paper}>
       <NavigationContainer theme={navigationTheme}>
@@ -80,7 +73,6 @@ export default function App() {
   }, []);
 
   const ready = (fontsLoaded || !!fontError) && (dbReady || !!dbError);
-
   const onLayout = useCallback(() => {
     if (ready) void SplashScreen.hideAsync();
   }, [ready]);
@@ -89,8 +81,8 @@ export default function App() {
 
   if (dbError) {
     return (
-        <View style={[styles.errorContainer, { backgroundColor: colors.surface }]} onLayout={onLayout}>
-          <Text style={[styles.errorText, { color: colors.onSurface }]}>{dbError}</Text>
+      <View style={[styles.errorContainer, { backgroundColor: colors.surface }]} onLayout={onLayout}>
+        <Text style={[styles.errorText, { color: colors.onSurface }]}>{dbError}</Text>
       </View>
     );
   }
@@ -100,7 +92,7 @@ export default function App() {
       <SafeAreaProvider>
         <AppThemeProvider>
           <QueryClientProvider client={queryClient}>
-            <Shell />
+            <ThemedApp />
           </QueryClientProvider>
         </AppThemeProvider>
       </SafeAreaProvider>
