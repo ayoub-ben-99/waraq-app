@@ -217,11 +217,11 @@ export function EntryEditScreen() {
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.bg }}
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}
       keyboardShouldPersistTaps="handled"
     >
-      <Text variant="labelMedium" style={{ color: colors.accent, textAlign: 'right', marginBottom: spacing.s }}>
+      <Text variant="labelMedium" style={{ color: colors.primary, textAlign: 'right', marginBottom: spacing.s }}>
         {entryId ? t.entryEdit : t.entryNew}
       </Text>
       <FilterPills
@@ -279,19 +279,19 @@ export function EntryEditScreen() {
           label={t.entryFavorite}
           status={favorite ? 'checked' : 'unchecked'}
           onPress={() => setFavorite((v) => !v)}
-          labelStyle={{ color: colors.textPrimary }}
+          labelStyle={{ color: colors.onSurface }}
           style={{ flexDirection: 'row-reverse' }}
         />
         <Checkbox.Item
           label={review ? t.entryInReview : t.entryAddReview}
           status={review ? 'checked' : 'unchecked'}
           onPress={() => setReview((v) => !v)}
-          labelStyle={{ color: colors.textPrimary }}
+          labelStyle={{ color: colors.onSurface }}
           style={{ flexDirection: 'row-reverse' }}
         />
       </View>
 
-      {error ? <Text style={{ color: colors.danger, textAlign: 'right', marginTop: spacing.s }}>{error}</Text> : null}
+      {error ? <Text style={{ color: colors.error, textAlign: 'right', marginTop: spacing.s }}>{error}</Text> : null}
       <Button mode="contained" onPress={save} loading={saving} disabled={saving} style={{ marginTop: spacing.m }}>
         {t.save}
       </Button>

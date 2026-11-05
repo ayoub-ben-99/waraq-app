@@ -103,7 +103,7 @@ export function KnowledgeScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg, paddingTop: spacing.s }}>
+    <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: spacing.s }}>
       <View style={{ paddingHorizontal: spacing.m }}>
         <TextInput
           mode="outlined"
@@ -113,7 +113,7 @@ export function KnowledgeScreen() {
           right={<TextInput.Icon icon="magnify" />}
           style={{ backgroundColor: colors.surface, textAlign: 'right' }}
           outlineColor={colors.outline}
-          activeOutlineColor={colors.accent}
+          activeOutlineColor={colors.primary}
         />
         <View style={{ marginTop: spacing.s }}>
           <FilterPills options={typeOptions} value={type} onChange={setType} />
@@ -134,7 +134,7 @@ export function KnowledgeScreen() {
             {t.entryNew}
           </Button>
         </View>
-        <Text variant="labelSmall" style={{ color: colors.textSecondary, marginTop: spacing.s, textAlign: 'right' }}>
+        <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, marginTop: spacing.s, textAlign: 'right' }}>
           {t.libraryCount(list.length)}
         </Text>
       </View>

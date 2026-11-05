@@ -74,14 +74,14 @@ export function PdfReaderScreen() {
 
   if (error) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center', padding: spacing.m }}>
-        <Text style={{ color: colors.textSecondary, textAlign: 'center' }}>{error}</Text>
+      <View style={{ flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center', padding: spacing.m }}>
+        <Text style={{ color: colors.onSurfaceVariant, textAlign: 'center' }}>{error}</Text>
         <Button onPress={() => navigation.goBack()} style={{ marginTop: spacing.s }}>{t.back}</Button>
       </View>
     );
   }
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center' }}>
       <Loading />
     </View>
   );

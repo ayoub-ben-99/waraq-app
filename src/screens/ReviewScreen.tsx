@@ -74,18 +74,18 @@ export function ReviewScreen() {
   if (due.isLoading) return <Loading />;
   return (
     <ScrollView
-      style={{ backgroundColor: colors.bg }}
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}
     >
-      <Card style={{ backgroundColor: colors.accentContainer, marginBottom: spacing.m }}>
+      <Card style={{ backgroundColor: colors.primaryContainer, marginBottom: spacing.m }}>
         <Card.Content style={{ alignItems: 'flex-end' }}>
-          <Text variant="labelMedium" style={{ color: colors.onAccentContainer }}>
+          <Text variant="labelMedium" style={{ color: colors.onPrimaryContainer }}>
             {t.review}
           </Text>
-          <Text variant="displaySmall" style={{ color: colors.onAccentContainer, fontFamily: 'PlexSemiBold' }}>
+          <Text variant="displaySmall" style={{ color: colors.onPrimaryContainer, fontFamily: 'PlexSemiBold' }}>
             {t.reviewCountDue(dueItems.length)}
           </Text>
-          <Text variant="bodySmall" style={{ color: colors.onAccentContainer, textAlign: 'right', marginTop: 4 }}>
+          <Text variant="bodySmall" style={{ color: colors.onPrimaryContainer, textAlign: 'right', marginTop: 4 }}>
             {t.settingsIntervalsHelp}
           </Text>
           <Button
@@ -103,7 +103,7 @@ export function ReviewScreen() {
         <EmptyState title={t.reviewNoDueTitle} body={t.reviewNoDueBody} />
       ) : (
         <>
-          <Text variant="titleMedium" style={{ color: colors.textPrimary, marginBottom: spacing.s, textAlign: 'right' }}>
+          <Text variant="titleMedium" style={{ color: colors.onSurface, marginBottom: spacing.s, textAlign: 'right' }}>
             {t.reviewDueToday}
           </Text>
           {dueItems.map((item) => {
@@ -115,11 +115,11 @@ export function ReviewScreen() {
                 onPress={() => navigation.navigate('EntryEdit', { entryId: item.entry.id })}
               >
                 <Card.Content>
-                  <Text variant="titleSmall" numberOfLines={2} style={{ color: colors.textPrimary, textAlign: 'right' }}>
+                  <Text variant="titleSmall" numberOfLines={2} style={{ color: colors.onSurface, textAlign: 'right' }}>
                     {displayTitle(item)}
                   </Text>
                   <View style={{ flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing.s }}>
-                    <Text variant="labelSmall" style={{ color: late > 0 ? colors.danger : colors.textSecondary }}>
+                    <Text variant="labelSmall" style={{ color: late > 0 ? colors.error : colors.onSurfaceVariant }}>
                       {late > 0 ? `${t.reviewOverdue} • ${late} يوم` : t.reviewDueToday}
                     </Text>
                     <Button compact mode="text" onPress={() => postponeItem(item)}>
@@ -135,7 +135,7 @@ export function ReviewScreen() {
 
       {later.length > 0 ? (
         <>
-          <Text variant="titleMedium" style={{ color: colors.textPrimary, marginTop: spacing.l, marginBottom: spacing.s, textAlign: 'right' }}>
+          <Text variant="titleMedium" style={{ color: colors.onSurface, marginTop: spacing.l, marginBottom: spacing.s, textAlign: 'right' }}>
             {t.reviewUpcoming}
           </Text>
           {later.map((item) => {
@@ -147,10 +147,10 @@ export function ReviewScreen() {
                 onPress={() => navigation.navigate('EntryEdit', { entryId: item.entry.id })}
               >
                 <Card.Content>
-                  <Text variant="titleSmall" numberOfLines={1} style={{ color: colors.textPrimary, textAlign: 'right' }}>
+                  <Text variant="titleSmall" numberOfLines={1} style={{ color: colors.onSurface, textAlign: 'right' }}>
                     {displayTitle(item)}
                   </Text>
-                  <Text variant="labelSmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: 4 }}>
+                  <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 4 }}>
                     {t.reviewUpcomingItem(formatShort(item.item.dueDate), days)}
                   </Text>
                 </Card.Content>

@@ -1,7 +1,7 @@
 // Ported from app/src/main/java/com/waraq/app/ui/settings/SettingsActivity.java
 import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Card, Divider, RadioButton, Text, TextInput } from 'react-native-paper';
+import { Button, Card, Divider, RadioButton, SegmentedButtons, Text, TextInput } from 'react-native-paper';
 import Constants from 'expo-constants';
 import { useNavigation, type NavigationProp } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
@@ -42,26 +42,16 @@ export function SettingsScreen() {
   ];
 
   return (
-    <ScrollView style={{ backgroundColor: colors.bg }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 140 }}>
-      <Text variant="labelLarge" style={{ color: colors.accent, textAlign: 'right', marginBottom: spacing.s }}>
+    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 140 }}>
+      <Text variant="labelLarge" style={{ color: colors.primary, textAlign: 'right', marginBottom: spacing.s }}>
         {t.settingsAppearance}
       </Text>
       <Card style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.outline }]}>
         <Card.Content>
-          <Text variant="titleSmall" style={{ color: colors.textPrimary, textAlign: 'right' }}>{t.settingsTheme}</Text>
-          <RadioButton.Group value={mode} onValueChange={(next) => setMode(next as ThemeMode)}>
-            {themeOptions.map((option) => (
-              <RadioButton.Item
-                key={option.value}
-                label={option.label}
-                value={option.value}
-                labelStyle={{ color: colors.textPrimary, textAlign: 'right' }}
-                style={{ flexDirection: 'row-reverse' }}
-              />
-            ))}
-          </RadioButton.Group>
+          <Text variant="titleSmall" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.settingsTheme}</Text>
+          <SegmentedButtons value={mode} onValueChange={(next) => setMode(next as ThemeMode)} buttons={themeOptions.map(o => ({ value: o.value, label: o.label }))} style={{ flexDirection: 'row-reverse' }} />
           <Divider style={{ backgroundColor: colors.outline }} />
-          <Text variant="titleSmall" style={{ color: colors.textPrimary, textAlign: 'right', marginTop: spacing.s }}>{t.settingsLibraryView}</Text>
+          <Text variant="titleSmall" style={{ color: colors.onSurface, textAlign: 'right', marginTop: spacing.s }}>{t.settingsLibraryView}</Text>
           <View style={{ flexDirection: 'row-reverse', gap: spacing.s, marginTop: spacing.s }}>
             <Button
               mode={view === 'grid' ? 'contained' : 'outlined'}
@@ -87,12 +77,12 @@ export function SettingsScreen() {
         </Card.Content>
       </Card>
 
-      <Text variant="labelLarge" style={{ color: colors.accent, textAlign: 'right', marginTop: spacing.l, marginBottom: spacing.s }}>
+      <Text variant="labelLarge" style={{ color: colors.primary, textAlign: 'right', marginTop: spacing.l, marginBottom: spacing.s }}>
         {t.settingsReview}
       </Text>
       <Card style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.outline }]}>
         <Card.Content>
-          <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right', lineHeight: 22 }}>
+          <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', lineHeight: 22 }}>
             {t.settingsIntervalsHelp}
           </Text>
           <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', gap: spacing.s, marginTop: spacing.s }}>
@@ -111,17 +101,17 @@ export function SettingsScreen() {
               />
             ))}
           </View>
-          <Text variant="labelSmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: 4 }}>
+          <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 4 }}>
             {t.settingsIntervalField}
           </Text>
-          {error ? <Text style={{ color: colors.danger, textAlign: 'right' }}>{error}</Text> : null}
+          {error ? <Text style={{ color: colors.error, textAlign: 'right' }}>{error}</Text> : null}
           <Button mode="contained" onPress={save} style={{ marginTop: spacing.s }}>
             {t.save}
           </Button>
         </Card.Content>
       </Card>
 
-      <Text variant="labelLarge" style={{ color: colors.accent, textAlign: 'right', marginTop: spacing.l, marginBottom: spacing.s }}>
+      <Text variant="labelLarge" style={{ color: colors.primary, textAlign: 'right', marginTop: spacing.l, marginBottom: spacing.s }}>
         {t.settingsData}
       </Text>
       <Button mode="outlined" icon="archive-outline" onPress={() => navigation.navigate('Backup')} style={{ marginBottom: spacing.s }}>
@@ -134,23 +124,23 @@ export function SettingsScreen() {
         {t.categories}
       </Button>
 
-      <Text variant="labelLarge" style={{ color: colors.accent, textAlign: 'right', marginTop: spacing.l, marginBottom: spacing.s }}>
+      <Text variant="labelLarge" style={{ color: colors.primary, textAlign: 'right', marginTop: spacing.l, marginBottom: spacing.s }}>
         {t.settingsPrivacy}
       </Text>
-      <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right', lineHeight: 22 }}>
+      <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', lineHeight: 22 }}>
         {t.settingsPrivacyBody}
       </Text>
-      <Text variant="bodySmall" style={{ color: colors.danger, textAlign: 'right', marginTop: spacing.s, lineHeight: 22 }}>
+      <Text variant="bodySmall" style={{ color: colors.error, textAlign: 'right', marginTop: spacing.s, lineHeight: 22 }}>
         {t.settingsPrivacyWarning}
       </Text>
 
-      <Text variant="labelLarge" style={{ color: colors.accent, textAlign: 'right', marginTop: spacing.l, marginBottom: spacing.s }}>
+      <Text variant="labelLarge" style={{ color: colors.primary, textAlign: 'right', marginTop: spacing.l, marginBottom: spacing.s }}>
         {t.settingsAbout}
       </Text>
-      <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+      <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
         {t.settingsAboutBody}
       </Text>
-      <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: 4 }}>
+      <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 4 }}>
         {t.settingsVersion(Constants.expoConfig?.version ?? '2.3.7')}
       </Text>
     </ScrollView>

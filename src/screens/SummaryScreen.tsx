@@ -115,20 +115,20 @@ export function SummaryScreen() {
       numberOfLines={lines}
       style={{ backgroundColor: colors.surface, textAlign: 'right' }}
       outlineColor={colors.outline}
-      activeOutlineColor={colors.accent}
+      activeOutlineColor={colors.primary}
     />
   );
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.bg }}
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}
       keyboardShouldPersistTaps="handled"
     >
-      <Text variant="titleLarge" style={{ color: colors.textPrimary, textAlign: 'right' }}>
+      <Text variant="titleLarge" style={{ color: colors.onSurface, textAlign: 'right' }}>
         {query.data?.book.title ?? ''}
       </Text>
-      <Text variant="bodySmall" style={{ color: colors.accent, textAlign: 'right', marginBottom: spacing.m }}>
+      <Text variant="bodySmall" style={{ color: colors.primary, textAlign: 'right', marginBottom: spacing.m }}>
         {t.bookSummary}
       </Text>
 
@@ -158,7 +158,7 @@ export function SummaryScreen() {
         </Card.Content>
       </Card>
 
-      <Text variant="labelSmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: spacing.s }}>
+      <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: spacing.s }}>
         {status}
       </Text>
       <Button mode="contained" onPress={() => persist(true)} style={{ marginTop: spacing.m }}>

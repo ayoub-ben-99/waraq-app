@@ -72,7 +72,7 @@ export function ReviewSessionScreen() {
   if (query.isLoading) return <Loading />;
   if (!query.data?.items.length) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.bg, padding: spacing.m }}>
+      <View style={{ flex: 1, backgroundColor: colors.background, padding: spacing.m }}>
         <EmptyState title={t.reviewNoDueTitle} body={t.reviewNoDueBody} action={<Button onPress={() => navigation.goBack()}>{t.back}</Button>} />
       </View>
     );
@@ -80,10 +80,10 @@ export function ReviewSessionScreen() {
 
   if (finished) {
     return (
-      <View style={{ flex: 1, backgroundColor: colors.bg, padding: spacing.m, justifyContent: 'center' }}>
-        <Text variant="headlineSmall" style={{ color: colors.textPrimary, textAlign: 'center' }}>{t.reviewFinished}</Text>
+      <View style={{ flex: 1, backgroundColor: colors.background, padding: spacing.m, justifyContent: 'center' }}>
+        <Text variant="headlineSmall" style={{ color: colors.onSurface, textAlign: 'center' }}>{t.reviewFinished}</Text>
         {lastInterval != null ? (
-          <Text variant="bodyMedium" style={{ color: colors.textSecondary, textAlign: 'center', marginTop: spacing.s }}>
+          <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'center', marginTop: spacing.s }}>
             {t.reviewNextDue(lastInterval)}
           </Text>
         ) : null}
@@ -99,9 +99,9 @@ export function ReviewSessionScreen() {
   const book = entry?.bookId ? query.data.bookNames.get(entry.bookId) : null;
 
   return (
-    <ScrollView style={{ backgroundColor: colors.bg }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
+    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
       <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text variant="labelMedium" style={{ color: colors.textSecondary }}>
+        <Text variant="labelMedium" style={{ color: colors.onSurfaceVariant }}>
           {t.reviewCardOf(index + 1, query.data.items.length)}
         </Text>
         <Button compact onPress={() => navigation.goBack()}>{t.close}</Button>
@@ -109,16 +109,16 @@ export function ReviewSessionScreen() {
 
       <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.s, minHeight: 320 }}>
         <Card.Content style={{ paddingVertical: spacing.l }}>
-          <Text variant="labelSmall" style={{ color: colors.accent, textAlign: 'right' }}>
+          <Text variant="labelSmall" style={{ color: colors.primary, textAlign: 'right' }}>
             {entry ? entryTypeLabel(entry.type) : ''}
             {book ? ` • ${book}` : ''}
           </Text>
-          <Text variant="bodyMedium" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: spacing.s }}>
+          <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: spacing.s }}>
             {t.reviewQuestionPrompt}
           </Text>
           <Text
             style={{
-              color: colors.textPrimary,
+              color: colors.onSurface,
               textAlign: 'right',
               marginTop: spacing.m,
               fontFamily: (entry?.type ?? 1) === 0 ? fonts.quote : fonts.regular,
@@ -131,12 +131,12 @@ export function ReviewSessionScreen() {
           {revealed && entry ? (
             <>
               {entry.quoteText && entry.comment ? (
-                <Text style={{ color: colors.textSecondary, textAlign: 'right', marginTop: spacing.m, lineHeight: 26 }}>
+                <Text style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: spacing.m, lineHeight: 26 }}>
                   {entry.comment}
                 </Text>
               ) : null}
               {entry.page != null ? (
-                <Text variant="labelSmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: spacing.s }}>
+                <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: spacing.s }}>
                   {t.entryPageValue(entry.page)}
                 </Text>
               ) : null}
@@ -158,7 +158,7 @@ export function ReviewSessionScreen() {
         </>
       ) : (
         <View style={{ gap: spacing.s, marginTop: spacing.m }}>
-          <Button mode="contained" buttonColor={colors.danger} textColor={colors.onDanger} disabled={busy} onPress={() => answer(reviewResults.FORGOT)}>
+          <Button mode="contained" buttonColor={colors.error} textColor={colors.onError} disabled={busy} onPress={() => answer(reviewResults.FORGOT)}>
             {t.reviewForgot}
           </Button>
           <Button mode="contained-tonal" disabled={busy} onPress={() => answer(reviewResults.PARTIAL)}>

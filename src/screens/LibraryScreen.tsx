@@ -28,6 +28,7 @@ import { t } from '../lib/strings';
 import { useRefreshOnFocus } from '../lib/useRefreshOnFocus';
 import type { RootStackParamList } from '../navigation/types';
 import { useAppTheme } from '../theme/ThemeProvider';
+import { shape } from '../theme/ThemeProvider';
 import { BookCard } from '../components/BookCard';
 import { ChoiceDialog, ConfirmDialog } from '../components/ChoiceDialog';
 import { EmptyState, Loading } from '../components/Layout';
@@ -37,7 +38,7 @@ type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 export function LibraryScreen() {
   const navigation = useNavigation<Nav>();
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, shape } = useAppTheme();
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<number>(FILTER_ALL);
   const [sort, setSort] = useState(SORT_RECENT);
@@ -130,7 +131,7 @@ export function LibraryScreen() {
   const filtering = status !== FILTER_ALL || categoryId != null || query.trim().length > 0;
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg, paddingTop: spacing.s }}>
+    <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: spacing.s }}>
       <View style={{ paddingHorizontal: spacing.m }}>
         <TextInput
           mode="outlined"
@@ -140,7 +141,7 @@ export function LibraryScreen() {
           right={<TextInput.Icon icon="magnify" />}
           style={{ backgroundColor: colors.surface, textAlign: 'right' }}
           outlineColor={colors.outline}
-          activeOutlineColor={colors.accent}
+          activeOutlineColor={colors.primary}
         />
         <View style={{ marginTop: spacing.s }}>
           <FilterPills options={statusOptions} value={status} onChange={setStatus} />
@@ -157,7 +158,7 @@ export function LibraryScreen() {
           </Button>
         </View>
         <View style={{ flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing.s }}>
-          <Text variant="labelSmall" style={{ color: colors.textSecondary }}>
+          <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
             {t.libraryCount(list.length)}
           </Text>
           <Button mode="contained-tonal" compact icon="file-pdf-box" onPress={pickPdf} loading={importing} disabled={importing}>
@@ -201,8 +202,8 @@ export function LibraryScreen() {
       )}
       {importing ? (
         <View style={styles.overlay} pointerEvents="none">
-          <ActivityIndicator color={colors.accent} />
-          <Text variant="bodySmall" style={{ color: colors.textPrimary, marginTop: 8 }}>
+          <ActivityIndicator color={colors.primary} />
+          <Text variant="bodySmall" style={{ color: colors.onSurface, marginTop: 8 }}>
             {t.bookPdfImporting}
           </Text>
         </View>
@@ -242,7 +243,7 @@ const styles = StyleSheet.create({
     bottom: 24,
     alignSelf: 'center',
     backgroundColor: 'rgba(0,0,0,0.08)',
-    borderRadius: 16,
+    borderRadius: shape.s16,
     paddingHorizontal: 20,
     paddingVertical: 12,
     alignItems: 'center',

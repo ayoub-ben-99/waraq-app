@@ -25,6 +25,7 @@ import { t } from '../lib/strings';
 import { useRefreshOnFocus } from '../lib/useRefreshOnFocus';
 import type { RootStackParamList } from '../navigation/types';
 import { useAppTheme } from '../theme/ThemeProvider';
+import { shape } from '../theme/ThemeProvider';
 import { BookCover } from '../components/BookCard';
 import { ChoiceDialog } from '../components/ChoiceDialog';
 import { EmptyState, Loading } from '../components/Layout';
@@ -173,56 +174,56 @@ export function BookDetailScreen() {
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.bg }}
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}
     >
       <View style={{ flexDirection: 'row-reverse', gap: spacing.m, alignItems: 'flex-start' }}>
         <BookCover book={book} size={92} />
         <View style={{ flex: 1 }}>
-          <Text variant="headlineSmall" style={{ color: colors.textPrimary, textAlign: 'right' }}>
+          <Text variant="headlineSmall" style={{ color: colors.onSurface, textAlign: 'right' }}>
             {book.title}
           </Text>
-          <Text variant="bodyMedium" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: 2 }}>
+          <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 2 }}>
             {book.author || '—'}
           </Text>
           <View style={{ flexDirection: 'row-reverse', gap: spacing.s, marginTop: spacing.s, flexWrap: 'wrap' }}>
             <Button compact mode="outlined" onPress={() => setStatusOpen(true)}>
               {bookStatusLabel(book.status)}
             </Button>
-            <Text variant="labelMedium" style={{ color: colors.gold, alignSelf: 'center' }}>
+            <Text variant="labelMedium" style={{ color: colors.secondary, alignSelf: 'center' }}>
               {book.rating == null ? t.bookNoRating : `★ ${book.rating}`}
             </Text>
           </View>
         </View>
       </View>
 
-      <Text variant="labelSmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: spacing.s }}>
+      <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: spacing.s }}>
         {dates.length ? dates.join(' • ') : t.none}
       </Text>
 
       {book.description?.trim() ? (
-        <Text variant="bodyMedium" style={{ color: colors.textPrimary, textAlign: 'right', marginTop: spacing.m, lineHeight: 26 }}>
+        <Text variant="bodyMedium" style={{ color: colors.onSurface, textAlign: 'right', marginTop: spacing.m, lineHeight: 26 }}>
           {book.description}
         </Text>
       ) : null}
 
       <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.m }}>
         <Card.Content>
-          <Text variant="labelMedium" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+          <Text variant="labelMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
             {t.bookProgress}
           </Text>
           {book.totalPages != null ? (
             <>
-              <Text variant="titleLarge" style={{ color: colors.textPrimary, textAlign: 'right' }}>
+              <Text variant="titleLarge" style={{ color: colors.onSurface, textAlign: 'right' }}>
                 {book.currentPage} / {book.totalPages}
                 {percent >= 0 ? ` • ${percent}%` : ''}
               </Text>
-              <View style={[styles.track, { backgroundColor: colors.surfaceAlt, marginTop: spacing.s }]}>
-                <View style={[styles.fill, { width: `${Math.max(0, percent)}%`, backgroundColor: colors.accent }]} />
+              <View style={[styles.track, { backgroundColor: colors.surfaceContainerHigh, marginTop: spacing.s }]}>
+                <View style={[styles.fill, { width: `${Math.max(0, percent)}%`, backgroundColor: colors.primary }]} />
               </View>
             </>
           ) : (
-            <Text variant="titleMedium" style={{ color: colors.textPrimary, textAlign: 'right' }}>
+            <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right' }}>
               {t.homeLastPosition(book.currentPage)}
             </Text>
           )}
@@ -241,7 +242,7 @@ export function BookDetailScreen() {
         <Button mode="outlined" icon="share-variant" style={{ flex: 1 }} onPress={exportNotes}>
           {t.bookExportEntries}
         </Button>
-        <Button mode="text" textColor={colors.danger} onPress={() => setDeleteOpen(true)}>
+        <Button mode="text" textColor={colors.error} onPress={() => setDeleteOpen(true)}>
           {t.delete}
         </Button>
       </View>
@@ -264,7 +265,7 @@ export function BookDetailScreen() {
             {t.bookAddSession}
           </Button>
           {sessions.length === 0 ? (
-            <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
               {t.emptySessions}
             </Text>
           ) : (
@@ -272,22 +273,22 @@ export function BookDetailScreen() {
               <Card key={session.id} style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.s }}>
                 <Card.Content>
                   <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}>
-                    <Text variant="titleSmall" style={{ color: colors.textPrimary }}>
+                    <Text variant="titleSmall" style={{ color: colors.onSurface }}>
                       {t.sessionPages(session.endPage - session.startPage)}
                     </Text>
-                    <Text variant="labelSmall" style={{ color: colors.textSecondary }}>
+                    <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
                       {session.durationMinutes} دقيقة
                     </Text>
                   </View>
-                  <Text variant="labelSmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: 4 }}>
+                  <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 4 }}>
                     {format(session.date)} • {session.startPage}–{session.endPage}
                   </Text>
                   {session.note?.trim() ? (
-                    <Text variant="bodySmall" style={{ color: colors.textPrimary, textAlign: 'right', marginTop: 4 }}>
+                    <Text variant="bodySmall" style={{ color: colors.onSurface, textAlign: 'right', marginTop: 4 }}>
                       {session.note}
                     </Text>
                   ) : null}
-                  <Button compact mode="text" textColor={colors.danger} onPress={() => confirmDeleteSession(session.id)} style={{ alignSelf: 'flex-end' }}>
+                  <Button compact mode="text" textColor={colors.error} onPress={() => confirmDeleteSession(session.id)} style={{ alignSelf: 'flex-end' }}>
                     {t.sessionDelete}
                   </Button>
                 </Card.Content>
@@ -303,7 +304,7 @@ export function BookDetailScreen() {
             {t.entryNew}
           </Button>
           {entries.length === 0 ? (
-            <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
               {t.emptyKnowledgeBody}
             </Text>
           ) : (
@@ -328,22 +329,22 @@ export function BookDetailScreen() {
               >
                 <Card.Content>
                   <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}>
-                    <Text variant="labelSmall" style={{ color: colors.accent }}>
+                    <Text variant="labelSmall" style={{ color: colors.primary }}>
                       {entryTypeLabel(entry.type)}
                     </Text>
-                    <Text variant="labelSmall" style={{ color: colors.textSecondary }}>
+                    <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
                       {formatShort(entry.date)}
                     </Text>
                   </View>
                   {entry.title?.trim() ? (
-                    <Text variant="titleSmall" style={{ color: colors.textPrimary, textAlign: 'right' }}>
+                    <Text variant="titleSmall" style={{ color: colors.onSurface, textAlign: 'right' }}>
                       {entry.title}
                     </Text>
                   ) : null}
                   <Text
                     numberOfLines={4}
                     style={{
-                      color: colors.textPrimary,
+                      color: colors.onSurface,
                       textAlign: 'right',
                       fontFamily: entry.type === 0 ? fonts.quote : fonts.regular,
                       fontSize: entry.type === 0 ? 20 : 15,
@@ -353,7 +354,7 @@ export function BookDetailScreen() {
                     {entryDisplayText(entry)}
                   </Text>
                   {entry.page != null ? (
-                    <Text variant="labelSmall" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+                    <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
                       {t.entryPageValue(entry.page)}
                     </Text>
                   ) : null}
@@ -367,16 +368,16 @@ export function BookDetailScreen() {
       {tab === 'summary' ? (
         <View style={{ marginTop: spacing.m }}>
           {summaryRows.length === 0 ? (
-            <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right', marginBottom: spacing.s }}>
+            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginBottom: spacing.s }}>
               {t.none}
             </Text>
           ) : (
             summaryRows.map(([label, value]) => (
               <View key={String(label)} style={{ marginBottom: spacing.m }}>
-                <Text variant="labelMedium" style={{ color: colors.accent, textAlign: 'right' }}>
+                <Text variant="labelMedium" style={{ color: colors.primary, textAlign: 'right' }}>
                   {label}
                 </Text>
-                <Text variant="bodyMedium" style={{ color: colors.textPrimary, textAlign: 'right', lineHeight: 26 }}>
+                <Text variant="bodyMedium" style={{ color: colors.onSurface, textAlign: 'right', lineHeight: 26 }}>
                   {value}
                 </Text>
               </View>
@@ -398,11 +399,11 @@ export function BookDetailScreen() {
             </View>
             <TextInput mode="outlined" label={t.sessionDuration} value={sessionForm.minutes} onChangeText={(minutes) => setSessionForm((f) => ({ ...f, minutes }))} keyboardType="number-pad" style={{ backgroundColor: colors.surface }} />
             <TextInput mode="outlined" label={t.sessionNote} value={sessionForm.note} onChangeText={(note) => setSessionForm((f) => ({ ...f, note }))} multiline style={{ backgroundColor: colors.surface }} />
-            {sessionErrorText ? <Text style={{ color: colors.danger }}>{sessionErrorText}</Text> : null}
+            {sessionErrorText ? <Text style={{ color: colors.error }}>{sessionErrorText}</Text> : null}
           </Dialog.Content>
           <Dialog.Actions>
-            <Text onPress={() => setSessionOpen(false)} style={{ color: colors.textSecondary }}>{t.cancel}</Text>
-            <Text onPress={addSession} style={{ color: colors.accent, marginStart: 20 }}>{t.save}</Text>
+            <Text onPress={() => setSessionOpen(false)} style={{ color: colors.onSurfaceVariant }}>{t.cancel}</Text>
+            <Text onPress={addSession} style={{ color: colors.primary, marginStart: 20 }}>{t.save}</Text>
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -423,14 +424,14 @@ export function BookDetailScreen() {
         <Dialog visible={deleteOpen} onDismiss={() => setDeleteOpen(false)} style={{ backgroundColor: colors.surface }}>
           <Dialog.Title style={{ textAlign: 'right' }}>{t.bookDelete}</Dialog.Title>
           <Dialog.Content>
-            <Text variant="bodyMedium" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+            <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
               {t.bookDeleteMessage}
             </Text>
           </Dialog.Content>
           <Dialog.Actions style={{ flexDirection: 'column', alignItems: 'stretch', gap: 4 }}>
             <Button
               mode="text"
-              textColor={colors.danger}
+              textColor={colors.error}
               onPress={async () => {
                 await deleteBook(bookId, true);
                 navigation.goBack();
@@ -440,7 +441,7 @@ export function BookDetailScreen() {
             </Button>
             <Button
               mode="text"
-              textColor={colors.danger}
+              textColor={colors.error}
               onPress={async () => {
                 await deleteBook(bookId, false);
                 navigation.goBack();
@@ -473,6 +474,6 @@ export function BookDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  track: { height: 6, borderRadius: 3, overflow: 'hidden' },
-  fill: { height: 6, borderRadius: 3 },
+  track: { height: 6, borderRadius: shape.s4, overflow: 'hidden' },
+  fill: { height: 6, borderRadius: shape.s4 },
 });

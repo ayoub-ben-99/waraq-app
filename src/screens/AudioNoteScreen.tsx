@@ -106,8 +106,8 @@ export function AudioNoteScreen() {
   };
 
   return (
-    <ScrollView style={{ backgroundColor: colors.bg }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
-      <Text variant="titleLarge" style={{ color: colors.textPrimary, textAlign: 'right' }}>{t.audioTitle}</Text>
+    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
+      <Text variant="titleLarge" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.audioTitle}</Text>
       <TextInput
         mode="outlined"
         label={t.entryTitle}
@@ -118,17 +118,17 @@ export function AudioNoteScreen() {
 
       <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.m }}>
         <Card.Content style={{ alignItems: 'center' }}>
-          <Text variant="displaySmall" style={{ color: colors.accent, fontVariant: ['tabular-nums'] }}>
+          <Text variant="displaySmall" style={{ color: colors.primary, fontVariant: ['tabular-nums'] }}>
             {clock(recorderState.isRecording ? recorderState.durationMillis : savedDuration)}
           </Text>
-          <Text variant="labelSmall" style={{ color: colors.textSecondary, marginBottom: spacing.m }}>
+          <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, marginBottom: spacing.m }}>
             {recorderState.isRecording ? t.audioRecord : hasSaved ? t.audioSaved : t.none}
           </Text>
           <View style={{ flexDirection: 'row-reverse', gap: spacing.s, flexWrap: 'wrap', justifyContent: 'center' }}>
             {!recorderState.isRecording ? (
               <Button mode="contained" icon="microphone" onPress={start}>{t.audioRecord}</Button>
             ) : (
-              <Button mode="contained" buttonColor={colors.danger} textColor={colors.onDanger} icon="stop" onPress={stop}>
+              <Button mode="contained" buttonColor={colors.error} textColor={colors.onError} icon="stop" onPress={stop}>
                 {t.audioStop}
               </Button>
             )}
@@ -148,7 +148,7 @@ export function AudioNoteScreen() {
               </Button>
             ) : null}
             {hasSaved && !recorderState.isRecording ? (
-              <Button mode="text" textColor={colors.danger} onPress={remove}>{t.audioDelete}</Button>
+              <Button mode="text" textColor={colors.error} onPress={remove}>{t.audioDelete}</Button>
             ) : null}
           </View>
         </Card.Content>

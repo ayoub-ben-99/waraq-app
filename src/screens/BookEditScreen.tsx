@@ -33,7 +33,7 @@ export function BookEditScreen() {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
   const bookId = route.params?.bookId ?? 0;
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, shape } = useAppTheme();
 
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -171,7 +171,7 @@ export function BookEditScreen() {
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.bg }}
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}
       keyboardShouldPersistTaps="handled"
     >
@@ -207,15 +207,15 @@ export function BookEditScreen() {
             />
           </View>
           <View style={{ flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text variant="bodyMedium" style={{ color: colors.textPrimary }}>
+            <Text variant="bodyMedium" style={{ color: colors.onSurface }}>
               {t.bookFavorite}
             </Text>
-            <Switch value={favorite} onValueChange={setFavorite} color={colors.accent} />
+            <Switch value={favorite} onValueChange={setFavorite} color={colors.primary} />
           </View>
         </Card.Content>
       </Card>
 
-      <Text variant="titleSmall" style={{ color: colors.textPrimary, textAlign: 'right', marginBottom: spacing.s }}>
+      <Text variant="titleSmall" style={{ color: colors.onSurface, textAlign: 'right', marginBottom: spacing.s }}>
         {t.bookStatus}
       </Text>
       <FilterPills
@@ -224,7 +224,7 @@ export function BookEditScreen() {
         onChange={setStatus}
       />
 
-      <Text variant="titleSmall" style={{ color: colors.textPrimary, textAlign: 'right', marginTop: spacing.m, marginBottom: spacing.s }}>
+      <Text variant="titleSmall" style={{ color: colors.onSurface, textAlign: 'right', marginTop: spacing.m, marginBottom: spacing.s }}>
         {t.bookRating}
       </Text>
       <FilterPills
@@ -233,7 +233,7 @@ export function BookEditScreen() {
         onChange={(v) => setRating(v === 0 ? null : v)}
       />
 
-      <Text variant="titleSmall" style={{ color: colors.textPrimary, textAlign: 'right', marginTop: spacing.m, marginBottom: spacing.s }}>
+      <Text variant="titleSmall" style={{ color: colors.onSurface, textAlign: 'right', marginTop: spacing.m, marginBottom: spacing.s }}>
         {t.bookCategory}
       </Text>
       <FilterPills options={categoryOptions} value={categoryId ?? -1} onChange={(value) => setCategoryId(value === -1 ? null : Number(value))} />
@@ -247,17 +247,17 @@ export function BookEditScreen() {
 
       <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.m }}>
         <Card.Content style={{ gap: spacing.s }}>
-          <Text variant="titleSmall" style={{ color: colors.textPrimary, textAlign: 'right' }}>
+          <Text variant="titleSmall" style={{ color: colors.onSurface, textAlign: 'right' }}>
             {t.bookOrganize}
           </Text>
           <View style={{ flexDirection: 'row-reverse', alignItems: 'center', gap: spacing.m }}>
             {pendingCover || (!coverRemoved && cover) ? (
               <Image
                 source={{ uri: pendingCover ?? coverUri(cover) ?? undefined }}
-                style={{ width: 72, height: 100, borderRadius: 8, backgroundColor: colors.surfaceAlt }}
+                style={{ width: 72, height: 100, borderRadius: shape.s8, backgroundColor: colors.surfaceContainerHigh }}
               />
             ) : (
-              <View style={{ width: 72, height: 100, borderRadius: 8, backgroundColor: colors.surfaceAlt }} />
+              <View style={{ width: 72, height: 100, borderRadius: shape.s8, backgroundColor: colors.surfaceContainerHigh }} />
             )}
             <View style={{ flex: 1, gap: spacing.s }}>
               <Button mode="outlined" icon="image-outline" onPress={pickCover}>
@@ -266,7 +266,7 @@ export function BookEditScreen() {
               {pendingCover || (!coverRemoved && cover) ? (
                 <Button
                   mode="text"
-                  textColor={colors.danger}
+                  textColor={colors.error}
                   onPress={() => {
                     setPendingCover(null);
                     setCover(null);
@@ -281,14 +281,14 @@ export function BookEditScreen() {
           <Button mode="outlined" icon="file-pdf-box" onPress={pickPdf}>
             {pdf ? t.bookPdfChosen(pdf.name) : t.bookPickPdf}
           </Button>
-          <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+          <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
             {t.bookPdfNone}
           </Text>
         </Card.Content>
       </Card>
 
       {error ? (
-        <Text variant="bodyMedium" style={{ color: colors.danger, textAlign: 'right', marginTop: spacing.s }}>
+        <Text variant="bodyMedium" style={{ color: colors.error, textAlign: 'right', marginTop: spacing.s }}>
           {error}
         </Text>
       ) : null}

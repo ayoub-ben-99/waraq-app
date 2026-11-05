@@ -44,8 +44,8 @@ export function ClearDataScreen() {
   ];
 
   return (
-    <ScrollView style={{ backgroundColor: colors.bg }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
-      <Text variant="bodyMedium" style={{ color: colors.textSecondary, textAlign: 'right', lineHeight: 24 }}>
+    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
+      <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right', lineHeight: 24 }}>
         {t.clearIntro}
       </Text>
       {rows.map((row) => (
@@ -55,17 +55,17 @@ export function ClearDataScreen() {
               label={row.title}
               status={flags.includes(row.flag) ? 'checked' : 'unchecked'}
               onPress={() => toggle(row.flag)}
-              labelStyle={{ color: colors.textPrimary, textAlign: 'right', flex: 1 }}
+              labelStyle={{ color: colors.onSurface, textAlign: 'right', flex: 1 }}
               style={{ flexDirection: 'row-reverse', paddingHorizontal: 0 }}
             />
-            <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right', lineHeight: 22 }}>
+            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', lineHeight: 22 }}>
               {row.body}
             </Text>
           </Card.Content>
         </Card>
       ))}
-      {error ? <Text style={{ color: colors.danger, textAlign: 'right', marginTop: spacing.s }}>{error}</Text> : null}
-      <Button mode="contained" buttonColor={colors.danger} textColor={colors.onDanger} onPress={() => (selected ? setConfirm(true) : setError(t.clearNothing))} style={{ marginTop: spacing.m }}>
+      {error ? <Text style={{ color: colors.error, textAlign: 'right', marginTop: spacing.s }}>{error}</Text> : null}
+      <Button mode="contained" buttonColor={colors.error} textColor={colors.onError} onPress={() => (selected ? setConfirm(true) : setError(t.clearNothing))} style={{ marginTop: spacing.m }}>
         {t.clearDo}
       </Button>
 
@@ -73,15 +73,15 @@ export function ClearDataScreen() {
         <Dialog visible={confirm} onDismiss={() => setConfirm(false)} style={{ backgroundColor: colors.surface }}>
           <Dialog.Title style={{ textAlign: 'right' }}>{t.clearConfirmTitle}</Dialog.Title>
           <Dialog.Content>
-            <Text style={{ color: colors.textPrimary, textAlign: 'right' }}>{t.clearConfirmBody}</Text>
+            <Text style={{ color: colors.onSurface, textAlign: 'right' }}>{t.clearConfirmBody}</Text>
             {flags.map((flag) => (
-              <Text key={flag} style={{ color: colors.textSecondary, textAlign: 'right' }}>• {labels[flag]}</Text>
+              <Text key={flag} style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>• {labels[flag]}</Text>
             ))}
-            <Text style={{ color: colors.danger, textAlign: 'right', marginTop: spacing.s }}>{t.clearNoUndo}</Text>
+            <Text style={{ color: colors.error, textAlign: 'right', marginTop: spacing.s }}>{t.clearNoUndo}</Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setConfirm(false)}>{t.cancel}</Button>
-            <Button mode="contained" buttonColor={colors.danger} textColor={colors.onDanger} onPress={run}>
+            <Button mode="contained" buttonColor={colors.error} textColor={colors.onError} onPress={run}>
               {t.clearDo}
             </Button>
           </Dialog.Actions>

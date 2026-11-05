@@ -29,7 +29,7 @@ export function SearchScreen() {
   const rows = (items: KnowledgeEntry[], title: string) =>
     items.length ? (
       <View style={{ marginTop: spacing.m }}>
-        <Text variant="labelLarge" style={{ color: colors.accent, textAlign: 'right', marginBottom: spacing.s }}>
+        <Text variant="labelLarge" style={{ color: colors.primary, textAlign: 'right', marginBottom: spacing.s }}>
           {title} · {items.length}
         </Text>
         {items.map((entry) => (
@@ -40,13 +40,13 @@ export function SearchScreen() {
           >
             <Card.Content>
               <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}>
-                <Text variant="labelSmall" style={{ color: colors.accent }}>{entryTypeLabel(entry.type)}</Text>
-                <Text variant="labelSmall" style={{ color: colors.textSecondary }}>{formatShort(entry.date)}</Text>
+                <Text variant="labelSmall" style={{ color: colors.primary }}>{entryTypeLabel(entry.type)}</Text>
+                <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>{formatShort(entry.date)}</Text>
               </View>
               {entry.title?.trim() ? (
-                <Text variant="titleSmall" style={{ color: colors.textPrimary, textAlign: 'right' }}>{entry.title}</Text>
+                <Text variant="titleSmall" style={{ color: colors.onSurface, textAlign: 'right' }}>{entry.title}</Text>
               ) : null}
-              <Text numberOfLines={3} style={{ color: colors.textPrimary, textAlign: 'right' }}>
+              <Text numberOfLines={3} style={{ color: colors.onSurface, textAlign: 'right' }}>
                 {entryDisplayText(entry)}
               </Text>
             </Card.Content>
@@ -56,7 +56,7 @@ export function SearchScreen() {
     ) : null;
 
   return (
-    <ScrollView style={{ backgroundColor: colors.bg }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }} keyboardShouldPersistTaps="handled">
+    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }} keyboardShouldPersistTaps="handled">
       <TextInput
         mode="outlined"
         autoFocus
@@ -66,20 +66,20 @@ export function SearchScreen() {
         right={<TextInput.Icon icon="magnify" />}
         style={{ backgroundColor: colors.surface, textAlign: 'right' }}
         outlineColor={colors.outline}
-        activeOutlineColor={colors.accent}
+        activeOutlineColor={colors.primary}
       />
       {text.trim().length < 2 ? (
-        <Text style={{ color: colors.textSecondary, textAlign: 'right', marginTop: spacing.m }}>{t.searchTypeWords}</Text>
+        <Text style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: spacing.m }}>{t.searchTypeWords}</Text>
       ) : null}
       {result ? (
-        <Text variant="labelMedium" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: spacing.s }}>
+        <Text variant="labelMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: spacing.s }}>
           {t.searchResults(result.total)}
         </Text>
       ) : null}
 
       {result?.books.length ? (
         <View style={{ marginTop: spacing.m }}>
-          <Text variant="labelLarge" style={{ color: colors.accent, textAlign: 'right', marginBottom: spacing.s }}>
+          <Text variant="labelLarge" style={{ color: colors.primary, textAlign: 'right', marginBottom: spacing.s }}>
             {t.searchBooks} · {result.books.length}
           </Text>
           {result.books.map((book) => (
@@ -89,8 +89,8 @@ export function SearchScreen() {
               onPress={() => navigation.navigate('BookDetail', { bookId: book.id })}
             >
               <Card.Content>
-                <Text variant="titleSmall" style={{ color: colors.textPrimary, textAlign: 'right' }}>{book.title}</Text>
-                <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right' }}>{book.author || '—'}</Text>
+                <Text variant="titleSmall" style={{ color: colors.onSurface, textAlign: 'right' }}>{book.title}</Text>
+                <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>{book.author || '—'}</Text>
               </Card.Content>
             </Card>
           ))}
@@ -104,18 +104,18 @@ export function SearchScreen() {
 
       {result?.tags.length ? (
         <View style={{ marginTop: spacing.m }}>
-          <Text variant="labelLarge" style={{ color: colors.accent, textAlign: 'right', marginBottom: spacing.s }}>
+          <Text variant="labelLarge" style={{ color: colors.primary, textAlign: 'right', marginBottom: spacing.s }}>
             {t.searchTags} · {result.tags.length}
           </Text>
           <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', gap: spacing.s }}>
             {result.tags.map((tag) => (
               <Card
                 key={tag.id}
-                style={{ backgroundColor: colors.surfaceAlt, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}
+                style={{ backgroundColor: colors.surfaceContainerHigh, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}
                 onPress={() => navigation.navigate('Tabs', { screen: 'Knowledge', params: { tag: tag.name } })}
               >
                 <Card.Content style={{ paddingVertical: 6, paddingHorizontal: 10 }}>
-                  <Text style={{ color: colors.textPrimary }}>#{tag.name}</Text>
+                  <Text style={{ color: colors.onSurface }}>#{tag.name}</Text>
                 </Card.Content>
               </Card>
             ))}

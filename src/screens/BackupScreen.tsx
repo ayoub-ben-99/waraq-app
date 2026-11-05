@@ -73,20 +73,20 @@ export function BackupScreen() {
   if (busy && !backup) return <Loading />;
 
   return (
-    <ScrollView style={{ backgroundColor: colors.bg }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
-      <Text variant="titleLarge" style={{ color: colors.textPrimary, textAlign: 'right' }}>{t.backupTitle}</Text>
+    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
+      <Text variant="titleLarge" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.backupTitle}</Text>
 
       <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.m }}>
         <Card.Content>
-          <Text variant="titleMedium" style={{ color: colors.textPrimary, textAlign: 'right' }}>{t.backupExport}</Text>
-          <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: 4, lineHeight: 22 }}>
+          <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.backupExport}</Text>
+          <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 4, lineHeight: 22 }}>
             {t.backupExportDesc}
           </Text>
           <View style={{ flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing.s }}>
-            <Text variant="bodyMedium" style={{ color: colors.textPrimary }}>تضمين ملفات PDF</Text>
-            <Switch value={includePdfs} onValueChange={setIncludePdfs} color={colors.accent} />
+            <Text variant="bodyMedium" style={{ color: colors.onSurface }}>تضمين ملفات PDF</Text>
+            <Switch value={includePdfs} onValueChange={setIncludePdfs} color={colors.primary} />
           </View>
-          <Text variant="labelSmall" style={{ color: colors.danger, textAlign: 'right', marginTop: spacing.s }}>
+          <Text variant="labelSmall" style={{ color: colors.error, textAlign: 'right', marginTop: spacing.s }}>
             {t.backupNotEncrypted}
           </Text>
           <Button mode="contained" icon="archive-arrow-down" onPress={exportNow} loading={busy} disabled={busy} style={{ marginTop: spacing.s }}>
@@ -97,8 +97,8 @@ export function BackupScreen() {
 
       <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.m }}>
         <Card.Content>
-          <Text variant="titleMedium" style={{ color: colors.textPrimary, textAlign: 'right' }}>{t.backupRestore}</Text>
-          <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: 4, lineHeight: 22 }}>
+          <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.backupRestore}</Text>
+          <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 4, lineHeight: 22 }}>
             {t.backupRestoreDesc}
           </Text>
           <Button mode="outlined" icon="archive-arrow-up" onPress={pick} disabled={busy} style={{ marginTop: spacing.s }}>
@@ -112,7 +112,7 @@ export function BackupScreen() {
           <Dialog.Title style={{ textAlign: 'right' }}>{t.backupPreviewTitle}</Dialog.Title>
           <Dialog.Content>
             {backup ? (
-              <Text style={{ color: colors.textSecondary, textAlign: 'right', lineHeight: 24 }}>
+              <Text style={{ color: colors.onSurfaceVariant, textAlign: 'right', lineHeight: 24 }}>
                 {t.backupPreviewBody(
                   backup.createdAt,
                   backup.schema,
@@ -126,14 +126,14 @@ export function BackupScreen() {
               </Text>
             ) : null}
             {backup && backup.pdfDocs.length > backup.pdfFiles.length ? (
-              <Text style={{ color: colors.gold, textAlign: 'right', marginTop: spacing.s }}>
+              <Text style={{ color: colors.secondary, textAlign: 'right', marginTop: spacing.s }}>
                 {t.backupUnlinkedPdfs(backup.pdfDocs.length - backup.pdfFiles.length)}
               </Text>
             ) : null}
           </Dialog.Content>
           <Dialog.Actions style={{ flexDirection: 'column', alignItems: 'stretch', gap: 4 }}>
             <Button mode="contained" onPress={() => restore(false)} disabled={busy}>{t.backupMerge}</Button>
-            <Button mode="outlined" textColor={colors.danger} onPress={() => setConfirmReplace(true)} disabled={busy}>{t.backupReplace}</Button>
+            <Button mode="outlined" textColor={colors.error} onPress={() => setConfirmReplace(true)} disabled={busy}>{t.backupReplace}</Button>
             <Button onPress={() => setBackup(null)}>{t.cancel}</Button>
           </Dialog.Actions>
         </Dialog>
@@ -141,11 +141,11 @@ export function BackupScreen() {
         <Dialog visible={confirmReplace} onDismiss={() => setConfirmReplace(false)} style={{ backgroundColor: colors.surface }}>
           <Dialog.Title style={{ textAlign: 'right' }}>{t.backupModeTitle}</Dialog.Title>
           <Dialog.Content>
-            <Text style={{ color: colors.danger, textAlign: 'right', lineHeight: 24 }}>{t.backupReplaceWarning}</Text>
+            <Text style={{ color: colors.error, textAlign: 'right', lineHeight: 24 }}>{t.backupReplaceWarning}</Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setConfirmReplace(false)}>{t.cancel}</Button>
-            <Button mode="contained" buttonColor={colors.danger} textColor={colors.onDanger} onPress={() => restore(true)} disabled={busy}>
+            <Button mode="contained" buttonColor={colors.error} textColor={colors.onError} onPress={() => restore(true)} disabled={busy}>
               {t.clearDo}
             </Button>
           </Dialog.Actions>

@@ -15,6 +15,7 @@ import { t } from '../lib/strings';
 import { useRefreshOnFocus } from '../lib/useRefreshOnFocus';
 import type { RootStackParamList } from '../navigation/types';
 import { useAppTheme } from '../theme/ThemeProvider';
+import { shape } from '../theme/ThemeProvider';
 import { BookCover } from '../components/BookCard';
 import { Loading } from '../components/Layout';
 
@@ -51,13 +52,13 @@ export function HomeScreen() {
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.bg }}
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: spacing.m, paddingBottom: spacing.xl }}
     >
-      <Text style={{ color: colors.accent, fontSize: 32, fontFamily: 'Amiri', textAlign: 'right', marginTop: spacing.s }}>
+      <Text style={{ color: colors.primary, fontSize: 32, fontFamily: 'Amiri', textAlign: 'right', marginTop: spacing.s }}>
         {t.homeGreeting}
       </Text>
-      <Text variant="bodyMedium" style={{ color: colors.textSecondary, textAlign: 'right', marginBottom: spacing.l }}>
+      <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginBottom: spacing.l }}>
         {t.homeSubtitle}
       </Text>
 
@@ -81,31 +82,31 @@ export function HomeScreen() {
         onPress={() => (book ? navigation.navigate('BookDetail', { bookId: book.id }) : navigation.navigate('BookEdit'))}
       >
         <Card.Content>
-          <Text variant="labelMedium" style={{ color: colors.accent, textAlign: 'right' }}>
+          <Text variant="labelMedium" style={{ color: colors.primary, textAlign: 'right' }}>
             {t.homeContinue}
           </Text>
           {book ? (
             <View style={{ flexDirection: 'row-reverse', alignItems: 'center', gap: spacing.m, marginTop: spacing.s }}>
               <BookCover book={book} />
               <View style={{ flex: 1 }}>
-                <Text variant="titleMedium" numberOfLines={2} style={{ color: colors.textPrimary, textAlign: 'right' }}>
+                <Text variant="titleMedium" numberOfLines={2} style={{ color: colors.onSurface, textAlign: 'right' }}>
                   {book.title}
                 </Text>
-                <Text variant="bodySmall" numberOfLines={1} style={{ color: colors.textSecondary, textAlign: 'right' }}>
+                <Text variant="bodySmall" numberOfLines={1} style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
                   {book.author || '—'}
                 </Text>
-                <Text variant="labelSmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: 6 }}>
+                <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 6 }}>
                   {t.homeLastPosition(book.currentPage)}
                 </Text>
                 {percent >= 0 ? (
-                  <View style={[styles.track, { backgroundColor: colors.surfaceAlt, marginTop: 8 }]}>
-                    <View style={[styles.fill, { width: `${percent}%`, backgroundColor: colors.accent }]} />
+                  <View style={[styles.track, { backgroundColor: colors.surfaceContainerHigh, marginTop: 8 }]}>
+                    <View style={[styles.fill, { width: `${percent}%`, backgroundColor: colors.primary }]} />
                   </View>
                 ) : null}
               </View>
             </View>
           ) : (
-            <Text variant="bodyMedium" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: spacing.s }}>
+            <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: spacing.s }}>
               {t.homeNoReading}
             </Text>
           )}
@@ -114,10 +115,10 @@ export function HomeScreen() {
 
       <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.m }}>
         <Card.Content>
-          <Text variant="labelMedium" style={{ color: colors.accent, textAlign: 'right' }}>
+          <Text variant="labelMedium" style={{ color: colors.primary, textAlign: 'right' }}>
             {t.homeToday}
           </Text>
-          <Text variant="bodyMedium" style={{ color: colors.textPrimary, textAlign: 'right', marginTop: 4 }}>
+          <Text variant="bodyMedium" style={{ color: colors.onSurface, textAlign: 'right', marginTop: 4 }}>
             {todayMinutes <= 0 && todayPages <= 0
               ? 'لا نشاط مسجّل اليوم'
               : `${formatDuration(todayMinutes)} · ${t.homeTodayPages(todayPages)}`}
@@ -146,11 +147,11 @@ export function HomeScreen() {
         </Button>
       </View>
 
-      <Text variant="titleMedium" style={{ color: colors.textPrimary, textAlign: 'right', marginBottom: spacing.s }}>
+      <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right', marginBottom: spacing.s }}>
         {t.homeRecent}
       </Text>
       {recent.length === 0 ? (
-        <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+        <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
           {t.emptyKnowledgeBody}
         </Text>
       ) : (
@@ -164,17 +165,17 @@ export function HomeScreen() {
             >
               <Card.Content>
                 <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}>
-                  <Text variant="labelSmall" style={{ color: colors.accent }}>
+                  <Text variant="labelSmall" style={{ color: colors.primary }}>
                     {entryTypeLabel(entry.type)}
                   </Text>
-                  <Text variant="labelSmall" style={{ color: colors.textSecondary }}>
+                  <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
                     {formatShort(entry.date)}
                   </Text>
                 </View>
                 <Text
                   numberOfLines={2}
                   style={{
-                    color: colors.textPrimary,
+                    color: colors.onSurface,
                     textAlign: 'right',
                     marginTop: 4,
                     fontFamily: entry.type === 0 ? fonts.quote : fonts.regular,
@@ -204,20 +205,20 @@ function StatCard({
   hint: string;
   onPress: () => void;
 }) {
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, shape } = useAppTheme();
   return (
     <Card
       onPress={onPress}
       style={{ flex: 1, backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}
     >
       <Card.Content style={{ alignItems: 'flex-end', paddingVertical: spacing.m }}>
-        <Text variant="labelSmall" style={{ color: colors.textSecondary }}>
+        <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
           {label}
         </Text>
-        <Text variant="headlineMedium" style={{ color: colors.textPrimary }}>
+        <Text variant="headlineMedium" style={{ color: colors.onSurface }}>
           {value}
         </Text>
-        <Text variant="labelSmall" numberOfLines={1} style={{ color: colors.textSecondary }}>
+        <Text variant="labelSmall" numberOfLines={1} style={{ color: colors.onSurfaceVariant }}>
           {hint}
         </Text>
       </Card.Content>
@@ -226,6 +227,6 @@ function StatCard({
 }
 
 const styles = StyleSheet.create({
-  track: { height: 5, borderRadius: 3, overflow: 'hidden' },
-  fill: { height: 5, borderRadius: 3 },
+  track: { height: 5, borderRadius: shape.s4, overflow: 'hidden' },
+  fill: { height: 5, borderRadius: shape.s4 },
 });

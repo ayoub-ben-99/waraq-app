@@ -16,7 +16,7 @@ import { EmptyState, Loading } from '../components/Layout';
 const DAY_LETTERS = ['أحد', 'اثن', 'ثلا', 'أرب', 'خمي', 'جمع', 'سبت'];
 
 export function StatsScreen() {
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, shape } = useAppTheme();
   const [period, setPeriod] = useState<Period>('week');
   const query = useQuery({ queryKey: ['stats', period], queryFn: () => loadStats(period) });
   useRefreshOnFocus(query.refetch);
@@ -76,7 +76,7 @@ export function StatsScreen() {
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.bg }}
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}
     >
       <View style={{ flexDirection: 'row-reverse', gap: spacing.s, marginBottom: spacing.m }}>
@@ -100,20 +100,20 @@ export function StatsScreen() {
       <Card style={{ backgroundColor: colors.surface, marginTop: spacing.m, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}>
         <Card.Content>
           <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}>
-            <Text variant="titleMedium" style={{ color: colors.textPrimary }}>
+            <Text variant="titleMedium" style={{ color: colors.onSurface }}>
               {t.statsChartTitle}
             </Text>
             <Button compact mode="text" icon="share-variant" onPress={exportCsv}>
               {t.statsExport}
             </Button>
           </View>
-          <Text variant="headlineSmall" style={{ color: colors.textPrimary, textAlign: 'right', marginTop: spacing.s }}>
+          <Text variant="headlineSmall" style={{ color: colors.onSurface, textAlign: 'right', marginTop: spacing.s }}>
             {formatDuration(stats.periodMinutes)}
           </Text>
-          <Text variant="labelSmall" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+          <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
             {formatShort(addDays(today(), -(stats.periodDays - 1)))} — {formatShort(today())}
           </Text>
-          <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: 4 }}>
+          <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 4 }}>
             {stats.previousPeriodMinutes <= 0
               ? t.statsCompareNone
               : stats.periodMinutes === stats.previousPeriodMinutes
@@ -123,7 +123,7 @@ export function StatsScreen() {
                   : t.statsCompareDown(formatDuration(stats.previousPeriodMinutes - stats.periodMinutes))}
           </Text>
           {stats.periodMinutes <= 0 ? (
-            <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right', marginTop: spacing.m }}>
+            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: spacing.m }}>
               {stats.hasAnySession ? t.statsChartEmpty : t.statsChartNoHistory}
             </Text>
           ) : (
@@ -136,11 +136,11 @@ export function StatsScreen() {
                       style={{
                         width: '70%',
                         height: Math.max(3, (bar.minutes / max) * 110),
-                        borderRadius: 5,
-                        backgroundColor: index === bars.length - 1 ? colors.accent : colors.accentContainer,
+                        borderRadius: shape.s4,
+                        backgroundColor: index === bars.length - 1 ? colors.primary : colors.primaryContainer,
                       }}
                     />
-                    <Text variant="labelSmall" style={{ color: colors.textSecondary, marginTop: 4 }}>
+                    <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, marginTop: 4 }}>
                       {bar.label}
                     </Text>
                   </View>
@@ -149,10 +149,10 @@ export function StatsScreen() {
             </View>
           )}
           <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between', marginTop: spacing.m }}>
-            <Text variant="labelSmall" style={{ color: colors.textSecondary }}>
+            <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
               {t.statsDaysRead}: {stats.periodActiveDays}/{stats.periodDays}
             </Text>
-            <Text variant="labelSmall" style={{ color: colors.textSecondary }}>
+            <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
               {t.statsDailyAverage}: {formatDuration(Math.round(stats.periodMinutes / Math.max(1, stats.periodDays)))}
             </Text>
           </View>
@@ -181,10 +181,10 @@ function Kpi({ label, value }: { label: string; value: string }) {
   return (
     <Card style={{ width: '31%', backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}>
       <Card.Content style={{ paddingVertical: 12 }}>
-        <Text variant="labelSmall" numberOfLines={1} style={{ color: colors.textSecondary }}>
+        <Text variant="labelSmall" numberOfLines={1} style={{ color: colors.onSurfaceVariant }}>
           {label}
         </Text>
-        <Text variant="titleLarge" numberOfLines={1} style={{ color: colors.textPrimary, marginTop: 4 }}>
+        <Text variant="titleLarge" numberOfLines={1} style={{ color: colors.onSurface, marginTop: 4 }}>
           {value}
         </Text>
       </Card.Content>
@@ -193,24 +193,24 @@ function Kpi({ label, value }: { label: string; value: string }) {
 }
 
 function Breakdown({ title, rows }: { title: string; rows: { label: string; value: number }[] }) {
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, shape } = useAppTheme();
   return (
     <Card style={{ backgroundColor: colors.surface, marginTop: spacing.m, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}>
       <Card.Content>
-        <Text variant="titleMedium" style={{ color: colors.textPrimary, textAlign: 'right', marginBottom: spacing.s }}>
+        <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right', marginBottom: spacing.s }}>
           {title}
         </Text>
         {rows.length === 0 ? (
-          <Text variant="bodySmall" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+          <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
             {t.none}
           </Text>
         ) : (
           rows.map((row) => (
             <View key={row.label} style={{ flexDirection: 'row-reverse', justifyContent: 'space-between', paddingVertical: 4 }}>
-              <Text variant="bodyMedium" style={{ color: colors.textPrimary }}>
+              <Text variant="bodyMedium" style={{ color: colors.onSurface }}>
                 {row.label}
               </Text>
-              <Text variant="labelMedium" style={{ color: colors.textSecondary }}>
+              <Text variant="labelMedium" style={{ color: colors.onSurfaceVariant }}>
                 {row.value}
               </Text>
             </View>

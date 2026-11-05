@@ -43,7 +43,7 @@ export function CategoriesScreen() {
   if (query.isLoading) return <Loading />;
 
   return (
-    <ScrollView style={{ backgroundColor: colors.bg }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
+    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
       <Button mode="contained" icon="plus" onPress={() => setAddOpen(true)} style={{ marginBottom: spacing.m }}>
         {t.categoryNew}
       </Button>
@@ -58,7 +58,7 @@ export function CategoriesScreen() {
         </Button>
       ))}
       {query.data?.length === 0 ? (
-        <Text variant="bodyMedium" style={{ color: colors.textSecondary, textAlign: 'right' }}>
+        <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
           {t.none}
         </Text>
       ) : null}
@@ -77,7 +77,7 @@ export function CategoriesScreen() {
               }}
               style={{ backgroundColor: colors.surface, textAlign: 'right' }}
             />
-            {error ? <Text style={{ color: colors.danger }}>{error}</Text> : null}
+            {error ? <Text style={{ color: colors.error }}>{error}</Text> : null}
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setAddOpen(false)}>{t.cancel}</Button>
@@ -92,13 +92,13 @@ export function CategoriesScreen() {
         <Dialog visible={selected != null} onDismiss={() => setSelected(null)} style={{ backgroundColor: colors.surface }}>
           <Dialog.Title style={{ textAlign: 'right' }}>{selected?.name}</Dialog.Title>
           <Dialog.Content>
-            <Text style={{ color: colors.textSecondary, textAlign: 'right' }}>
+            <Text style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
               {t.categoryUsed(selected?.count ?? 0)}
             </Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setSelected(null)}>{t.cancel}</Button>
-            <Button textColor={colors.danger} onPress={() => selected && remove(selected)}>
+            <Button textColor={colors.error} onPress={() => selected && remove(selected)}>
               {t.delete}
             </Button>
           </Dialog.Actions>
