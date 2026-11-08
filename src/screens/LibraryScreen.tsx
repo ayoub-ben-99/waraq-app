@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/library/LibraryFragment.java
 import React, { useMemo, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button, Text, TextInput } from 'react-native-paper';
@@ -28,7 +27,6 @@ import { t } from '../lib/strings';
 import { useRefreshOnFocus } from '../lib/useRefreshOnFocus';
 import type { RootStackParamList } from '../navigation/types';
 import { useAppTheme } from '../theme/ThemeProvider';
-import { shape } from '../theme/ThemeProvider';
 import { BookCard } from '../components/BookCard';
 import { ChoiceDialog, ConfirmDialog } from '../components/ChoiceDialog';
 import { EmptyState, Loading } from '../components/Layout';
@@ -38,7 +36,7 @@ type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 export function LibraryScreen() {
   const navigation = useNavigation<Nav>();
-  const { colors, spacing, shape } = useAppTheme();
+  const { colors, spacing, radius } = useAppTheme();
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<number>(FILTER_ALL);
   const [sort, setSort] = useState(SORT_RECENT);
@@ -131,7 +129,7 @@ export function LibraryScreen() {
   const filtering = status !== FILTER_ALL || categoryId != null || query.trim().length > 0;
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background, paddingTop: spacing.s }}>
+    <View className="flex-1 pt-2" style={{ backgroundColor: colors.background }}>
       <View style={{ paddingHorizontal: spacing.m }}>
         <TextInput
           mode="outlined"
@@ -143,10 +141,10 @@ export function LibraryScreen() {
           outlineColor={colors.outline}
           activeOutlineColor={colors.primary}
         />
-        <View style={{ marginTop: spacing.s }}>
+        <View className="mt-2">
           <FilterPills options={statusOptions} value={status} onChange={setStatus} />
         </View>
-        <View style={{ flexDirection: 'row-reverse', gap: spacing.s, marginTop: spacing.s, flexWrap: 'wrap' }}>
+        <View className="mt-2 flex-row-reverse flex-wrap" style={{ gap: spacing.s }}>
           <Button mode="outlined" compact onPress={() => setSortOpen(true)} icon="sort">
             {sortOptions.find((x) => x.value === sort)?.label ?? t.sort}
           </Button>
@@ -157,7 +155,7 @@ export function LibraryScreen() {
             {t.libraryView}
           </Button>
         </View>
-        <View style={{ flexDirection: 'row-reverse', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing.s }}>
+        <View className="mt-2 flex-row-reverse items-center justify-between">
           <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
             {t.libraryCount(list.length)}
           </Text>
@@ -201,7 +199,11 @@ export function LibraryScreen() {
         />
       )}
       {importing ? (
-        <View style={styles.overlay} pointerEvents="none">
+        <View
+          className="absolute bottom-6 self-center items-center px-5 py-3"
+          pointerEvents="none"
+          style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerHighest }}
+        >
           <ActivityIndicator color={colors.primary} />
           <Text variant="bodySmall" style={{ color: colors.onSurface, marginTop: 8 }}>
             {t.bookPdfImporting}
@@ -236,16 +238,3 @@ export function LibraryScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    position: 'absolute',
-    bottom: 24,
-    alignSelf: 'center',
-    backgroundColor: 'rgba(0,0,0,0.08)',
-    borderRadius: shape.s16,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-});

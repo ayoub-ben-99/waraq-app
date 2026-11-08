@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/knowledge/AudioNoteActivity.java
 import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text, TextInput } from 'react-native-paper';
@@ -116,7 +115,7 @@ export function AudioNoteScreen() {
         style={{ backgroundColor: colors.surface, textAlign: 'right', marginTop: spacing.m }}
       />
 
-      <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.m }}>
+      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content style={{ alignItems: 'center' }}>
           <Text variant="displaySmall" style={{ color: colors.primary, fontVariant: ['tabular-nums'] }}>
             {clock(recorderState.isRecording ? recorderState.durationMillis : savedDuration)}

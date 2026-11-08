@@ -1,7 +1,5 @@
-// Ported from app/src/main/java/com/waraq/app/ui/MainActivity.java
 import React from 'react';
 import { I18nManager, Pressable } from 'react-native';
-import {  DefaultTheme as NavLight, DarkTheme as NavDark } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -26,20 +24,13 @@ import { BackupScreen } from '../screens/BackupScreen';
 import { ClearDataScreen } from '../screens/ClearDataScreen';
 import { AudioNoteScreen } from '../screens/AudioNoteScreen';
 import { PdfReaderScreen } from '../screens/PdfReaderScreen';
+import { MaterialNavigationBar } from './MaterialNavigationBar';
 
 I18nManager.allowRTL(true);
 I18nManager.forceRTL(true);
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tabs = createBottomTabNavigator<TabParamList>();
-
-const icons: Record<keyof TabParamList, keyof typeof MaterialCommunityIcons.glyphMap> = {
-  Home: 'home-variant-outline',
-  Library: 'bookshelf',
-  Knowledge: 'notebook-outline',
-  Review: 'cards-outline',
-  Stats: 'chart-box-outline',
-};
 
 const labels: Record<keyof TabParamList, string> = {
   Home: t.home,
@@ -54,32 +45,39 @@ function TabNavigator() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <Tabs.Navigator
+      tabBar={(props) => <MaterialNavigationBar {...props} />}
       screenOptions={({ route }) => ({
         headerStyle: { backgroundColor: colors.background },
         headerShadowVisible: false,
         headerTitleStyle: { color: colors.onSurface, fontFamily: paper.fonts.titleLarge.fontFamily, fontSize: 21 },
         headerTitleAlign: 'center',
         headerRight: () => (
-          <Pressable onPress={() => navigation.navigate('Search')} hitSlop={12} style={{ paddingHorizontal: 12 }}>
+          <Pressable
+            onPress={() => navigation.navigate('Search')}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel={t.search}
+            style={{ minWidth: 48, minHeight: 48, alignItems: 'center', justifyContent: 'center' }}
+          >
             <MaterialCommunityIcons name="magnify" size={24} color={colors.onSurface} />
           </Pressable>
         ),
         headerLeft: () => (
-          <Pressable onPress={() => navigation.navigate('Settings')} hitSlop={12} style={{ paddingHorizontal: 12 }}>
+          <Pressable
+            onPress={() => navigation.navigate('Settings')}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel={t.settings}
+            style={{ minWidth: 48, minHeight: 48, alignItems: 'center', justifyContent: 'center' }}
+          >
             <MaterialCommunityIcons name="cog-outline" size={24} color={colors.onSurface} />
           </Pressable>
-        ),
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.onSurfaceVariant,
-        tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.outline, height: 64, paddingBottom: 8, paddingTop: 6 },
-        tabBarLabelStyle: { fontFamily: paper.fonts.labelSmall.fontFamily, fontSize: 11 },
-        tabBarIcon: ({ color, size }) => (
-          <MaterialCommunityIcons name={icons[route.name]} size={size} color={color} />
         ),
         title: labels[route.name],
         headerShown: route.name !== 'Home' ? true : true,
         tabBarHideOnKeyboard: true,
         freezeOnBlur: true,
+        animation: 'none',
         sceneStyle: { backgroundColor: dark ? colors.background : colors.background },
       })}
     >
@@ -93,21 +91,7 @@ function TabNavigator() {
 }
 
 export function RootNavigator() {
-  const { colors, paper, dark } = useAppTheme();
-  const base = dark ? NavDark : NavLight;
-  const navTheme = {
-    ...base,
-    colors: {
-      ...base.colors,
-      primary: colors.primary,
-      background: colors.background,
-      card: colors.surface,
-      text: colors.onSurface,
-      border: colors.outline,
-      notification: colors.error,
-    },
-    fonts: base.fonts,
-  };
+  const { colors, paper } = useAppTheme();
 
   return (
     <Stack.Navigator
@@ -119,21 +103,22 @@ export function RootNavigator() {
         headerTitleAlign: 'center',
         headerBackButtonDisplayMode: 'minimal',
         contentStyle: { backgroundColor: colors.background },
-        animation: 'slide_from_left',
+        animation: 'fade_from_bottom',
+        animationDuration: 600,
       }}
     >
       <Stack.Screen name="Tabs" component={TabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="BookDetail" component={BookDetailScreen} options={{ title: t.bookDetail, animation: 'slide_from_left' }} />
-      <Stack.Screen name="BookEdit" component={BookEditScreen} options={{ title: t.bookEdit, presentation: 'modal' }} />
+      <Stack.Screen name="BookDetail" component={BookDetailScreen} options={{ title: t.bookDetail, animation: 'fade_from_bottom', animationDuration: 600 }} />
+      <Stack.Screen name="BookEdit" component={BookEditScreen} options={{ title: t.bookEdit, presentation: 'modal', animation: 'slide_from_bottom' }} />
       <Stack.Screen name="Categories" component={CategoriesScreen} options={{ title: t.categories }} />
-      <Stack.Screen name="EntryEdit" component={EntryEditScreen} options={{ title: t.entryNew, presentation: 'modal' }} />
+      <Stack.Screen name="EntryEdit" component={EntryEditScreen} options={{ title: t.entryNew, presentation: 'modal', animation: 'slide_from_bottom' }} />
       <Stack.Screen name="Summary" component={SummaryScreen} options={{ title: t.bookSummary }} />
-      <Stack.Screen name="ReviewSession" component={ReviewSessionScreen} options={{ title: t.reviewSessionTitle, presentation: 'modal' }} />
+      <Stack.Screen name="ReviewSession" component={ReviewSessionScreen} options={{ title: t.reviewSessionTitle, presentation: 'modal', animation: 'slide_from_bottom' }} />
       <Stack.Screen name="Search" component={SearchScreen} options={{ title: t.search }} />
       <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: t.settings }} />
       <Stack.Screen name="Backup" component={BackupScreen} options={{ title: t.backupTitle }} />
       <Stack.Screen name="ClearData" component={ClearDataScreen} options={{ title: t.clearTitle }} />
-      <Stack.Screen name="AudioNote" component={AudioNoteScreen} options={{ title: t.audioTitle, presentation: 'modal' }} />
+      <Stack.Screen name="AudioNote" component={AudioNoteScreen} options={{ title: t.audioTitle, presentation: 'modal', animation: 'slide_from_bottom' }} />
       <Stack.Screen name="PdfReader" component={PdfReaderScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );

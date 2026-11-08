@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/settings/ClearDataActivity.java
 import React, { useState } from 'react';
 import { Alert, ScrollView, StyleSheet } from 'react-native';
 import { Button, Card, Checkbox, Dialog, Portal, Text } from 'react-native-paper';
@@ -49,7 +48,7 @@ export function ClearDataScreen() {
         {t.clearIntro}
       </Text>
       {rows.map((row) => (
-        <Card key={row.flag} style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.m }}>
+        <Card key={row.flag} style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
           <Card.Content>
             <Checkbox.Item
               label={row.title}

@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/settings/BackupActivity.java
 import React, { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Dialog, Portal, Switch, Text } from 'react-native-paper';
@@ -76,7 +75,7 @@ export function BackupScreen() {
     <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
       <Text variant="titleLarge" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.backupTitle}</Text>
 
-      <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.m }}>
+      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content>
           <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.backupExport}</Text>
           <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 4, lineHeight: 22 }}>
@@ -95,7 +94,7 @@ export function BackupScreen() {
         </Card.Content>
       </Card>
 
-      <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.m }}>
+      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content>
           <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.backupRestore}</Text>
           <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 4, lineHeight: 22 }}>

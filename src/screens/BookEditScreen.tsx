@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/library/BookEditActivity.java
 import React, { useEffect, useState } from 'react';
 import { Alert, Image, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Switch, Text, TextInput } from 'react-native-paper';
@@ -175,7 +174,7 @@ export function BookEditScreen() {
       contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}
       keyboardShouldPersistTaps="handled"
     >
-      <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.m }}>
+      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.m }}>
         <Card.Content style={{ gap: spacing.s }}>
           <TextInput mode="outlined" label={t.bookTitle} value={title} onChangeText={setTitle} error={!!error && !title.trim()} style={inputStyle(colors)} />
           <TextInput mode="outlined" label={t.bookAuthor} value={author} onChangeText={setAuthor} style={inputStyle(colors)} />
@@ -245,7 +244,7 @@ export function BookEditScreen() {
         style={[inputStyle(colors), { marginTop: spacing.s }]}
       />
 
-      <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.m }}>
+      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content style={{ gap: spacing.s }}>
           <Text variant="titleSmall" style={{ color: colors.onSurface, textAlign: 'right' }}>
             {t.bookOrganize}

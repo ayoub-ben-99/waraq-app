@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/pdf/PdfReaderActivity.java
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { Button, Text } from 'react-native-paper';

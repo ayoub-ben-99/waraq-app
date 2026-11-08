@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/knowledge/KnowledgeFragment.java
 import React, { useMemo, useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';

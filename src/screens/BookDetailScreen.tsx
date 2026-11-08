@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/library/BookDetailActivity.java
 import React, { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Dialog, Portal, Text, TextInput } from 'react-native-paper';
@@ -162,14 +161,14 @@ export function BookDetailScreen() {
   ].filter(Boolean);
   const summaryRows = summary
     ? [
-        [t.summaryCore, summary.coreIdea],
-        [t.summaryKeyIdeas, summary.keyIdeas],
-        [t.summaryLearned, summary.learned],
-        [t.summaryAgree, summary.agreeDisagree],
-        [t.summaryApply, summary.applications],
-        [t.summaryQuestions, summary.questions],
-        [t.summaryFree, summary.freeText],
-      ].filter(([, value]) => !!value && value.trim().length > 0)
+      [t.summaryCore, summary.coreIdea],
+      [t.summaryKeyIdeas, summary.keyIdeas],
+      [t.summaryLearned, summary.learned],
+      [t.summaryAgree, summary.agreeDisagree],
+      [t.summaryApply, summary.applications],
+      [t.summaryQuestions, summary.questions],
+      [t.summaryFree, summary.freeText],
+    ].filter(([, value]) => !!value && value.trim().length > 0)
     : [];
 
   return (
@@ -207,7 +206,7 @@ export function BookDetailScreen() {
         </Text>
       ) : null}
 
-      <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.m }}>
+      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content>
           <Text variant="labelMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
             {t.bookProgress}
@@ -270,7 +269,7 @@ export function BookDetailScreen() {
             </Text>
           ) : (
             sessions.map((session) => (
-              <Card key={session.id} style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.s }}>
+              <Card key={session.id} style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}>
                 <Card.Content>
                   <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}>
                     <Text variant="titleSmall" style={{ color: colors.onSurface }}>
@@ -311,7 +310,7 @@ export function BookDetailScreen() {
             entries.map((entry) => (
               <Card
                 key={entry.id}
-                style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.s }}
+                style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
                 onPress={() => navigation.navigate('EntryEdit', { entryId: entry.id })}
                 onLongPress={() =>
                   Alert.alert(t.entryDeleteTitle, t.entryDeleteMessage, [
@@ -402,8 +401,8 @@ export function BookDetailScreen() {
             {sessionErrorText ? <Text style={{ color: colors.error }}>{sessionErrorText}</Text> : null}
           </Dialog.Content>
           <Dialog.Actions>
-            <Text onPress={() => setSessionOpen(false)} style={{ color: colors.onSurfaceVariant }}>{t.cancel}</Text>
-            <Text onPress={addSession} style={{ color: colors.primary, marginStart: 20 }}>{t.save}</Text>
+            <Button mode="text" textColor={colors.onSurfaceVariant} onPress={() => setSessionOpen(false)}>{t.cancel}</Button>
+            <Button mode="text" textColor={colors.primary} onPress={addSession}>{t.save}</Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>

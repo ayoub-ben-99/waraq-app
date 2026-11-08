@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/util/ArabicText.java
 export function normalize(input: string | null | undefined): string | null {
   if (input == null) return null;
   let out = '';

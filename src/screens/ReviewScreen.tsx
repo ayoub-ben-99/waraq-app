@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/review/ReviewFragment.java
 import React, { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
@@ -111,7 +110,7 @@ export function ReviewScreen() {
             return (
               <Card
                 key={item.item.entryId}
-                style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.s }}
+                style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
                 onPress={() => navigation.navigate('EntryEdit', { entryId: item.entry.id })}
               >
                 <Card.Content>
@@ -143,7 +142,7 @@ export function ReviewScreen() {
             return (
               <Card
                 key={item.item.entryId}
-                style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.s }}
+                style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
                 onPress={() => navigation.navigate('EntryEdit', { entryId: item.entry.id })}
               >
                 <Card.Content>

@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/knowledge/EntryEditActivity.java
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Checkbox, Text, TextInput } from 'react-native-paper';

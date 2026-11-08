@@ -1,12 +1,12 @@
-// Ported from app/src/main/java/com/waraq/app/WaraqApp.java
+import './global.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, I18nManager } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { md3DarkColors } from './src/theme/md3Dark';
-import { md3LightColors } from './src/theme/md3Light';
+import { md3DarkColors } from './src/theme/md3Colors';
+import { md3LightColors } from './src/theme/md3Colors';
 import { NavigationContainer, DefaultTheme as NavigationDefaultTheme, DarkTheme as NavigationDarkTheme } from '@react-navigation/native';
 import { PaperProvider } from 'react-native-paper';
 import { RootNavigator } from './src/navigation/RootNavigator';
@@ -34,8 +34,20 @@ const queryClient = new QueryClient({
 });
 
 function ThemedApp() {
-  const { paper, dark } = useAppTheme();
-  const navigationTheme = dark ? NavigationDarkTheme : NavigationDefaultTheme;
+  const { paper, colors, dark } = useAppTheme();
+  const base = dark ? NavigationDarkTheme : NavigationDefaultTheme;
+  const navigationTheme = {
+    ...base,
+    colors: {
+      ...base.colors,
+      primary: colors.primary,
+      background: colors.background,
+      card: colors.surface,
+      text: colors.onSurface,
+      border: colors.outlineVariant,
+      notification: colors.error,
+    },
+  };
   return (
     <PaperProvider theme={paper}>
       <NavigationContainer theme={navigationTheme}>

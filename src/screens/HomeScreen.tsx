@@ -1,7 +1,7 @@
-// Ported from app/src/main/java/com/waraq/app/ui/HomeFragment.java
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
+import { ProgressBar, StatCard, SurfaceCard } from '../ui';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useQuery } from '@tanstack/react-query';
@@ -15,9 +15,10 @@ import { t } from '../lib/strings';
 import { useRefreshOnFocus } from '../lib/useRefreshOnFocus';
 import type { RootStackParamList } from '../navigation/types';
 import { useAppTheme } from '../theme/ThemeProvider';
-import { shape } from '../theme/ThemeProvider';
 import { BookCover } from '../components/BookCard';
 import { Loading } from '../components/Layout';
+import { ReadingIllustration } from '../components/ReadingIllustration';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 type Nav = NativeStackNavigationProp<RootStackParamList>;
 
@@ -55,9 +56,12 @@ export function HomeScreen() {
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: spacing.m, paddingBottom: spacing.xl }}
     >
-      <Text style={{ color: colors.primary, fontSize: 32, fontFamily: 'Amiri', textAlign: 'right', marginTop: spacing.s }}>
-        {t.homeGreeting}
-      </Text>
+      <View style={{ flexDirection: 'row-reverse', alignItems: 'center', gap: spacing.s, marginTop: spacing.s }}>
+        <MaterialCommunityIcons name="book-open-page-variant-outline" size={26} color={colors.primary} />
+        <Text style={{ color: colors.primary, fontSize: 32, fontFamily: 'Amiri', textAlign: 'right' }}>
+          {t.homeGreeting}
+        </Text>
+      </View>
       <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginBottom: spacing.l }}>
         {t.homeSubtitle}
       </Text>
@@ -77,14 +81,15 @@ export function HomeScreen() {
         />
       </View>
 
-      <Card
-        style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.m }}
+      <SurfaceCard
+        style={{ marginBottom: spacing.m }}
         onPress={() => (book ? navigation.navigate('BookDetail', { bookId: book.id }) : navigation.navigate('BookEdit'))}
       >
         <Card.Content>
-          <Text variant="labelMedium" style={{ color: colors.primary, textAlign: 'right' }}>
-            {t.homeContinue}
-          </Text>
+          <View style={{ flexDirection: 'row-reverse', alignItems: 'center', gap: spacing.xs }}>
+            <MaterialCommunityIcons name="book-arrow-right-outline" size={19} color={colors.primary} />
+            <Text variant="labelMedium" style={{ color: colors.primary, textAlign: 'right' }}>{t.homeContinue}</Text>
+          </View>
           {book ? (
             <View style={{ flexDirection: 'row-reverse', alignItems: 'center', gap: spacing.m, marginTop: spacing.s }}>
               <BookCover book={book} />
@@ -99,25 +104,29 @@ export function HomeScreen() {
                   {t.homeLastPosition(book.currentPage)}
                 </Text>
                 {percent >= 0 ? (
-                  <View style={[styles.track, { backgroundColor: colors.surfaceContainerHigh, marginTop: 8 }]}>
-                    <View style={[styles.fill, { width: `${percent}%`, backgroundColor: colors.primary }]} />
+                  <View style={{ marginTop: 8 }}>
+                    <ProgressBar value={percent} />
                   </View>
                 ) : null}
               </View>
             </View>
           ) : (
-            <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: spacing.s }}>
-              {t.homeNoReading}
-            </Text>
+            <View style={{ alignItems: 'center', marginTop: spacing.s }}>
+              <ReadingIllustration />
+              <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'center' }}>
+                {t.homeNoReading}
+              </Text>
+            </View>
           )}
         </Card.Content>
-      </Card>
+      </SurfaceCard>
 
-      <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.m }}>
+      <SurfaceCard style={{ marginBottom: spacing.m }}>
         <Card.Content>
-          <Text variant="labelMedium" style={{ color: colors.primary, textAlign: 'right' }}>
-            {t.homeToday}
-          </Text>
+          <View style={{ flexDirection: 'row-reverse', alignItems: 'center', gap: spacing.xs }}>
+            <MaterialCommunityIcons name="chart-timeline-variant" size={19} color={colors.primary} />
+            <Text variant="labelMedium" style={{ color: colors.primary, textAlign: 'right' }}>{t.homeToday}</Text>
+          </View>
           <Text variant="bodyMedium" style={{ color: colors.onSurface, textAlign: 'right', marginTop: 4 }}>
             {todayMinutes <= 0 && todayPages <= 0
               ? 'لا نشاط مسجّل اليوم'
@@ -132,14 +141,15 @@ export function HomeScreen() {
             {due > 0 ? t.homeDue(due) : t.reviewNoDueTitle}
           </Button>
         </Card.Content>
-      </Card>
+      </SurfaceCard>
 
       <View style={{ flexDirection: 'row-reverse', gap: spacing.s, marginBottom: spacing.m }}>
-        <Button mode="contained" onPress={() => navigation.navigate('BookEdit')} style={{ flex: 1 }}>
+        <Button mode="contained" icon="book-plus-outline" onPress={() => navigation.navigate('BookEdit')} style={{ flex: 1 }}>
           {t.bookAdd}
         </Button>
         <Button
           mode="outlined"
+          icon="note-plus-outline"
           onPress={() => navigation.navigate('EntryEdit', { type: 1 })}
           style={{ flex: 1 }}
         >
@@ -147,20 +157,24 @@ export function HomeScreen() {
         </Button>
       </View>
 
-      <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right', marginBottom: spacing.s }}>
-        {t.homeRecent}
-      </Text>
+      <View style={{ flexDirection: 'row-reverse', alignItems: 'center', gap: spacing.s, marginBottom: spacing.s }}>
+        <MaterialCommunityIcons name="book-multiple-outline" size={21} color={colors.onSurface} />
+        <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.homeRecent}</Text>
+      </View>
       {recent.length === 0 ? (
-        <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
-          {t.emptyKnowledgeBody}
-        </Text>
+        <View style={{ alignItems: 'center' }}>
+          <ReadingIllustration variant="knowledge" />
+          <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'center' }}>
+            {t.emptyKnowledgeBody}
+          </Text>
+        </View>
       ) : (
         recent.map((entry) => {
           const body = entryDisplayText(entry);
           return (
-            <Card
+            <SurfaceCard
               key={entry.id}
-              style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.s }}
+              style={{ marginBottom: spacing.s }}
               onPress={() => navigation.navigate('EntryEdit', { entryId: entry.id })}
             >
               <Card.Content>
@@ -186,47 +200,10 @@ export function HomeScreen() {
                   {entry.title?.trim() || body}
                 </Text>
               </Card.Content>
-            </Card>
+            </SurfaceCard>
           );
         })
       )}
     </ScrollView>
   );
 }
-
-function StatCard({
-  label,
-  value,
-  hint,
-  onPress,
-}: {
-  label: string;
-  value: string;
-  hint: string;
-  onPress: () => void;
-}) {
-  const { colors, spacing, shape } = useAppTheme();
-  return (
-    <Card
-      onPress={onPress}
-      style={{ flex: 1, backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}
-    >
-      <Card.Content style={{ alignItems: 'flex-end', paddingVertical: spacing.m }}>
-        <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
-          {label}
-        </Text>
-        <Text variant="headlineMedium" style={{ color: colors.onSurface }}>
-          {value}
-        </Text>
-        <Text variant="labelSmall" numberOfLines={1} style={{ color: colors.onSurfaceVariant }}>
-          {hint}
-        </Text>
-      </Card.Content>
-    </Card>
-  );
-}
-
-const styles = StyleSheet.create({
-  track: { height: 5, borderRadius: shape.s4, overflow: 'hidden' },
-  fill: { height: 5, borderRadius: shape.s4 },
-});

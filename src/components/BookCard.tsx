@@ -1,44 +1,40 @@
-// Ported from app/src/main/java/com/waraq/app/ui/library/BookAdapter.java
 import React from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import * as FS from 'expo-file-system/legacy';
 import type { Book } from '../data/db/schema';
 import { progressPercent } from '../data/repos/books';
 import { bookStatusLabel } from '../lib/labels';
-import { shape, useAppTheme } from '../theme/ThemeProvider';
+import { useAppTheme } from '../theme/ThemeProvider';
 
 export function coverUri(coverPath: string | null): string | null {
   if (!coverPath) return null;
   return `${FS.documentDirectory}${coverPath}`;
 }
-
 export function BookCover({ book, size = 64 }: { book: Book; size?: number }) {
-  const { colors } = useAppTheme();
+  const { colors, fonts } = useAppTheme();
   const uri = coverUri(book.coverPath);
   return (
     <View
+      className="items-center justify-center overflow-hidden rounded-lg border-0"
       style={[
-        styles.cover,
         {
           width: size,
           height: size * 1.4,
           backgroundColor: colors.surfaceContainerHigh,
-          borderColor: colors.outline,
         },
       ]}
     >
       {uri ? (
-        <Image source={{ uri }} style={styles.image} resizeMode="cover" />
+        <Image source={{ uri }} className="h-full w-full" resizeMode="cover" />
       ) : (
-        <Text variant="headlineSmall" style={{ color: colors.primary, fontFamily: 'Amiri' }}>
+        <Text variant="headlineSmall" style={{ color: colors.primary, fontFamily: fonts.quote }}>
           {book.title.trim().charAt(0) || 'و'}
         </Text>
       )}
     </View>
   );
 }
-
 export function BookCard({
   book,
   grid,
@@ -50,18 +46,24 @@ export function BookCard({
   onPress: () => void;
   onLongPress?: () => void;
 }) {
-  const { colors, spacing, fonts, shape } = useAppTheme();
+  const { colors, spacing, fonts, radius } = useAppTheme();
   const percent = progressPercent(book);
   if (grid) {
     return (
-      <TouchableOpacity
+      <Pressable
         onPress={onPress}
         onLongPress={onLongPress}
         accessibilityRole="button"
         accessibilityLabel={book.title}
-        style={[styles.grid, { backgroundColor: colors.surface, borderColor: colors.outline }]}
+        style={({ pressed }) => ({
+          flex: 1,
+          margin: spacing.s,
+          borderRadius: radius.card,
+          padding: spacing.m,
+          backgroundColor: pressed ? colors.surfaceContainer : colors.surfaceContainerLow,
+        })}
       >
-        <View style={{ alignItems: 'center' }}>
+        <View className="items-center">
           <BookCover book={book} size={88} />
         </View>
         <Text
@@ -75,22 +77,29 @@ export function BookCard({
           {book.author || bookStatusLabel(book.status)}
         </Text>
         {percent >= 0 ? (
-          <View style={{ marginTop: 6 }}>
-            <View style={[styles.track, { backgroundColor: colors.surfaceContainerHigh }]}>
-              <View style={[styles.fill, { width: `${percent}%`, backgroundColor: colors.primary }]} />
+          <View className="mt-1.5">
+            <View className="h-1.25 overflow-hidden rounded-full" style={{ backgroundColor: colors.surfaceContainerHigh }}>
+              <View className="h-1.25 rounded-full" style={{ width: `${percent}%`, backgroundColor: colors.primary }} />
             </View>
           </View>
         ) : null}
-      </TouchableOpacity>
+      </Pressable>
     );
   }
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={onPress}
       onLongPress={onLongPress}
       accessibilityRole="button"
       accessibilityLabel={book.title}
-      style={[styles.row, { backgroundColor: colors.surface, borderColor: colors.outline }]}
+      style={({ pressed }) => ({
+        marginBottom: spacing.s,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: radius.card,
+        padding: spacing.m,
+        backgroundColor: pressed ? colors.surfaceContainer : colors.surfaceContainerLow,
+      })}
     >
       <BookCover book={book} />
       <View style={{ flex: 1, marginStart: spacing.m }}>
@@ -110,34 +119,8 @@ export function BookCard({
           ★
         </Text>
       ) : null}
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
-  cover: {
-    borderRadius: shape.s8,
-    borderWidth: StyleSheet.hairlineWidth,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  image: { width: '100%', height: '100%' },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: shape.s16,
-    padding: 12,
-    marginBottom: 10,
-  },
-  grid: {
-    flex: 1,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: shape.s16,
-    padding: 12,
-    margin: 5,
-  },
-  track: { height: 4, borderRadius: shape.s4, overflow: 'hidden' },
-  fill: { height: 4, borderRadius: shape.s4 },
-});
+

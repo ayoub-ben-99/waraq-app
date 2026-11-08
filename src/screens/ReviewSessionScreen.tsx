@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/review/ReviewSessionActivity.java
 import React, { useMemo, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
@@ -107,7 +106,7 @@ export function ReviewSessionScreen() {
         <Button compact onPress={() => navigation.goBack()}>{t.close}</Button>
       </View>
 
-      <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginTop: spacing.s, minHeight: 320 }}>
+      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.s, minHeight: 320 }}>
         <Card.Content style={{ paddingVertical: spacing.l }}>
           <Text variant="labelSmall" style={{ color: colors.primary, textAlign: 'right' }}>
             {entry ? entryTypeLabel(entry.type) : ''}

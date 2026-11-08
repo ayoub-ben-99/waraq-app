@@ -1,4 +1,4 @@
-// Ported from app/src/main/java/com/waraq/app/data/WaraqDatabase.java
+import { Platform } from 'react-native';
 import { drizzle, type ExpoSQLiteDatabase } from 'drizzle-orm/expo-sqlite';
 import { openDatabaseSync, type SQLiteDatabase } from 'expo-sqlite';
 import { createSchemaSql, LATEST_SCHEMA } from './migrations';
@@ -8,16 +8,26 @@ let sqlite: SQLiteDatabase | null = null;
 let database: ExpoSQLiteDatabase<typeof schema> | null = null;
 
 export function getSqlite(): SQLiteDatabase {
+  if (Platform.OS === 'web') {
+    throw new Error('SQLite is not supported on web platform');
+  }
   if (!sqlite) sqlite = openDatabaseSync('waraq.db');
   return sqlite;
 }
 
 export function getDb(): ExpoSQLiteDatabase<typeof schema> {
+  if (Platform.OS === 'web') {
+    throw new Error('SQLite is not supported on web platform');
+  }
   if (!database) database = drizzle(getSqlite(), { schema });
   return database;
 }
 
 export function initializeDatabase(): void {
+  if (Platform.OS === 'web') {
+    // No‑op for web; SQLite is unavailable.
+    return;
+  }
   const raw = getSqlite();
   raw.execSync('PRAGMA foreign_keys = ON;');
   raw.execSync('PRAGMA journal_mode = WAL;');

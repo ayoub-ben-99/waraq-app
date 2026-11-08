@@ -1,8 +1,7 @@
-// Ported from app/src/main/java/com/waraq/app/ui/FilterPill.java
 import React from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { Pressable, ScrollView } from 'react-native';
 import { Text } from 'react-native-paper';
-import { shape, useAppTheme } from '../theme/ThemeProvider';
+import { useAppTheme } from '../theme/ThemeProvider';
 
 export type FilterOption<T extends string | number> = { value: T; label: string };
 
@@ -17,29 +16,35 @@ export function FilterPills<T extends string | number>({
   onChange: (value: T) => void;
   scroll?: boolean;
 }) {
-  const { colors } = useAppTheme();
+  const { colors, radius, spacing } = useAppTheme();
   const content = (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ gap: 8, paddingVertical: 4, flexDirection: 'row-reverse' }}
+      className="py-1"
+      contentContainerClassName="flex-row-reverse gap-2"
       scrollEnabled={scroll}
     >
       {options.map((option) => {
         const selected = option.value === value;
         return (
-          <TouchableOpacity
+          <Pressable
             key={String(option.value)}
             accessibilityRole="button"
             accessibilityState={{ selected }}
             onPress={() => onChange(option.value)}
-            style={[
-              styles.pill,
-              {
-                backgroundColor: selected ? colors.primary : colors.surfaceContainerHigh,
-                borderColor: selected ? colors.primary : colors.outline,
-              },
-            ]}
+            style={({ pressed }) => ({
+              minHeight: 40,
+              justifyContent: 'center',
+              borderRadius: radius.control,
+              paddingHorizontal: spacing.m,
+              paddingVertical: spacing.s,
+              backgroundColor: selected
+                ? colors.primary
+                : pressed
+                  ? colors.surfaceContainer
+                  : colors.surfaceContainerHigh,
+            })}
           >
             <Text
               variant="labelMedium"
@@ -47,19 +52,10 @@ export function FilterPills<T extends string | number>({
             >
               {option.label}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         );
       })}
     </ScrollView>
   );
   return content;
 }
-
-const styles = StyleSheet.create({
-  pill: {
-    paddingHorizontal: 14,
-    paddingVertical: 7,
-    borderRadius: shape.s28,
-    borderWidth: StyleSheet.hairlineWidth,
-  },
-});

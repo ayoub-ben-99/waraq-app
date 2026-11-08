@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/library/CategoriesActivity.java
 import React, { useState } from 'react';
 import { Alert, ScrollView, StyleSheet } from 'react-native';
 import { Button, Dialog, Portal, Text, TextInput } from 'react-native-paper';
@@ -7,6 +6,7 @@ import { categoryUsage, createCategory, deleteCategory, type CategoryUsage } fro
 import { t } from '../lib/strings';
 import { useAppTheme } from '../theme/ThemeProvider';
 import { Loading } from '../components/Layout';
+import { radius } from '../theme';
 
 export function CategoriesScreen() {
   const { colors, spacing } = useAppTheme();
@@ -52,7 +52,7 @@ export function CategoriesScreen() {
           key={category.id}
           mode="outlined"
           onPress={() => setSelected(category)}
-          style={{ marginBottom: spacing.s, backgroundColor: colors.surface, borderColor: colors.outline }}
+          style={{ marginBottom: spacing.s, backgroundColor: colors.surfaceContainerLow }}
         >
           {category.name}
         </Button>
@@ -64,7 +64,7 @@ export function CategoriesScreen() {
       ) : null}
 
       <Portal>
-        <Dialog visible={addOpen} onDismiss={() => setAddOpen(false)} style={{ backgroundColor: colors.surface }}>
+        <Dialog visible={addOpen} onDismiss={() => setAddOpen(false)} style={{ backgroundColor: colors.surface, borderRadius: radius.card }}>
           <Dialog.Title style={{ textAlign: 'right' }}>{t.categoryNew}</Dialog.Title>
           <Dialog.Content style={{ gap: spacing.s }}>
             <TextInput
@@ -81,7 +81,7 @@ export function CategoriesScreen() {
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setAddOpen(false)}>{t.cancel}</Button>
-            <Button mode="contained" onPress={add}>
+            <Button style={{paddingInline:"10px"}} mode="contained" onPress={add}>
               {t.add}
             </Button>
           </Dialog.Actions>

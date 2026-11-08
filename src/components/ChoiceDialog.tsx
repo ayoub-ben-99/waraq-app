@@ -1,7 +1,6 @@
-// Ported from app/src/main/java/com/waraq/app/ui/Ui.java
 import React from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
-import { Dialog, Portal, Text, TextInput } from 'react-native-paper';
+import { Pressable, ScrollView, View } from 'react-native';
+import { Button, Dialog, Portal, Text, TextInput } from 'react-native-paper';
 import { useAppTheme } from '../theme/ThemeProvider';
 
 export function ChoiceDialog<T extends string | number | null>({
@@ -19,25 +18,33 @@ export function ChoiceDialog<T extends string | number | null>({
   onSelect: (value: T) => void;
   onDismiss: () => void;
 }) {
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, radius } = useAppTheme();
   return (
     <Portal>
-      <Dialog visible={visible} onDismiss={onDismiss} style={{ backgroundColor: colors.surface }}>
+      <Dialog visible={visible} onDismiss={onDismiss} style={{ borderRadius: radius.card, backgroundColor: colors.surface }}>
         <Dialog.Title style={{ textAlign: 'right', color: colors.onSurface }}>{title}</Dialog.Title>
         <Dialog.Content style={{ maxHeight: 420, paddingHorizontal: 0 }}>
           <ScrollView>
             {options.map((option) => (
-              <TouchableOpacity
+              <Pressable
                 key={String(option.value)}
                 onPress={() => {
                   onSelect(option.value);
                   onDismiss();
                 }}
-                style={{
+                style={({ pressed }) => ({
+                  marginInline :"10px",
+                  borderRadius:radius.full,
+                  minHeight: 48,
+                  justifyContent: 'center',
                   paddingVertical: spacing.m,
                   paddingHorizontal: spacing.l,
-                  backgroundColor: option.value === value ? colors.primaryContainer : 'transparent',
-                }}
+                  backgroundColor: option.value === value
+                    ? colors.secondaryContainer
+                    : pressed
+                      ? colors.surfaceContainerHigh
+                      : 'transparent',
+                })}
               >
                 <Text
                   variant="bodyLarge"
@@ -45,7 +52,7 @@ export function ChoiceDialog<T extends string | number | null>({
                 >
                   {option.label}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </ScrollView>
         </Dialog.Content>
@@ -71,10 +78,10 @@ export function ConfirmDialog({
   onDismiss: () => void;
   destructive?: boolean;
 }) {
-  const { colors } = useAppTheme();
+  const { colors, radius } = useAppTheme();
   return (
     <Portal>
-      <Dialog visible={visible} onDismiss={onDismiss} style={{ backgroundColor: colors.surface }}>
+      <Dialog visible={visible} onDismiss={onDismiss} style={{ borderRadius: radius.card, backgroundColor: colors.surface }}>
         <Dialog.Title style={{ textAlign: 'right', color: colors.onSurface }}>{title}</Dialog.Title>
         <Dialog.Content>
           <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
@@ -82,18 +89,19 @@ export function ConfirmDialog({
           </Text>
         </Dialog.Content>
         <Dialog.Actions>
-          <Text onPress={onDismiss} style={{ color: colors.onSurfaceVariant }}>
+          <Button mode="text" textColor={colors.onSurfaceVariant} onPress={onDismiss}>
             إلغاء
-          </Text>
-          <Text
+          </Button>
+          <Button
+            mode="text"
+            textColor={destructive ? colors.error : colors.primary}
             onPress={() => {
               onConfirm();
               onDismiss();
             }}
-            style={{ color: destructive ? colors.error : colors.primary, marginStart: 20 }}
           >
             {confirmLabel}
-          </Text>
+          </Button>
         </Dialog.Actions>
       </Dialog>
     </Portal>
@@ -117,10 +125,10 @@ export function FormDialog({
   onDismiss: () => void;
   label?: string;
 }) {
-  const { colors } = useAppTheme();
+  const { colors, radius } = useAppTheme();
   return (
     <Portal>
-      <Dialog visible={visible} onDismiss={onDismiss} style={{ backgroundColor: colors.surface }}>
+      <Dialog visible={visible} onDismiss={onDismiss} style={{ borderRadius: radius.card, backgroundColor: colors.surface }}>
         <Dialog.Title style={{ textAlign: 'right', color: colors.onSurface }}>{title}</Dialog.Title>
         <Dialog.Content>
           <TextInput
@@ -133,12 +141,12 @@ export function FormDialog({
           />
         </Dialog.Content>
         <Dialog.Actions>
-          <Text onPress={onDismiss} style={{ color: colors.onSurfaceVariant }}>
+          <Button mode="text" textColor={colors.onSurfaceVariant} onPress={onDismiss}>
             إلغاء
-          </Text>
-          <Text onPress={onSave} style={{ color: colors.primary, marginStart: 20 }}>
+          </Button>
+          <Button mode="text" textColor={colors.primary} onPress={onSave}>
             حفظ
-          </Text>
+          </Button>
         </Dialog.Actions>
       </Dialog>
     </Portal>

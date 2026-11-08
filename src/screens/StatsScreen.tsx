@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/stats/StatsFragment.java
 import React, { useMemo, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
@@ -97,7 +96,7 @@ export function StatsScreen() {
         <Kpi label={t.statsReadingTime} value={formatDuration(stats.minutes)} />
       </View>
 
-      <Card style={{ backgroundColor: colors.surface, marginTop: spacing.m, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}>
+      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content>
           <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}>
             <Text variant="titleMedium" style={{ color: colors.onSurface }}>
@@ -179,7 +178,7 @@ export function StatsScreen() {
 function Kpi({ label, value }: { label: string; value: string }) {
   const { colors } = useAppTheme();
   return (
-    <Card style={{ width: '31%', backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}>
+    <Card style={{ width: '48%', backgroundColor: colors.surfaceContainerLow }}>
       <Card.Content style={{ paddingVertical: 12 }}>
         <Text variant="labelSmall" numberOfLines={1} style={{ color: colors.onSurfaceVariant }}>
           {label}
@@ -195,7 +194,7 @@ function Kpi({ label, value }: { label: string; value: string }) {
 function Breakdown({ title, rows }: { title: string; rows: { label: string; value: number }[] }) {
   const { colors, spacing, shape } = useAppTheme();
   return (
-    <Card style={{ backgroundColor: colors.surface, marginTop: spacing.m, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}>
+    <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
       <Card.Content>
         <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right', marginBottom: spacing.s }}>
           {title}

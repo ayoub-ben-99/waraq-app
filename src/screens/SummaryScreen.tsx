@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/knowledge/SummaryActivity.java
 import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Button, Card, Text, TextInput } from 'react-native-paper';
@@ -141,7 +140,7 @@ export function SummaryScreen() {
         </Button>
       </View>
 
-      <Card style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}>
+      <Card style={{ backgroundColor: colors.surfaceContainerLow }}>
         <Card.Content style={{ gap: spacing.s }}>
           {mode === 'template' ? (
             <>

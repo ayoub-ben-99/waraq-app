@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/search/SearchActivity.java
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Card, Text, TextInput } from 'react-native-paper';
@@ -35,7 +34,7 @@ export function SearchScreen() {
         {items.map((entry) => (
           <Card
             key={entry.id}
-            style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.s }}
+            style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
             onPress={() => navigation.navigate('EntryEdit', { entryId: entry.id })}
           >
             <Card.Content>
@@ -85,7 +84,7 @@ export function SearchScreen() {
           {result.books.map((book) => (
             <Card
               key={book.id}
-              style={{ backgroundColor: colors.surface, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth, marginBottom: spacing.s }}
+              style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
               onPress={() => navigation.navigate('BookDetail', { bookId: book.id })}
             >
               <Card.Content>
@@ -111,7 +110,7 @@ export function SearchScreen() {
             {result.tags.map((tag) => (
               <Card
                 key={tag.id}
-                style={{ backgroundColor: colors.surfaceContainerHigh, borderColor: colors.outline, borderWidth: StyleSheet.hairlineWidth }}
+                style={{ backgroundColor: colors.surfaceContainerHigh }}
                 onPress={() => navigation.navigate('Tabs', { screen: 'Knowledge', params: { tag: tag.name } })}
               >
                 <Card.Content style={{ paddingVertical: 6, paddingHorizontal: 10 }}>

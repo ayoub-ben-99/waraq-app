@@ -1,9 +1,9 @@
-// Ported from app/src/main/java/com/waraq/app/util/Prefs.java
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import { MD3DarkTheme, MD3LightTheme, configureFonts, type MD3Theme } from 'react-native-paper';
-import { md3DarkColors } from './md3Dark';
-import { md3LightColors } from './md3Light';
+import { Uniwind } from 'uniwind';
+import { md3DarkColors } from './md3Colors';
+import { md3LightColors } from './md3Colors';
 import { fonts, spacing, radius } from './tokens';
 import { getThemeMode, setThemeMode as persistThemeMode, type ThemeMode } from '../lib/prefs';
 
@@ -25,7 +25,7 @@ type AppTheme = {
 
 const ThemeContext = createContext<AppTheme | null>(null);
 
-const fontConfig = {
+export const fontConfig = {
   displayLarge: { fontFamily: fonts.semibold, fontSize: 54, fontWeight: '600' as const },
   displayMedium: { fontFamily: fonts.semibold, fontSize: 44, fontWeight: '600' as const },
   displaySmall: { fontFamily: fonts.semibold, fontSize: 36, fontWeight: '600' as const },
@@ -43,7 +43,7 @@ const fontConfig = {
   bodySmall: { fontFamily: fonts.regular, fontSize: 13, fontWeight: '400' as const },
 };
 
-function makePaperTheme(colors: Palette, dark: boolean): MD3Theme {
+export function createPaperTheme(colors: Palette, dark: boolean): MD3Theme {
   const base = dark ? MD3DarkTheme : MD3LightTheme;
   return {
     ...base,
@@ -57,29 +57,33 @@ function makePaperTheme(colors: Palette, dark: boolean): MD3Theme {
       primaryContainer: colors.primaryContainer,
       onPrimaryContainer: colors.onPrimaryContainer,
       secondary: colors.secondary,
-      onSecondary: colors.onPrimary,
-      secondaryContainer: colors.surfaceContainerHigh,
-      onSecondaryContainer: colors.onSurface,
+      onSecondary: colors.onSecondary,
+      secondaryContainer: colors.secondaryContainer,
+      onSecondaryContainer: colors.onSecondaryContainer,
       tertiary: colors.tertiary,
-      onTertiary: colors.onPrimary,
+      onTertiary: colors.onTertiary,
+      tertiaryContainer: colors.tertiaryContainer,
+      onTertiaryContainer: colors.onTertiaryContainer,
       background: colors.background,
       onBackground: colors.onSurface,
       surface: colors.surface,
       onSurface: colors.onSurface,
-      surfaceVariant: colors.surfaceContainerHigh,
+      surfaceVariant: colors.surfaceVariant,
       onSurfaceVariant: colors.onSurfaceVariant,
       outline: colors.outline,
-      outlineVariant: colors.outline,
+      outlineVariant: colors.outlineVariant,
       error: colors.error,
       onError: colors.onError,
+      errorContainer: colors.errorContainer,
+      onErrorContainer: colors.onErrorContainer,
       elevation: {
         ...base.colors.elevation,
         level0: 'transparent',
-        level1: colors.surface,
-        level2: colors.surface,
-        level3: colors.surface,
-        level4: colors.surface,
-        level5: colors.surface,
+        level1: colors.surfaceContainerLow,
+        level2: colors.surfaceContainer,
+        level3: colors.surfaceContainerHigh,
+        level4: colors.surfaceContainerHighest,
+        level5: colors.surfaceContainerHighest,
       },
     },
   };
@@ -90,6 +94,11 @@ export function AppThemeProvider({ children }: { children: React.ReactNode }) {
   const [mode, setModeState] = useState<ThemeMode>(() => getThemeMode());
   const dark = mode === 'dark' || (mode === 'system' && system === 'dark');
   const colors = dark ? md3DarkColors : md3LightColors;
+
+  useEffect(() => {
+    Uniwind.setTheme(mode);
+  }, [mode]);
+
   const setMode = useCallback((next: ThemeMode) => {
     persistThemeMode(next);
     setModeState(next);
@@ -103,7 +112,7 @@ export function AppThemeProvider({ children }: { children: React.ReactNode }) {
       radius,
       shape,
       fonts,
-      paper: makePaperTheme(colors, dark),
+      paper: createPaperTheme(colors, dark),
       setMode,
     }),
     [mode, dark, colors, setMode],

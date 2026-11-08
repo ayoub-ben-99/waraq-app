@@ -1,11 +1,10 @@
-// Ported from app/src/main/java/com/waraq/app/ui/knowledge/EntryAdapter.java
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import type { KnowledgeEntry } from '../data/db/schema';
 import { formatShort } from '../lib/dates';
 import { entryDisplayText, entryTypeLabel } from '../lib/labels';
-import { shape, useAppTheme } from '../theme/ThemeProvider';
+import { useAppTheme } from '../theme/ThemeProvider';
 
 export function EntryCard({
   entry,
@@ -22,15 +21,22 @@ export function EntryCard({
   onPress: () => void;
   onLongPress?: () => void;
 }) {
-  const { colors, spacing, fonts } = useAppTheme();
+  const { colors, spacing, fonts, radius } = useAppTheme();
   const body = entryDisplayText(entry);
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={onPress}
       onLongPress={onLongPress}
-      style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.outline }]}
+      accessibilityRole="button"
+      accessibilityLabel={entry.title?.trim() || body || entryTypeLabel(entry.type)}
+      style={({ pressed }) => ({
+        marginBottom: spacing.s,
+        borderRadius: radius.card,
+        padding: spacing.m,
+        backgroundColor: pressed ? colors.surfaceContainer : colors.surfaceContainerLow,
+      })}
     >
-      <View style={styles.top}>
+      <View className="flex-row-reverse items-center justify-between">
         <Text variant="labelSmall" style={{ color: colors.primary }}>
           {entryTypeLabel(entry.type)}
         </Text>
@@ -58,7 +64,7 @@ export function EntryCard({
           {body}
         </Text>
       ) : null}
-      <View style={[styles.meta, { marginTop: spacing.s }]}>
+      <View className="mt-2 flex-row-reverse items-center flex-wrap gap-2">
         {entry.page != null ? (
           <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
             صفحة {entry.page}
@@ -77,17 +83,6 @@ export function EntryCard({
           </Text>
         ) : null}
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: shape.s16,
-    padding: 14,
-    marginBottom: 10,
-  },
-  top: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center' },
-  meta: { flexDirection: 'row-reverse', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
-});

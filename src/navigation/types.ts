@@ -1,4 +1,3 @@
-// Ported from app/src/main/java/com/waraq/app/ui/MainActivity.java
 import type { NavigatorScreenParams } from '@react-navigation/native';
 
 export type TabParamList = {
