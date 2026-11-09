@@ -1,5 +1,5 @@
 import React from 'react';
-import { I18nManager, Pressable } from 'react-native';
+import { I18nManager, Pressable, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -25,6 +25,7 @@ import { ClearDataScreen } from '../screens/ClearDataScreen';
 import { AudioNoteScreen } from '../screens/AudioNoteScreen';
 import { PdfReaderScreen } from '../screens/PdfReaderScreen';
 import { MaterialNavigationBar } from './MaterialNavigationBar';
+import { QuickActionsFab } from './QuickActionsFab';
 
 I18nManager.allowRTL(true);
 I18nManager.forceRTL(true);
@@ -44,9 +45,10 @@ function TabNavigator() {
   const { colors, paper, dark } = useAppTheme();
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
-    <Tabs.Navigator
-      tabBar={(props) => <MaterialNavigationBar {...props} />}
-      screenOptions={({ route }) => ({
+    <View style={{ flex: 1 }}>
+      <Tabs.Navigator
+        tabBar={(props) => <MaterialNavigationBar {...props} />}
+        screenOptions={({ route }) => ({
         headerStyle: { backgroundColor: colors.background },
         headerShadowVisible: false,
         headerTitleStyle: { color: colors.onSurface, fontFamily: paper.fonts.titleLarge.fontFamily, fontSize: 21 },
@@ -79,14 +81,16 @@ function TabNavigator() {
         freezeOnBlur: true,
         animation: 'none',
         sceneStyle: { backgroundColor: dark ? colors.background : colors.background },
-      })}
-    >
-      <Tabs.Screen name="Home" component={HomeScreen} options={{ title: labels.Home }} />
-      <Tabs.Screen name="Library" component={LibraryScreen} options={{ title: labels.Library }} />
-      <Tabs.Screen name="Knowledge" component={KnowledgeScreen} options={{ title: labels.Knowledge }} />
-      <Tabs.Screen name="Review" component={ReviewScreen} options={{ title: labels.Review }} />
-      <Tabs.Screen name="Stats" component={StatsScreen} options={{ title: labels.Stats }} />
-    </Tabs.Navigator>
+        })}
+      >
+        <Tabs.Screen name="Home" component={HomeScreen} options={{ title: labels.Home }} />
+        <Tabs.Screen name="Library" component={LibraryScreen} options={{ title: labels.Library }} />
+        <Tabs.Screen name="Knowledge" component={KnowledgeScreen} options={{ title: labels.Knowledge }} />
+        <Tabs.Screen name="Review" component={ReviewScreen} options={{ title: labels.Review }} />
+        <Tabs.Screen name="Stats" component={StatsScreen} options={{ title: labels.Stats }} />
+      </Tabs.Navigator>
+      <QuickActionsFab navigation={navigation} />
+    </View>
   );
 }
 

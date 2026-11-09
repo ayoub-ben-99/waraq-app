@@ -38,7 +38,7 @@ export function SummaryScreen() {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
   const bookId = route.params.bookId;
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, radius } = useAppTheme();
   const [mode, setMode] = useState<'template' | 'free'>('template');
   const [form, setForm] = useState<Form>(empty);
   const loaded = useRef(false);
@@ -140,7 +140,7 @@ export function SummaryScreen() {
         </Button>
       </View>
 
-      <Card style={{ backgroundColor: colors.surfaceContainerLow }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow }}>
         <Card.Content style={{ gap: spacing.s }}>
           {mode === 'template' ? (
             <>

@@ -4,9 +4,10 @@ import { Button, Card, Checkbox, Dialog, Portal, Text } from 'react-native-paper
 import { WIPE_HIGHLIGHTS, WIPE_OCR, WIPE_PROGRESS, wipeData } from '../data/repos/dataWiper';
 import { t } from '../lib/strings';
 import { useAppTheme } from '../theme/ThemeProvider';
+import { flatSurface } from '../theme/tokens';
 
 export function ClearDataScreen() {
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, radius } = useAppTheme();
   const [flags, setFlags] = useState<number[]>([]);
   const [confirm, setConfirm] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +49,7 @@ export function ClearDataScreen() {
         {t.clearIntro}
       </Text>
       {rows.map((row) => (
-        <Card key={row.flag} style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
+        <Card mode="contained" key={row.flag} style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
           <Card.Content>
             <Checkbox.Item
               label={row.title}
@@ -69,7 +70,7 @@ export function ClearDataScreen() {
       </Button>
 
       <Portal>
-        <Dialog visible={confirm} onDismiss={() => setConfirm(false)} style={{ backgroundColor: colors.surface }}>
+        <Dialog visible={confirm} onDismiss={() => setConfirm(false)} style={[flatSurface, { borderRadius: radius.card, backgroundColor: colors.surface }]}>
           <Dialog.Title style={{ textAlign: 'right' }}>{t.clearConfirmTitle}</Dialog.Title>
           <Dialog.Content>
             <Text style={{ color: colors.onSurface, textAlign: 'right' }}>{t.clearConfirmBody}</Text>

@@ -47,7 +47,9 @@ export function createPaperTheme(colors: Palette, dark: boolean): MD3Theme {
   const base = dark ? MD3DarkTheme : MD3LightTheme;
   return {
     ...base,
-    roundness: radius.control,
+    // Paper multiplies this value for buttons, while text fields use it directly.
+    // Keep inputs, cards, and dialogs at a calm 10dp radius; buttons remain pill-shaped.
+    roundness: radius.card,
     dark,
     fonts: configureFonts({ config: fontConfig }),
     colors: {

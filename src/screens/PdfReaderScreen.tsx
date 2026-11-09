@@ -55,11 +55,20 @@ export function PdfReaderScreen() {
             void addHighlight(doc, payload.page, payload.rects, payload.text, payload.color);
           }),
         );
-        const path = doc.localPath ? `${FS.documentDirectory}${doc.localPath}` : null;
-        if (!path) {
+        const uri = doc.localPath ? `${FS.documentDirectory}${doc.localPath}` : null;
+        if (!uri) {
           setError(t.genericError);
           return;
         }
+        const fileInfo = await FS.getInfoAsync(uri);
+        if (!fileInfo.exists) {
+          setError(t.genericError);
+          return;
+        }
+
+        // The Android module opens the file with java.io.File, so it needs a
+        // filesystem path rather than Expo's file:// URI.
+        const path = uri.startsWith('file://') ? decodeURIComponent(uri.slice('file://'.length)) : uri;
         await openReader(bookId, path, doc.lastPage, JSON.stringify(highlights));
       } catch {
         if (active) setError(t.genericError);

@@ -13,6 +13,7 @@ export function SurfaceCard({
     return (
         <Card
             {...props}
+            mode="contained"
             style={[{ overflow: 'hidden', borderRadius: radius.card, backgroundColor: "transparent", shadowColor: "transparent" }, style]}
         >
             {children}

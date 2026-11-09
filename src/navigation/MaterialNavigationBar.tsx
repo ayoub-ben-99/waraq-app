@@ -33,7 +33,7 @@ export function MaterialNavigationBar({ state, descriptors, navigation }: Bottom
   const indicatorX = useRef(new Animated.Value(0)).current;
   const iconScales = useRef(new Map<string, Animated.Value>()).current;
   const itemWidth = barWidth / Math.max(routes.length, 1);
-  const indicatorWidth = Math.min(76, Math.max(64, itemWidth - spacing.m));
+  const indicatorWidth = Math.min(76, Math.max(56, itemWidth - spacing.m));
   const activeDisplayIndex = routes.length - 1 - state.index;
   const indicatorTarget = activeDisplayIndex * itemWidth + Math.max(0, (itemWidth - indicatorWidth) / 2);
 
@@ -69,11 +69,10 @@ export function MaterialNavigationBar({ state, descriptors, navigation }: Bottom
     <View
       onLayout={(event) => setBarWidth(event.nativeEvent.layout.width)}
       style={{
-        marginHorizontal: spacing.s,
-        paddingTop: spacing.xs,
-        paddingBottom: Math.max(insets.bottom, spacing.s),
-        borderRadius: radius.card,
-        backgroundColor: "transparent",
+        borderRadius: radius.nav,
+        direction: 'ltr',
+        position: "relative",
+        marginBottom: 6
       }}
     >
       {barWidth > 0 ? (
@@ -81,19 +80,20 @@ export function MaterialNavigationBar({ state, descriptors, navigation }: Bottom
           pointerEvents="none"
           style={{
             position: 'absolute',
-            top: spacing.xs+2,
+            top: spacing.xs,
             left: 0,
             width: indicatorWidth,
-            height: 54,
+            height: "50%",
             borderRadius: radius.full,
-            backgroundColor: colors.secondaryContainer,
+            backgroundColor: colors.primary,
             opacity: barWidth > 0 ? 1 : 0,
+            zIndex: 0,
             transform: [{ translateX: indicatorX }],
           }}
         />
       ) : null}
 
-      <View style={{ flexDirection: 'row-reverse' }}>
+      <View style={{ flexDirection: 'row-reverse', direction: 'ltr' }}>
         {routes.map((route) => {
           const isFocused = state.routes[state.index].key === route.key;
           const routeIcons = icons[route.name] ?? { active: 'circle', inactive: 'circle-outline' };
@@ -117,29 +117,30 @@ export function MaterialNavigationBar({ state, descriptors, navigation }: Bottom
               onLongPress={onLongPress}
               style={{
                 flex: 1,
-                minHeight: 58,
+                minHeight: 66,
                 alignItems: 'center',
-                justifyContent: 'center',
-                gap: spacing.xs,
+                justifyContent: 'flex-start',
+                gap: 2,
                 paddingHorizontal: spacing.xs,
-                paddingVertical: spacing.xs,
+                paddingTop: spacing.s,
+                zIndex: 1,
               }}
             >
               <Animated.View style={{ transform: [{ scale: iconScale }] }}>
                 <MaterialCommunityIcons
                   name={isFocused ? routeIcons.active : routeIcons.inactive}
                   size={24}
-                  color={isFocused ? colors.onSecondaryContainer : colors.onSurfaceVariant}
+                  color={isFocused ? colors.surfaceContainerHigh : colors.onSurfaceVariant}
                 />
               </Animated.View>
               <Text
                 numberOfLines={1}
                 style={{
                   maxWidth: '100%',
-                  color: isFocused ? colors.onSecondaryContainer : colors.onSurfaceVariant,
+                  color: colors.onSurfaceVariant,
                   fontFamily: fonts.medium,
                   fontSize: 11,
-                  lineHeight: 16,
+                  lineHeight: 30,
                   textAlign: 'center',
                 }}
               >

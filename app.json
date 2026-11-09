@@ -7,8 +7,13 @@
     "icon": "./assets/icon.png",
     "scheme": "waraq",
     "userInterfaceStyle": "automatic",
-    "platforms": ["android", "web"],
-    "web": { "bundler": "metro" },
+    "platforms": [
+      "android",
+      "web"
+    ],
+    "web": {
+      "bundler": "metro"
+    },
     "android": {
       "package": "com.waraq.app",
       "versionCode": 2,
@@ -34,10 +39,14 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/splash.png",
-          "imageWidth": 180,
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#FAF7F1"
+          "backgroundColor": "#cde8df",
+          "dark": {
+            "image": "./assets/splash-icon.png",
+            "backgroundColor": "#1d352f"
+          }
         }
       ],
       "expo-font",

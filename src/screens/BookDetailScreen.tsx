@@ -25,6 +25,7 @@ import { useRefreshOnFocus } from '../lib/useRefreshOnFocus';
 import type { RootStackParamList } from '../navigation/types';
 import { useAppTheme } from '../theme/ThemeProvider';
 import { shape } from '../theme/ThemeProvider';
+import { flatSurface } from '../theme/tokens';
 import { BookCover } from '../components/BookCard';
 import { ChoiceDialog } from '../components/ChoiceDialog';
 import { EmptyState, Loading } from '../components/Layout';
@@ -36,7 +37,7 @@ export function BookDetailScreen() {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
   const bookId = route.params.bookId;
-  const { colors, spacing, fonts } = useAppTheme();
+  const { colors, spacing, fonts, radius } = useAppTheme();
   const [tab, setTab] = useState<'sessions' | 'entries' | 'summary'>('sessions');
   const [sessionOpen, setSessionOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -206,7 +207,7 @@ export function BookDetailScreen() {
         </Text>
       ) : null}
 
-      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content>
           <Text variant="labelMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
             {t.bookProgress}
@@ -269,7 +270,7 @@ export function BookDetailScreen() {
             </Text>
           ) : (
             sessions.map((session) => (
-              <Card key={session.id} style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}>
+              <Card mode="contained" key={session.id} style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}>
                 <Card.Content>
                   <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}>
                     <Text variant="titleSmall" style={{ color: colors.onSurface }}>
@@ -309,8 +310,9 @@ export function BookDetailScreen() {
           ) : (
             entries.map((entry) => (
               <Card
+                mode="contained"
                 key={entry.id}
-                style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
+                style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
                 onPress={() => navigation.navigate('EntryEdit', { entryId: entry.id })}
                 onLongPress={() =>
                   Alert.alert(t.entryDeleteTitle, t.entryDeleteMessage, [
@@ -389,7 +391,7 @@ export function BookDetailScreen() {
       ) : null}
 
       <Portal>
-        <Dialog visible={sessionOpen} onDismiss={() => setSessionOpen(false)} style={{ backgroundColor: colors.surface }}>
+        <Dialog visible={sessionOpen} onDismiss={() => setSessionOpen(false)} style={[flatSurface, { borderRadius: radius.card, backgroundColor: colors.surface }]}>
           <Dialog.Title style={{ textAlign: 'right' }}>{t.sessionTitle}</Dialog.Title>
           <Dialog.Content style={{ gap: spacing.s }}>
             <View style={{ flexDirection: 'row-reverse', gap: spacing.s }}>
@@ -420,7 +422,7 @@ export function BookDetailScreen() {
       />
 
       <Portal>
-        <Dialog visible={deleteOpen} onDismiss={() => setDeleteOpen(false)} style={{ backgroundColor: colors.surface }}>
+        <Dialog visible={deleteOpen} onDismiss={() => setDeleteOpen(false)} style={[flatSurface, { borderRadius: radius.card, backgroundColor: colors.surface }]}>
           <Dialog.Title style={{ textAlign: 'right' }}>{t.bookDelete}</Dialog.Title>
           <Dialog.Content>
             <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>

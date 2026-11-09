@@ -24,7 +24,7 @@ function displayTitle(d: DueEntry): string {
 
 export function ReviewScreen() {
   const navigation = useNavigation<Nav>();
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, radius } = useAppTheme();
   const [busy, setBusy] = useState(false);
   const due = useQuery({ queryKey: ['review-due'], queryFn: dueList });
   const upcomingQuery = useQuery({ queryKey: ['review-upcoming'], queryFn: () => upcoming(20) });
@@ -76,7 +76,7 @@ export function ReviewScreen() {
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}
     >
-      <Card style={{ backgroundColor: colors.primaryContainer, marginBottom: spacing.m }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.primaryContainer, marginBottom: spacing.m }}>
         <Card.Content style={{ alignItems: 'flex-end' }}>
           <Text variant="labelMedium" style={{ color: colors.onPrimaryContainer }}>
             {t.review}
@@ -109,8 +109,9 @@ export function ReviewScreen() {
             const late = daysBetween(item.item.dueDate, today());
             return (
               <Card
+                mode="contained"
                 key={item.item.entryId}
-                style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
+                style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
                 onPress={() => navigation.navigate('EntryEdit', { entryId: item.entry.id })}
               >
                 <Card.Content>
@@ -141,8 +142,9 @@ export function ReviewScreen() {
             const days = daysBetween(today(), item.item.dueDate);
             return (
               <Card
+                mode="contained"
                 key={item.item.entryId}
-                style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
+                style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
                 onPress={() => navigation.navigate('EntryEdit', { entryId: item.entry.id })}
               >
                 <Card.Content>

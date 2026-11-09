@@ -11,11 +11,12 @@ import { t } from '../lib/strings';
 import { useRefreshOnFocus } from '../lib/useRefreshOnFocus';
 import { useAppTheme } from '../theme/ThemeProvider';
 import { EmptyState, Loading } from '../components/Layout';
+import { StatsChart } from '../ui/StatsChart';
 
 const DAY_LETTERS = ['أحد', 'اثن', 'ثلا', 'أرب', 'خمي', 'جمع', 'سبت'];
 
 export function StatsScreen() {
-  const { colors, spacing, shape } = useAppTheme();
+  const { colors, spacing, shape, radius } = useAppTheme();
   const [period, setPeriod] = useState<Period>('week');
   const query = useQuery({ queryKey: ['stats', period], queryFn: () => loadStats(period) });
   useRefreshOnFocus(query.refetch);
@@ -96,7 +97,7 @@ export function StatsScreen() {
         <Kpi label={t.statsReadingTime} value={formatDuration(stats.minutes)} />
       </View>
 
-      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content>
           <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between' }}>
             <Text variant="titleMedium" style={{ color: colors.onSurface }}>
@@ -125,28 +126,7 @@ export function StatsScreen() {
             <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: spacing.m }}>
               {stats.hasAnySession ? t.statsChartEmpty : t.statsChartNoHistory}
             </Text>
-          ) : (
-            <View style={{ flexDirection: 'row-reverse', alignItems: 'flex-end', height: 150, gap: 6, marginTop: spacing.m }}>
-              {bars.map((bar, index) => {
-                const max = Math.max(...bars.map((b) => b.minutes), 1);
-                return (
-                  <View key={`${bar.label}-${index}`} style={{ flex: 1, alignItems: 'center' }}>
-                    <View
-                      style={{
-                        width: '70%',
-                        height: Math.max(3, (bar.minutes / max) * 110),
-                        borderRadius: shape.s4,
-                        backgroundColor: index === bars.length - 1 ? colors.primary : colors.primaryContainer,
-                      }}
-                    />
-                    <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, marginTop: 4 }}>
-                      {bar.label}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-          )}
+          ) : <StatsChart data={bars.map((bar) => ({ label: bar.label, value: bar.minutes }))} />}
           <View style={{ flexDirection: 'row-reverse', justifyContent: 'space-between', marginTop: spacing.m }}>
             <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
               {t.statsDaysRead}: {stats.periodActiveDays}/{stats.periodDays}
@@ -176,9 +156,9 @@ export function StatsScreen() {
 }
 
 function Kpi({ label, value }: { label: string; value: string }) {
-  const { colors } = useAppTheme();
+  const { colors, radius } = useAppTheme();
   return (
-    <Card style={{ width: '48%', backgroundColor: colors.surfaceContainerLow }}>
+    <Card mode="contained" style={{ width: '48%', borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow }}>
       <Card.Content style={{ paddingVertical: 12 }}>
         <Text variant="labelSmall" numberOfLines={1} style={{ color: colors.onSurfaceVariant }}>
           {label}
@@ -192,9 +172,9 @@ function Kpi({ label, value }: { label: string; value: string }) {
 }
 
 function Breakdown({ title, rows }: { title: string; rows: { label: string; value: number }[] }) {
-  const { colors, spacing, shape } = useAppTheme();
+  const { colors, spacing, shape, radius } = useAppTheme();
   return (
-    <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
+    <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
       <Card.Content>
         <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right', marginBottom: spacing.s }}>
           {title}

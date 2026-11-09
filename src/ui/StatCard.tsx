@@ -16,7 +16,7 @@ export function StatCard({
     const { colors, spacing, radius } = useAppTheme();
 
     return (
-        <Card className='flex-1' onPress={onPress} style={{ flex: 1, overflow: 'hidden', borderRadius: radius.card, backgroundColor: colors.secondaryContainer }}>
+        <Card mode="contained" className='flex-1' onPress={onPress} style={{ flex: 1, overflow: 'hidden', borderRadius: radius.card, backgroundColor: colors.secondaryContainer }}>
             <Card.Content style={{ minHeight: 96, alignItems: 'flex-end', justifyContent: 'center', paddingHorizontal: spacing.m, paddingVertical: spacing.m }}>
                 <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
                     {label}

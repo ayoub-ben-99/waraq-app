@@ -60,7 +60,7 @@ export function SettingsScreen() {
         <MaterialCommunityIcons name="palette-outline" size={20} color={colors.primary} />
         <Text variant="labelLarge" style={{ color: colors.primary, textAlign: 'right' }}>{t.settingsAppearance}</Text>
       </View>
-      <Card style={{ backgroundColor: colors.surfaceContainerLow }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow }}>
         <Card.Content>
           <View style={{ flexDirection: 'row-reverse', alignItems: 'center', gap: spacing.s }}>
             <MaterialCommunityIcons name="palette-outline" size={24} color={colors.primary} />
@@ -156,7 +156,7 @@ export function SettingsScreen() {
         <MaterialCommunityIcons name="calendar-clock-outline" size={20} color={colors.primary} />
         <Text variant="labelLarge" style={{ color: colors.primary, textAlign: 'right' }}>{t.settingsReview}</Text>
       </View>
-      <Card style={{ backgroundColor: colors.surfaceContainerLow }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow }}>
         <Card.Content>
           <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', lineHeight: 22 }}>
             {t.settingsIntervalsHelp}

@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Button, Dialog, Portal, Text, TextInput } from 'react-native-paper';
 import { useAppTheme } from '../theme/ThemeProvider';
+import { flatSurface } from '../theme/tokens';
 
 export function ChoiceDialog<T extends string | number | null>({
   visible,
@@ -21,7 +22,7 @@ export function ChoiceDialog<T extends string | number | null>({
   const { colors, spacing, radius } = useAppTheme();
   return (
     <Portal>
-      <Dialog visible={visible} onDismiss={onDismiss} style={{ borderRadius: radius.card, backgroundColor: colors.surface }}>
+      <Dialog visible={visible} onDismiss={onDismiss} style={[flatSurface, { borderRadius: radius.card, backgroundColor: colors.surface }]}>
         <Dialog.Title style={{ textAlign: 'right', color: colors.onSurface }}>{title}</Dialog.Title>
         <Dialog.Content style={{ maxHeight: 420, paddingHorizontal: 0 }}>
           <ScrollView>
@@ -81,7 +82,7 @@ export function ConfirmDialog({
   const { colors, radius } = useAppTheme();
   return (
     <Portal>
-      <Dialog visible={visible} onDismiss={onDismiss} style={{ borderRadius: radius.card, backgroundColor: colors.surface }}>
+      <Dialog visible={visible} onDismiss={onDismiss} style={[flatSurface, { borderRadius: radius.card, backgroundColor: colors.surface }]}>
         <Dialog.Title style={{ textAlign: 'right', color: colors.onSurface }}>{title}</Dialog.Title>
         <Dialog.Content>
           <Text variant="bodyMedium" style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
@@ -128,7 +129,7 @@ export function FormDialog({
   const { colors, radius } = useAppTheme();
   return (
     <Portal>
-      <Dialog visible={visible} onDismiss={onDismiss} style={{ borderRadius: radius.card, backgroundColor: colors.surface }}>
+      <Dialog visible={visible} onDismiss={onDismiss} style={[flatSurface, { borderRadius: radius.card, backgroundColor: colors.surface }]}>
         <Dialog.Title style={{ textAlign: 'right', color: colors.onSurface }}>{title}</Dialog.Title>
         <Dialog.Content>
           <TextInput

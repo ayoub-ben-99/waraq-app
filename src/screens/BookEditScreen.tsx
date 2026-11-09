@@ -32,7 +32,7 @@ export function BookEditScreen() {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
   const bookId = route.params?.bookId ?? 0;
-  const { colors, spacing, shape } = useAppTheme();
+  const { colors, spacing, shape, radius } = useAppTheme();
 
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -174,7 +174,7 @@ export function BookEditScreen() {
       contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}
       keyboardShouldPersistTaps="handled"
     >
-      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.m }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.m }}>
         <Card.Content style={{ gap: spacing.s }}>
           <TextInput mode="outlined" label={t.bookTitle} value={title} onChangeText={setTitle} error={!!error && !title.trim()} style={inputStyle(colors)} />
           <TextInput mode="outlined" label={t.bookAuthor} value={author} onChangeText={setAuthor} style={inputStyle(colors)} />
@@ -244,7 +244,7 @@ export function BookEditScreen() {
         style={[inputStyle(colors), { marginTop: spacing.s }]}
       />
 
-      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content style={{ gap: spacing.s }}>
           <Text variant="titleSmall" style={{ color: colors.onSurface, textAlign: 'right' }}>
             {t.bookOrganize}

@@ -15,6 +15,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AppThemeProvider, useAppTheme } from './src/theme/ThemeProvider';
 import { useColorScheme } from 'react-native';
 import { t } from './src/lib/strings';
+import { AnimatedSplash } from './src/ui/motion/AnimatedSplash';
 
 I18nManager.allowRTL(true);
 I18nManager.forceRTL(true);
@@ -34,6 +35,7 @@ const queryClient = new QueryClient({
 });
 
 function ThemedApp() {
+  const [splashDone, setSplashDone] = useState(false);
   const { paper, colors, dark } = useAppTheme();
   const base = dark ? NavigationDarkTheme : NavigationDefaultTheme;
   const navigationTheme = {
@@ -54,6 +56,7 @@ function ThemedApp() {
         <StatusBar style={dark ? 'light' : 'dark'} />
         <RootNavigator />
       </NavigationContainer>
+      {!splashDone && <AnimatedSplash onDone={() => setSplashDone(true)} />}
     </PaperProvider>
   );
 }

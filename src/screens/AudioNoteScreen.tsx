@@ -24,7 +24,7 @@ export function AudioNoteScreen() {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
   const entryId = route.params?.entryId ?? 0;
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, radius } = useAppTheme();
   const [title, setTitle] = useState('');
   const [savedUri, setSavedUri] = useState<string | null>(null);
   const [savedDuration, setSavedDuration] = useState(0);
@@ -115,7 +115,7 @@ export function AudioNoteScreen() {
         style={{ backgroundColor: colors.surface, textAlign: 'right', marginTop: spacing.m }}
       />
 
-      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content style={{ alignItems: 'center' }}>
           <Text variant="displaySmall" style={{ color: colors.primary, fontVariant: ['tabular-nums'] }}>
             {clock(recorderState.isRecording ? recorderState.durationMillis : savedDuration)}

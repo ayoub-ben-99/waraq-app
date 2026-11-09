@@ -8,9 +8,10 @@ import { KEY_LAST_BACKUP, putSetting } from '../data/repos/settings';
 import { t } from '../lib/strings';
 import { useAppTheme } from '../theme/ThemeProvider';
 import { Loading } from '../components/Layout';
+import { flatSurface } from '../theme/tokens';
 
 export function BackupScreen() {
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, radius } = useAppTheme();
   const [includePdfs, setIncludePdfs] = useState(false);
   const [busy, setBusy] = useState(false);
   const [backup, setBackup] = useState<BackupData | null>(null);
@@ -75,7 +76,7 @@ export function BackupScreen() {
     <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={{ padding: spacing.m, paddingBottom: 120 }}>
       <Text variant="titleLarge" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.backupTitle}</Text>
 
-      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content>
           <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.backupExport}</Text>
           <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 4, lineHeight: 22 }}>
@@ -94,7 +95,7 @@ export function BackupScreen() {
         </Card.Content>
       </Card>
 
-      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginTop: spacing.m }}>
         <Card.Content>
           <Text variant="titleMedium" style={{ color: colors.onSurface, textAlign: 'right' }}>{t.backupRestore}</Text>
           <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, textAlign: 'right', marginTop: 4, lineHeight: 22 }}>
@@ -107,7 +108,7 @@ export function BackupScreen() {
       </Card>
 
       <Portal>
-        <Dialog visible={backup != null} onDismiss={() => setBackup(null)} style={{ backgroundColor: colors.surface }}>
+        <Dialog visible={backup != null} onDismiss={() => setBackup(null)} style={[flatSurface, { borderRadius: radius.card, backgroundColor: colors.surface }]}>
           <Dialog.Title style={{ textAlign: 'right' }}>{t.backupPreviewTitle}</Dialog.Title>
           <Dialog.Content>
             {backup ? (
@@ -137,7 +138,7 @@ export function BackupScreen() {
           </Dialog.Actions>
         </Dialog>
 
-        <Dialog visible={confirmReplace} onDismiss={() => setConfirmReplace(false)} style={{ backgroundColor: colors.surface }}>
+        <Dialog visible={confirmReplace} onDismiss={() => setConfirmReplace(false)} style={[flatSurface, { borderRadius: radius.card, backgroundColor: colors.surface }]}>
           <Dialog.Title style={{ textAlign: 'right' }}>{t.backupModeTitle}</Dialog.Title>
           <Dialog.Content>
             <Text style={{ color: colors.error, textAlign: 'right', lineHeight: 24 }}>{t.backupReplaceWarning}</Text>

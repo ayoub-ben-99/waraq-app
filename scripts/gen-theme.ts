@@ -2,8 +2,14 @@ import { themeFromSourceColor, argbFromHex, hexFromArgb } from '@material/materi
 import { writeFileSync } from 'fs';
 import { dirname, resolve } from 'path';
 
-// Primary seed colour – replace with the desired primary colour.
-const PRIMARY_COLOR = '#2F6B5E';
+const brandColors = {
+  sand: '#E4DCC3',
+  sage: '#A7C8A0',
+  cream: '#F5EFDF',
+  forest: '#275241',
+} as const;
+
+const PRIMARY_COLOR = brandColors.forest;
 
 function generate(): void {
   const primaryArgb = argbFromHex(PRIMARY_COLOR);
@@ -22,21 +28,73 @@ function generate(): void {
   const light = mapToHex(theme.schemes.light.toJSON());
   const dark = mapToHex(theme.schemes.dark.toJSON());
 
+  Object.assign(light, {
+    primary: brandColors.forest,
+    onPrimary: brandColors.cream,
+    primaryContainer: brandColors.sage,
+    onPrimaryContainer: brandColors.forest,
+    secondary: '#6B5E43',
+    onSecondary: brandColors.cream,
+    secondaryContainer: brandColors.sand,
+    onSecondaryContainer: brandColors.forest,
+    tertiary: brandColors.sand,
+    onTertiary: brandColors.forest,
+    tertiaryContainer: brandColors.cream,
+    onTertiaryContainer: brandColors.forest,
+    background: brandColors.cream,
+    onBackground: brandColors.forest,
+    surface: brandColors.cream,
+    onSurface: brandColors.forest,
+    surfaceVariant: brandColors.sand,
+    onSurfaceVariant: '#4E5B4D',
+    outline: '#7D8875',
+    outlineVariant: '#C5BFA9',
+    inverseSurface: brandColors.forest,
+    inverseOnSurface: brandColors.cream,
+    inversePrimary: brandColors.sage,
+  });
+
+  Object.assign(dark, {
+    primary: brandColors.sage,
+    onPrimary: brandColors.forest,
+    primaryContainer: brandColors.forest,
+    onPrimaryContainer: brandColors.cream,
+    secondary: brandColors.sand,
+    onSecondary: brandColors.forest,
+    secondaryContainer: '#4A493B',
+    onSecondaryContainer: brandColors.cream,
+    tertiary: brandColors.cream,
+    onTertiary: brandColors.forest,
+    tertiaryContainer: '#454936',
+    onTertiaryContainer: brandColors.cream,
+    background: '#202A24',
+    onBackground: brandColors.cream,
+    surface: '#202A24',
+    onSurface: brandColors.cream,
+    surfaceVariant: '#45493D',
+    onSurfaceVariant: '#D0CBB8',
+    outline: '#9A9D87',
+    outlineVariant: '#45493D',
+    inverseSurface: brandColors.cream,
+    inverseOnSurface: '#202A24',
+    inversePrimary: brandColors.forest,
+  });
+
   // Surface container levels – neutral palette tones
   const neutral = theme.palettes.neutral.tone;
   const lightContainers = {
-    surfaceContainerLowest: hexFromArgb(theme.palettes.neutral.tone(98)),
-    surfaceContainerLow: hexFromArgb(theme.palettes.neutral.tone(96)),
-    surfaceContainer: hexFromArgb(theme.palettes.neutral.tone(94)),
-    surfaceContainerHigh: hexFromArgb(theme.palettes.neutral.tone(92)),
-    surfaceContainerHighest: hexFromArgb(theme.palettes.neutral.tone(90)),
+    surfaceContainerLowest: '#FBF7EC',
+    surfaceContainerLow: '#F8F2E5',
+    surfaceContainer: brandColors.cream,
+    surfaceContainerHigh: '#EEE7D5',
+    surfaceContainerHighest: '#E8E0CB',
   };
   const darkContainers = {
-    surfaceContainerLowest: hexFromArgb(theme.palettes.neutral.tone(6)),
-    surfaceContainerLow: hexFromArgb(theme.palettes.neutral.tone(10)),
-    surfaceContainer: hexFromArgb(theme.palettes.neutral.tone(12)),
-    surfaceContainerHigh: hexFromArgb(theme.palettes.neutral.tone(17)),
-    surfaceContainerHighest: hexFromArgb(theme.palettes.neutral.tone(22)),
+    surfaceContainerLowest: '#19221D',
+    surfaceContainerLow: '#202A24',
+    surfaceContainer: '#263129',
+    surfaceContainerHigh: '#303A31',
+    surfaceContainerHighest: '#3A4338',
   };
 
   const write = (name: string, scheme: Record<string, string>, containers: Record<string, string>) => {

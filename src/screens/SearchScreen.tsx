@@ -16,7 +16,7 @@ type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 export function SearchScreen() {
   const navigation = useNavigation<Nav>();
-  const { colors, spacing } = useAppTheme();
+  const { colors, spacing, radius } = useAppTheme();
   const [text, setText] = useState('');
   const query = useQuery({
     queryKey: ['search', text],
@@ -33,8 +33,9 @@ export function SearchScreen() {
         </Text>
         {items.map((entry) => (
           <Card
+            mode="contained"
             key={entry.id}
-            style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
+            style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
             onPress={() => navigation.navigate('EntryEdit', { entryId: entry.id })}
           >
             <Card.Content>
@@ -83,8 +84,9 @@ export function SearchScreen() {
           </Text>
           {result.books.map((book) => (
             <Card
+              mode="contained"
               key={book.id}
-              style={{ backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
+              style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginBottom: spacing.s }}
               onPress={() => navigation.navigate('BookDetail', { bookId: book.id })}
             >
               <Card.Content>
@@ -109,8 +111,9 @@ export function SearchScreen() {
           <View style={{ flexDirection: 'row-reverse', flexWrap: 'wrap', gap: spacing.s }}>
             {result.tags.map((tag) => (
               <Card
+                mode="contained"
                 key={tag.id}
-                style={{ backgroundColor: colors.surfaceContainerHigh }}
+                style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerHigh }}
                 onPress={() => navigation.navigate('Tabs', { screen: 'Knowledge', params: { tag: tag.name } })}
               >
                 <Card.Content style={{ paddingVertical: 6, paddingHorizontal: 10 }}>

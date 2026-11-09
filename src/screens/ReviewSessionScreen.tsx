@@ -17,7 +17,7 @@ type Nav = NativeStackNavigationProp<RootStackParamList>;
 
 export function ReviewSessionScreen() {
   const navigation = useNavigation<Nav>();
-  const { colors, spacing, fonts } = useAppTheme();
+  const { colors, spacing, fonts, radius } = useAppTheme();
   const [index, setIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [finished, setFinished] = useState(false);
@@ -106,7 +106,7 @@ export function ReviewSessionScreen() {
         <Button compact onPress={() => navigation.goBack()}>{t.close}</Button>
       </View>
 
-      <Card style={{ backgroundColor: colors.surfaceContainerLow, marginTop: spacing.s, minHeight: 320 }}>
+      <Card mode="contained" style={{ borderRadius: radius.card, backgroundColor: colors.surfaceContainerLow, marginTop: spacing.s, minHeight: 320 }}>
         <Card.Content style={{ paddingVertical: spacing.l }}>
           <Text variant="labelSmall" style={{ color: colors.primary, textAlign: 'right' }}>
             {entry ? entryTypeLabel(entry.type) : ''}

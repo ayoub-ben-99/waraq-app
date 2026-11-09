@@ -7,6 +7,7 @@ import { t } from '../lib/strings';
 import { useAppTheme } from '../theme/ThemeProvider';
 import { Loading } from '../components/Layout';
 import { radius } from '../theme';
+import { flatSurface } from '../theme/tokens';
 
 export function CategoriesScreen() {
   const { colors, spacing } = useAppTheme();
@@ -64,7 +65,7 @@ export function CategoriesScreen() {
       ) : null}
 
       <Portal>
-        <Dialog visible={addOpen} onDismiss={() => setAddOpen(false)} style={{ backgroundColor: colors.surface, borderRadius: radius.card }}>
+        <Dialog visible={addOpen} onDismiss={() => setAddOpen(false)} style={[flatSurface, { backgroundColor: colors.surface, borderRadius: radius.card }]}>
           <Dialog.Title style={{ textAlign: 'right' }}>{t.categoryNew}</Dialog.Title>
           <Dialog.Content style={{ gap: spacing.s }}>
             <TextInput
@@ -89,7 +90,7 @@ export function CategoriesScreen() {
       </Portal>
 
       <Portal>
-        <Dialog visible={selected != null} onDismiss={() => setSelected(null)} style={{ backgroundColor: colors.surface }}>
+        <Dialog visible={selected != null} onDismiss={() => setSelected(null)} style={[flatSurface, { borderRadius: radius.card, backgroundColor: colors.surface }]}>
           <Dialog.Title style={{ textAlign: 'right' }}>{selected?.name}</Dialog.Title>
           <Dialog.Content>
             <Text style={{ color: colors.onSurfaceVariant, textAlign: 'right' }}>
