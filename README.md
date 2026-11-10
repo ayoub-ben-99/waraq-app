@@ -53,5 +53,3 @@ There is currently no configured test or lint script. Run `npm run typecheck` an
 - `src/theme/` — design tokens and theme provider
 - `modules/waraq-native/` — Android native PDF/OCR module
 - `assets/` — icons, splash artwork, and fonts
-
-See [AGENTS.md](AGENTS.md) for contributor conventions and pull request guidance.
