@@ -15,7 +15,6 @@
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
   <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android" />
-  <img src="https://img.shields.io/badge/Web-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Web" />
 </p>
 
 ---
@@ -24,7 +23,7 @@
 
 Waraq is an offline-first personal library. You import books, capture highlights and notes, attach audio, and review saved knowledge with spaced repetition. All data stays on your device.
 
-The interface is Arabic-first with full RTL support. Targets: Android and web.
+The interface is Arabic-first with full RTL support. Targets: Android.
 
 Waraq is in beta. Expect changes, and report issues on the [Issues](../../issues) page.
 
