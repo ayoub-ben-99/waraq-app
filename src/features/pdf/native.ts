@@ -20,11 +20,15 @@ export type ReaderHighlight = {
 };
 export type ReaderEntry = { bookId: number; page: number; type: number };
 
+export type RenderedPage = { uri: string; width: number; height: number };
+
 type WaraqNativeModule = {
   importPdf(uri: string): Promise<ImportedPdfResult>;
   extractCover(path: string, bookId: number): Promise<string | null>;
   openReader(bookId: number, path: string, lastPage: number, highlightsJson: string): Promise<void>;
   clearOcrCache(): Promise<number>;
+  renderPage(path: string, page: number, width: number, invert: boolean): Promise<RenderedPage>;
+  pageText(path: string, page: number): Promise<string>;
   addListener(eventName: string, listener: (payload: unknown) => void): EventSubscription;
 };
 
@@ -37,6 +41,12 @@ const fallbackNative: WaraqNativeModule = {
     throw new Error('PDF reader is not available in the web build.');
   },
   clearOcrCache: async () => 0,
+  renderPage: async () => {
+    throw new Error('PDF pages are not available in the web build.');
+  },
+  pageText: async () => {
+    throw new Error('PDF text is not available in the web build.');
+  },
   addListener: () => ({ remove: () => undefined }) as EventSubscription,
 };
 
@@ -61,6 +71,19 @@ export function openReader(
 
 export function clearOcrCache(): Promise<number> {
   return Native.clearOcrCache();
+}
+
+/**
+ * يُصيّر صفحة PDF إلى صورة PNG مؤقتة ويعيد مسارها وأبعادها.
+ * يُخزَّن الناتج في ذاكرة أصلية، فالنداءات المتكررة رخيصة.
+ */
+export function renderPage(path: string, page: number, width: number, invert: boolean): Promise<RenderedPage> {
+  return Native.renderPage(path, page, width, invert);
+}
+
+/** يستخرج نص صفحة لوضع القراءة النصي؛ يفشل بـ page-no-text إن كان الملف مصوَّرًا. */
+export function pageText(path: string, page: number): Promise<string> {
+  return Native.pageText(path, page);
 }
 
 export function onReaderProgress(listener: (payload: ReaderProgress) => void): EventSubscription {

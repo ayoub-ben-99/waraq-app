@@ -2,11 +2,19 @@ package com.waraq.rn
 
 import android.content.ContentResolver
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
 import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
+import com.tom_roush.pdfbox.pdmodel.PDDocument
+import com.tom_roush.pdfbox.text.PDFTextStripper
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import java.io.File
@@ -46,6 +54,19 @@ class WaraqNativeModule : Module() {
     AsyncFunction("clearOcrCache") {
       val context = appContext.reactContext ?: throw IllegalStateException("no-context")
       clearOcrCache(context.filesDir)
+    }
+
+    // يُصيّر صفحة PDF إلى ملف PNG مؤقت ويعيد مساره بأبعادها.
+    // يُستخدم من قارئ واجهة React Native للتمرير العمودي والتقليب الأفقي.
+    AsyncFunction("renderPage") { path: String, page: Int, width: Int, invert: Boolean ->
+      val context = appContext.reactContext ?: throw IllegalStateException("no-context")
+      renderPage(context, File(path), page, width, invert)
+    }
+
+    // يستخرج نص صفحة عبر PdfBox-Android مع تخزينه في ملف نصي جانبي.
+    AsyncFunction("pageText") { path: String, page: Int ->
+      val context = appContext.reactContext ?: throw IllegalStateException("no-context")
+      pageText(context, File(path), page)
     }
   }
 
@@ -146,5 +167,85 @@ class WaraqNativeModule : Module() {
       }
     }
     return count
+  }
+
+  private fun renderPage(context: android.content.Context, source: File, page: Int, width: Int, invert: Boolean): Map<String, Any?> {
+    if (!source.exists()) throw IllegalArgumentException("pdf-missing")
+    val safeWidth = width.coerceIn(120, 2048)
+    val dir = File(context.cacheDir, "page-cache/${source.nameWithoutExtension}").apply { mkdirs() }
+    val target = File(dir, "p${page}-w${safeWidth}-${if (invert) "i" else "n"}.png")
+    var outWidth = 0
+    var outHeight = 0
+    if (!target.exists()) {
+      ParcelFileDescriptor.open(source, ParcelFileDescriptor.MODE_READ_ONLY).use { descriptor ->
+        PdfRenderer(descriptor).use { renderer ->
+          if (page < 0 || page >= renderer.pageCount) throw IllegalArgumentException("page-out-of-range")
+          renderer.openPage(page).use { pdfPage ->
+            outWidth = safeWidth
+            outHeight = maxOf(1, (safeWidth * pdfPage.height.toFloat() / pdfPage.width).toInt())
+            val bitmap = Bitmap.createBitmap(outWidth, outHeight, Bitmap.Config.ARGB_8888)
+            bitmap.eraseColor(Color.WHITE)
+            pdfPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+            val finalBitmap = if (invert) invertBitmap(bitmap) else bitmap
+            FileOutputStream(target).use { output ->
+              finalBitmap.compress(Bitmap.CompressFormat.PNG, 88, output)
+            }
+            finalBitmap.recycle()
+          }
+        }
+      }
+    } else {
+      val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+      BitmapFactory.decodeFile(target.absolutePath, options)
+      outWidth = options.outWidth
+      outHeight = options.outHeight
+    }
+    return mapOf(
+      "uri" to Uri.fromFile(target).toString(),
+      "width" to outWidth,
+      "height" to outHeight,
+    )
+  }
+
+  /** عكس ألوان الصفحة للوضع الداكن: الأبيض يصير داكنًا والنص فاتحًا بتناسق. */
+  private fun invertBitmap(source: Bitmap): Bitmap {
+    val matrix = ColorMatrix(
+      floatArrayOf(
+        -1f, 0f, 0f, 0f, 255f,
+        0f, -1f, 0f, 0f, 255f,
+        0f, 0f, -1f, 0f, 255f,
+        0f, 0f, 0f, 1f, 0f,
+      ),
+    )
+    val paint = Paint().apply { colorFilter = ColorMatrixColorFilter(matrix) }
+    val result = Bitmap.createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
+    Canvas(result).drawBitmap(source, 0f, 0f, paint)
+    source.recycle()
+    return result
+  }
+
+  private fun pageText(context: android.content.Context, source: File, page: Int): String {
+    if (!source.exists()) throw IllegalArgumentException("pdf-missing")
+    ensurePdfBox(context)
+    val dir = File(context.filesDir, "pdf-text/${source.nameWithoutExtension}").apply { mkdirs() }
+    val target = File(dir, "p${page}.txt")
+    if (!target.exists()) {
+      val text = PDDocument.load(source).use { document ->
+        if (page < 0 || page >= document.numberOfPages) throw IllegalArgumentException("page-out-of-range")
+        val stripper = PDFTextStripper().apply {
+          startPage = page + 1
+          endPage = page + 1
+          sortByPosition = true
+        }
+        stripper.getText(document)
+      }
+      if (text.isBlank()) throw IllegalArgumentException("page-no-text")
+      target.writeText(text)
+    }
+    return target.readText()
+  }
+
+  private fun ensurePdfBox(context: android.content.Context) {
+    PDFBoxResourceLoader.init(context.applicationContext)
   }
 }
