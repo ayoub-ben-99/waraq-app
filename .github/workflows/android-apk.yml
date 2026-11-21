@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - arena/9417a58a-waraq-app
+    # Cutting a tag (v4.2.0) publishes a versioned GitHub release.
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 permissions:
@@ -179,3 +182,35 @@ jobs:
               --notes "$NOTES" \
               --latest
           fi
+
+      # Tagging vX.Y.Z turns the same binary into an immutable, versioned
+      # release, which is what "cut a release" means for testers.
+      - name: Publish versioned release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          if [ "${{ steps.signing.outputs.signed }}" = "true" ]; then
+            KEY_NOTE="Signed with the project release key."
+          else
+            KEY_NOTE="**Debug-signed** (no release key configured)."
+          fi
+          ASSET="dist/waraq-$VERSION.apk"
+          cp dist/waraq.apk "$ASSET"
+          {
+            printf 'Waraq %s — release build (Flutter, release mode).\n\n' "$VERSION"
+            printf '**Install:** download `waraq-%s.apk`, allow installs from unknown sources, open it.\n\n' "$VERSION"
+            printf '%s\n' "$KEY_NOTE"
+            printf 'Certificate SHA-256: `%s`\n\n' "$CERT_FINGERPRINT"
+            printf 'Android 5.0+ · arm64 / armv7 / x86_64 · commit %s\n\n' "$GITHUB_SHA"
+            printf '### What is inside\n'
+            printf -- '- Rubik + Cairo typography, Material You colour, Shape & Motion settings\n'
+            printf -- '- Reader: paged and continuous modes, bookmarks, page notes\n'
+            printf -- '- Notes tab: search every note, jump back to its page\n'
+            printf -- '- Backup & restore as a single `.waraq.zip`\n'
+          } > /tmp/release-notes.md
+          gh release create "$GITHUB_REF_NAME" "$ASSET" \
+            --title "Waraq $VERSION" \
+            --notes-file /tmp/release-notes.md \
+            --latest
