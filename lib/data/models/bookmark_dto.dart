@@ -5,7 +5,7 @@ class BookmarkDto {
   const BookmarkDto._();
 
   static Bookmark fromMap(Map<String, Object?> map) {
-    final String note = readString(map['note'], '');
+    final String note = readString(map['note'], '').trim();
     return Bookmark(
       id: readString(map['id'], ''),
       documentId: readString(map['documentId'], ''),
