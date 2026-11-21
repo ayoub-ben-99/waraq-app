@@ -19,6 +19,19 @@
 
 ---
 
+## Try it on a phone
+
+A debug-signed release APK is rebuilt by GitHub Actions on every push and attached
+to the **[`apk-latest` release](https://github.com/ayoub-ben-99/waraq-app/releases/tag/apk-latest)**:
+
+```
+https://github.com/ayoub-ben-99/waraq-app/releases/download/apk-latest/waraq.apk
+```
+
+Download it on the device, allow installation from unknown sources, and open it.
+Android 5.0+ (arm64, armv7 and x86_64 are all in the one APK). It is signed with
+a debug key, so it is for testing only — Play Store uploads need a real keystore.
+
 ## What it is
 
 Waraq is a **PDF reader**, not a library manager. You import a file, it opens
@@ -66,7 +79,7 @@ while you read.
 ## Getting started
 
 ```bash
-# 1. Flutter 3.22+ with the Android or iOS toolchain
+# 1. Flutter 3.32+ (CI builds with 3.35.7) with the Android or iOS toolchain
 flutter --version
 
 # 2. Generate the platform folders once (they are not checked in — see below)
@@ -90,15 +103,18 @@ Minimum Android SDK: **21**. iOS: **12**.
 
 | Check | Status |
 | --- | --- |
-| Dart parse (tree-sitter, 62 files) | ✅ clean |
-| Relative imports resolve | ✅ |
-| String keys exist in both languages | ✅ |
-| Design-token members referenced correctly | ✅ |
-| `flutter analyze` / `flutter build` | ⚠️ not run — no Flutter SDK in the authoring environment |
-| Unit tests | ⚠️ written, not executed (same reason) |
+| `flutter analyze` (Flutter 3.35.7) | ✅ passes in CI |
+| `flutter test` | ✅ passes in CI |
+| `flutter build apk --release` | ✅ passes in CI (APK published to the release) |
+| Dart parse, imports, string keys, design tokens | ✅ clean (static checks) |
+| Physical-device behaviour, frame timings, gestures | ⚠️ needs a real device |
 
 `test/` covers the pure logic that does not need a device: page geometry and
 scrub maths, formatters, JSON mapping, and reading-position semantics.
+
+The CI pipeline lives in `.github/workflows/android-apk.yml`: it generates the
+Android host project into a scratch directory, runs analyze + tests, builds the
+APK, uploads it as an artifact and refreshes the `apk-latest` release.
 
 ```bash
 flutter analyze

@@ -3,6 +3,7 @@ name: Android APK
 on:
   push:
     branches:
+      - main
       - arena/9417a58a-waraq-app
   workflow_dispatch:
 
@@ -56,6 +57,9 @@ jobs:
       - name: Analyze
         run: flutter analyze --no-fatal-infos --no-fatal-warnings
 
+      - name: Unit tests
+        run: flutter test --reporter compact
+
       - name: Build APK
         id: build
         continue-on-error: true
@@ -81,7 +85,7 @@ jobs:
       - name: Collect output
         run: |
           mkdir -p dist
-          cp build/app/outputs/flutter-apk/app-release.apk "dist/waraq-${GITHUB_SHA::7}.apk"
+          cp build/app/outputs/flutter-apk/app-release.apk dist/waraq.apk
           ls -lh dist
 
       - name: Upload artifact
@@ -93,7 +97,7 @@ jobs:
           retention-days: 30
 
       - name: Publish to "apk-latest" release
-        if: github.ref == 'refs/heads/arena/9417a58a-waraq-app'
+        if: github.ref == 'refs/heads/arena/9417a58a-waraq-app' || github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -104,7 +108,8 @@ jobs:
             gh release create apk-latest "$APK" \
               --title "Waraq — latest test build" \
               --notes "Debug-signed release build of the Flutter rewrite.
-          Install on Android 5.0+ (arm64 / armv7 / x86_64).
-          Built from commit ${GITHUB_SHA}." \
+
+          **Install:** download \`waraq.apk\` below, allow installs from unknown sources, open it.
+          Android 5.0+ · arm64 / armv7 / x86_64 · built from ${GITHUB_SHA}." \
               --latest
           fi
