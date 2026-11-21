@@ -1,107 +1,143 @@
-# Repository Guidelines
+# AGENTS.md
 
-## Project Structure & Module Organization
+Working notes for anyone (human or agent) changing this repository.
 
-This is an Expo React Native application targeting Android and web. `App.tsx` and `index.ts` are the application entry points. Most product code lives under `src/`, organized by responsibility: `screens/` for user-facing views, `components/` and `ui/` for reusable presentation, `navigation/` for routing, `data/` for SQLite schema/migrations/repositories, `features/` for feature-specific integrations, `lib/` for shared utilities, and `theme/` for design tokens and providers. Native functionality is in `modules/waraq-native/`; Android project files are under `android/`. Put images and fonts in `assets/`, build/config helpers in `scripts/` and `plugins/`, and keep generated output such as `dist/` and Android build artifacts out of commits.
+## What this repo is
 
-## Build, Test, and Development Commands
+Waraq is a **Flutter 3.22+ / Dart 3.4+** application: a local-first PDF reader
+with Material 3 (Material You) theming. Everything lives in `lib/`, plus
+`assets/`, `test/` and `pubspec.yaml`.
 
-Run commands from the repository root:
+**There are no platform folders in the repo.** `android/` and `ios/` are
+generated once per checkout with:
 
-- `npm install` — install the locked dependency set from `package-lock.json`.
-- `npm run start` — start the Expo development server.
-- `npm run android` — build/install the native Android app and launch it.
-- `npm run typecheck` — run strict TypeScript checking without emitting files.
-- `npx expo start --web` — run the web target locally when working on `webpack.config.js` or browser behavior.
-
-There is currently no configured unit-test or lint script. For changes that affect native code, verify the relevant Android flow manually and run `npm run typecheck` before opening a PR.
-
-## Coding Style & Naming Conventions
-
-Use TypeScript with strict checking, two-space indentation, semicolons, and double-quoted strings to match the existing code. Name React components and screens in PascalCase, hooks with a `use` prefix, and utilities/repositories in camelCase. Keep data access in `src/data/` rather than issuing database calls directly from screens. Reuse theme tokens and shared UI components instead of introducing one-off colors or spacing values. Preserve Arabic/RTL behavior when changing user-visible text or layout.
-
-## Design System
-
-The visual language is soft, calm, and based on Material Design 3 (Material You). Build every screen with `react-native-paper` components and the tokens in `src/theme/`. Do not hardcode colors, radii, spacing, or font sizes in screens.
-
-### Softness
-
-- Use rounded shapes from the theme: 8 for chips and small controls, 12 for inputs, 16 for cards, 28 for sheets, dialogs, and large containers.
-- Separate surfaces with tonal color (Material 3 surface container levels) instead of hard borders. Use soft, low shadows only where elevation is needed.
-- Use generous spacing on an 8dp grid. Keep at least 16dp of horizontal padding and 12 to 16dp of padding inside cards.
-- Use muted, low-contrast backgrounds with one clear accent color for primary actions. Keep text contrast at WCAG AA or better.
-- Keep touch targets at 48dp minimum.
-- Support light and dark themes through theme tokens. Never assume one mode.
-- Prefer ripple feedback on Android and avoid harsh borders, flat black, and pure white surfaces.
-
-### Icons
-
-- Use `@expo/vector-icons` (`MaterialCommunityIcons` first, `MaterialIcons` when a glyph is missing). Do not mix other icon sets.
-- Put an icon on every element that carries importance or state:
-  - Primary and destructive actions (add, save, delete, share).
-  - Status messages: success, warning, error, info.
-  - Navigation tabs and screen headers.
-  - Empty states, with a large soft icon and one line of text.
-  - List rows that open a detail view, import/export actions, and settings entries.
-- Pair icons with a text label unless the meaning is universal (close, back, search).
-- Give every icon-only button an `accessibilityLabel` in Arabic.
-- Mirror directional icons (arrows, chevrons, back) in RTL.
-- Keep sizes consistent: 20 for inline, 24 for buttons and rows, 48 to 64 for empty states. Tint with theme colors.
-- Do not decorate every element. Use icons for emphasis only.
-
-### Motion
-
-Every important element has motion. Motion is smooth, short, and consistent.
-
-Define motion tokens once in `src/theme/motion.ts` and reuse them:
-
-```ts
-import { Easing } from "react-native";
-
-export const motion = {
-  duration: { short: 150, medium: 280, long: 400 },
-  easing: {
-    emphasized: Easing.bezier(0.2, 0, 0, 1),
-    decelerate: Easing.bezier(0.05, 0.7, 0.1, 1),
-    accelerate: Easing.bezier(0.3, 0, 0.8, 0.15),
-  },
-  spring: { friction: 7, tension: 120 },
-  stagger: 40,
-  maxStaggered: 8,
-};
+```bash
+flutter create . --platforms=android,ios --project-name waraq
 ```
 
-The signature motion of the app:
+That command never overwrites `lib/`, `test/`, `assets/` or `pubspec.yaml`. After
+generating, the folders are normal project files and should be committed.
 
-- **Reveal:** elements fade in and rise 12dp with `decelerate` easing over `medium` duration.
-- **Stagger:** list items and cards enter one after another, 40ms apart, for the first 8 items only.
-- **Press:** pressable cards and buttons scale to 0.97 with a spring and return on release.
-- **Pop:** icons that change state (done, favorite, saved) scale from 0.6 to 1 with a spring.
-- **Transitions:** screens use native-stack transitions. Dialogs and sheets use `emphasized` easing.
-- **Feedback:** success and error states shake or pulse once, never in a loop.
+## Commands
 
-Rules:
+```bash
+flutter pub get          # dependencies
+flutter analyze          # lints: flutter_lints + strict casts/raw types
+flutter test             # pure-Dart unit tests in test/
+flutter run              # device/emulator
+flutter build apk --release
+```
 
-- Build motion as shared components in `src/ui/motion/` (for example `Reveal`, `PressableScale`, `PopIcon`). Do not write ad hoc `Animated` code inside screens.
-- Use the built-in `Animated` API with `useNativeDriver: true`. Animate `opacity` and `transform` only. Do not animate `width`, `height`, or `margin`.
-- Do not add `react-native-reanimated` or other native animation dependencies without approval, because native changes affect the Android build.
-- Flip horizontal slide directions in RTL: multiply the translateX value by `I18nManager.isRTL ? -1 : 1`.
-- Respect reduced motion. Check `AccessibilityInfo.isReduceMotionEnabled()` and fall back to a plain fade or no animation.
-- Keep animations under 400ms. Never block input while an animation runs.
-- In `FlashList` and long lists, animate on first mount only. Do not re-run entry animations when rows are recycled or scrolled.
-- Never loop animations on content screens. Looping is allowed for loading indicators only.
+`analysis_options.yaml` enables `strict-casts`, `strict-raw-types`,
+`single_quotes` and `unawaited_futures`. Fire-and-forget futures must be wrapped
+in `unawaited(...)` — the linter will not accept a bare call in an async body.
 
-## Testing Guidelines
+## Layout rules
 
-No test framework or coverage threshold is currently configured. At minimum, run `npm run typecheck` and manually exercise the affected screen, navigation path, and persistence flow. For UI changes, also check:
+| Layer | May import | Must not import |
+| --- | --- | --- |
+| `domain/` | `dart:*`, other `domain/` | Flutter, Riverpod, `data/`, `presentation/` |
+| `data/` | `domain/`, `dart:*`, `package:pdfx`, storage packages | `presentation/`, Flutter widgets |
+| `core/` | Flutter, `package:flutter_riverpod` (providers only) | `presentation/screens`, `data/local` |
+| `presentation/` | everything | — |
 
-- Light and dark themes.
-- RTL layout, mirrored icons, and animation direction.
-- Reduced motion on and off.
-- Smooth frame rate on a mid-range Android device in a release build.
+`data/pdf/pdf_renderer.dart` is the **only** file allowed to import
+`package:pdfx`. Swapping engines should touch that file and `pdf_page_cache.dart`
+only.
 
-If adding tests, keep them close to the feature they cover and use descriptive names such as `reviewScheduler.test.ts`.
+## Conventions
 
-## Commit & Pull Request Guidelines
+- **Style**: 2-space indent, single quotes, trailing commas, `final` locals,
+  explicit types on public API (`final String title`), `const` wherever allowed.
+- **Design tokens** live in `lib/core/theme/tokens.dart` (`Gap`, `Radii`,
+  `Motion`, `Sizes`). Never hard-code a spacing, radius or duration; add a token
+  instead. Colours come from `Theme.of(context).colorScheme` or the
+  `WaraqPalette` theme extension — never a literal hex in a widget.
+- **Opacity**: use the `withFraction(double)` extension from
+  `core/theme/app_theme.dart` (`color.withFraction(0.6)`), not the deprecated
+  `withOpacity`. Any file using it must import `app_theme.dart` directly —
+  extensions are not transitive.
+- **Strings**: every user-visible string comes from `AppStrings.of(context)` in
+  `core/l10n/app_strings.dart`, in **both** English and Arabic. No inline text,
+  no `intl` codegen.
+- **Direction**: use edge-aware APIs (`EdgeInsetsDirectional`,
+  `PositionedDirectional`, `AlignmentDirectional`, `start`/`end`). Mirror icons
+  (`Icons.arrow_back_rounded` ↔ `arrow_forward_rounded`) when the direction
+  flips; `Directionality.of(context) == TextDirection.rtl` is the test.
+- **Motion**: 120–360 ms, `Motion.emphasized` for transforms,
+  `Motion.decelerate` for entrances. Everything animates with `Animated*`
+  widgets or implicit `Tween`s — no janky `setState` position changes.
+- **Safe areas**: the app shell owns the bottom `NavigationBar` inside a
+  `SafeArea`; overlay chrome in the reader offsets by
+  `MediaQuery.padding.bottom` explicitly.
 
-Recent commits use short, imperative, sentence-style subjects (for example, `Fix nested NavigationContainer error`). Keep commits focused and avoid committing generated files. Pull requests should explain the user-visible or architectural change, list validation commands, link the relevant issue when one exists, and include screenshots or a short recording for UI changes. Screen recordings are required for any animation change. Call out Android/native-module or migration changes explicitly.
+## Riverpod
+
+- `flutter_riverpod` 2.x, **no codegen**. `NotifierProvider` /
+  `AsyncNotifierProvider` / `Provider.family`.
+- Repository providers live in `data/data_providers.dart`; view state lives in
+  `presentation/providers/`.
+- `main.dart` overrides `sharedPreferencesProvider` and
+  `initialSettingsProvider` before `runApp`, so the first frame already has the
+  user's theme.
+- Reader-scoped state is **not** a provider. `ReaderController` is a plain
+  `ChangeNotifier` created by `ReaderScreen`, so it is disposed with the route.
+
+## Reader internals (read before touching scroll math)
+
+`ReaderController` is the single source of truth for: current page, progress,
+zoom, scroll mode, page filter, dim level, auto-scroll, chrome visibility and
+the scrub preview. The widget tree reads it through `AnimatedBuilder`.
+
+- **Geometry**: `PageLayout` (`domain/entities/page_geometry.dart`) maps page
+  sizes to offsets. `contentWidth / aspectRatio` per page, `spacing` between
+  pages, `topInset` above the first. Pure and unit-tested — extend the tests in
+  `test/page_geometry_test.dart` rather than adding untested maths.
+- **Progress** is page-counted: `(pageIndex + fractionWithinPage) / pageCount`,
+  so it always agrees with the "12 / 340" indicator.
+- **Persistence** is debounced (650 ms) and also flushed in `dispose()`; the
+  position stores the page *and* `offsetFraction`.
+- **Rendering**: `PdfPageCache` keys bitmaps by `page@widthBucket`, serialises
+  renders through `PdfRenderer`'s queue and prefetches ±2 pages around the
+  current one. Do not render directly from widgets.
+- **Gestures**: `ReaderGestureLayer` uses a raw `Listener` on purpose — pinch
+  zoom must not fight the scroll view's gesture arena. Single taps are delayed
+  200 ms and cancelled by a second tap; double tap is only reported in vertical
+  mode (paged mode zooms inside `ZoomablePage`).
+
+## Testing
+
+`test/` must stay runnable with `flutter test` and no device:
+
+- `page_geometry_test.dart` — layout, scrub, page lookup.
+- `formatters_test.dart` — byte/date/speed formatting, greetings, clamping.
+- `settings_dto_test.dart` — JSON round-trip, tolerant defaults, clamping.
+- `reading_position_test.dart` — percent maths, copy semantics, value equality.
+
+Anything that needs a renderer or a plugin belongs behind an interface in
+`data/` so it can be faked, not in `test/` as an integration test.
+
+## Common pitfalls
+
+- `pdfx` returns **raster** pages; there is no text layer. Search/selection is
+  intentionally out of scope until a text engine is added.
+- `LinearProgressIndicator.value` must be `0..1` or `null`; `.clamp()` returns
+  `num`, so follow it with `.toDouble()`.
+- Don't call `Navigator`/`ScaffoldMessenger`/`Theme` lookups from `domain/` or
+  `data/`; pass plain values in.
+- `ReaderCanvas` is only rebuilt for scroll mode, zoom, pinch and filter
+  changes. If you add state that changes layout, extend
+  `_onControllerChanged`'s comparison or the canvas will go stale.
+- Avoid `Opacity` on the page stack; `AnimatedOpacity` on the chrome and
+  `RepaintBoundary` per page keep the reader at frame rate.
+
+## Verification before handing work back
+
+```bash
+dart format --output=none --set-exit-if-changed .
+flutter analyze
+flutter test
+```
+
+If the environment has no Flutter SDK, say so explicitly instead of claiming the
+build passes — static parsing is not a build.

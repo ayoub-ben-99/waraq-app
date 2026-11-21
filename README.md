@@ -1,128 +1,184 @@
 <p align="center">
-  <img src="./assets/readme-cover.png" alt="Waraq app cover" width="1600" />
+  <img src="./assets/readme-cover.png" alt="Waraq — a quiet place to read PDFs" width="1600" />
 </p>
 
 <h1 align="center">وَرَق &nbsp;|&nbsp; Waraq</h1>
 
 <p align="center">
-  offline reading library and knowledge notebook. Organize books, save highlights, review with spaced repetition, attach audio notes, and read PDFs. No account, no sync. Currently in beta.
+  A calm, local-first PDF reader for Android and iOS. Material You theming,
+  a reading surface that gets out of the way, and nothing to sign up for.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/status-beta-orange?style=for-the-badge" alt="Beta" />
-  <img src="https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white" alt="Expo" />
-  <img src="https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React Native" />
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
-  <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android" />
+  <img src="https://img.shields.io/badge/Flutter-3.22+-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter" />
+  <img src="https://img.shields.io/badge/Material_3-Express-6750A4?style=for-the-badge" alt="Material 3" />
+  <img src="https://img.shields.io/badge/Riverpod-2.x-2E7EEA?style=for-the-badge" alt="Riverpod" />
+  <img src="https://img.shields.io/badge/pdfx-2.x-BD3934?style=for-the-badge" alt="pdfx" />
+  <img src="https://img.shields.io/badge/status-in_development-orange?style=for-the-badge" alt="In development" />
 </p>
 
 ---
 
-## Overview
+## What it is
 
-Waraq is an offline-first personal library. You import books, capture highlights and notes, attach audio, and review saved knowledge with spaced repetition. All data stays on your device.
+Waraq is a **PDF reader**, not a library manager. You import a file, it opens
+instantly, you read. Everything — documents, thumbnails, reading positions,
+bookmarks, preferences — lives on the device. There is no account, no network
+call, and no analytics.
 
-The interface is Arabic-first with full RTL support. Targets: Android.
-
-Waraq is in beta. Expect changes, and report issues on the [Issues](../../issues) page.
+The interface borrows its manners from Flow, Material Files and *Now in
+Android*: one idea per screen, rounded tonal surfaces, generous whitespace,
+micro-animations that explain where things came from, and chrome that fades away
+while you read.
 
 ## Features
 
-<table>
-  <tr>
-    <td width="48" align="center"><img src="https://api.iconify.design/lucide/library-big.svg?color=%23888888" width="24" height="24" alt="" /></td>
-    <td><b>Book library</b><br/>Searchable grid and list views.</td>
-  </tr>
-  <tr>
-    <td align="center"><img src="https://api.iconify.design/lucide/brain.svg?color=%23888888" width="24" height="24" alt="" /></td>
-    <td><b>Knowledge entries</b><br/>Tags, summaries, and review scheduling with spaced repetition.</td>
-  </tr>
-  <tr>
-    <td align="center"><img src="https://api.iconify.design/lucide/file-text.svg?color=%23888888" width="24" height="24" alt="" /></td>
-    <td><b>PDF reader</b><br/>Import and read PDFs on native Android.</td>
-  </tr>
-  <tr>
-    <td align="center"><img src="https://api.iconify.design/lucide/mic.svg?color=%23888888" width="24" height="24" alt="" /></td>
-    <td><b>Audio notes</b><br/>Record and attach audio to any knowledge entry.</td>
-  </tr>
-  <tr>
-    <td align="center"><img src="https://api.iconify.design/lucide/database.svg?color=%23888888" width="24" height="24" alt="" /></td>
-    <td><b>Local storage</b><br/>SQLite persistence with backup and restore.</td>
-  </tr>
-  <tr>
-    <td align="center"><img src="https://api.iconify.design/lucide/shield-check.svg?color=%23888888" width="24" height="24" alt="" /></td>
-    <td><b>Private by design</b><br/>No account and no sync requirement.</td>
-  </tr>
-  <tr>
-    <td align="center"><img src="https://api.iconify.design/lucide/languages.svg?color=%23888888" width="24" height="24" alt="" /></td>
-    <td><b>Arabic and RTL</b><br/>Custom fonts and theme tokens.</td>
-  </tr>
-</table>
+### Reading surface
+- **Continuous vertical scroll** (default) or **paged horizontal** swiping, switchable mid-document.
+- **Auto-scroll** with a speed dial, play/pause, and instant pause on any touch.
+- **Draggable scrubber** with a live page-number preview floating above the rail.
+- **Per-document resume** — page *and* the fraction scrolled through that page.
+- **Pinch-to-zoom** (1×–3×, snapping back to the page you were on) and **double
+  tap** to jump to 1.85× and back.
+- **Auto-hiding chrome**: the top bar, the tool dock and the immersive progress
+  hairline fade and slide away; a tap brings them back.
+- **Floating page indicator** that appears while you move and fades out at rest.
+- **Sepia / night page tone**, **brightness dimming**, and **bookmark page** with a
+  one-tap toggle plus a bookmarks sheet.
 
-## Download
+### Theming
+- **Dynamic colour** from the wallpaper via `dynamic_color`, with an animated
+  cross-fade when the palette changes.
+- Three modes — **Light**, **Dark**, and **true-black AMOLED** — plus *follow the
+  system* (the default). Manual override is one tap in Settings.
+- When dynamic colour is unavailable (desktop, older Android, dynamic colour
+  switched off) the theme falls back to `ColorScheme.fromSeed` over five
+  hand-tuned accent seeds.
+- Full **English / Arabic** interface, right-to-left included, with a string
+  catalogue that has no codegen step.
 
-Get the latest Android APK from the [Releases](../../releases) page.
+### Library
+- Import via the system file picker, with a bundled sample document on first run.
+- Recent files with rendered page thumbnails on Home, plus a *Continue reading*
+  card that knows the exact spot.
+- Search, sort by recent or title, long-press to delete, and a storage summary.
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js (compatible LTS version)
-- Android Studio or a physical Android device (for native builds)
-
-### Install and run
+## Getting started
 
 ```bash
-npm install
-npm run start
+# 1. Flutter 3.22+ with the Android or iOS toolchain
+flutter --version
+
+# 2. Generate the platform folders once (they are not checked in — see below)
+flutter create . --platforms=android,ios --project-name waraq
+
+# 3. Dependencies, then run
+flutter pub get
+flutter run
 ```
 
-Open the app from the Expo development server on a connected device or emulator.
+> **Why `flutter create .`?** The repository contains only the Dart application
+> (`lib/`, `test/`, `assets/`, `pubspec.yaml`). The generated `android/` and
+> `ios/` folders are created once per checkout by `flutter create .`, which
+> leaves existing Dart files untouched, and are then committed normally. No
+> custom Gradle or Info.plist changes are required — `pdfx`, `file_picker`,
+> `path_provider` and `shared_preferences` work with their defaults.
 
-### Native Android build
+Minimum Android SDK: **21**. iOS: **12**.
 
-```bash
-npm run android
-```
+## Verification status
 
-### Web
-
-```bash
-npx expo start --web
-```
-
-## Development Commands
-
-| Command | Description |
+| Check | Status |
 | --- | --- |
-| `npm run start` | Start the Expo development server |
-| `npm run android` | Build, install, and launch on Android |
-| `npm run typecheck` | Run the strict TypeScript check |
+| Dart parse (tree-sitter, 62 files) | ✅ clean |
+| Relative imports resolve | ✅ |
+| String keys exist in both languages | ✅ |
+| Design-token members referenced correctly | ✅ |
+| `flutter analyze` / `flutter build` | ⚠️ not run — no Flutter SDK in the authoring environment |
+| Unit tests | ⚠️ written, not executed (same reason) |
 
-No test or lint scripts are configured yet. Run `npm run typecheck` and verify affected flows manually before you submit changes.
+`test/` covers the pure logic that does not need a device: page geometry and
+scrub maths, formatters, JSON mapping, and reading-position semantics.
 
-## Project Layout
-
-```text
-src/
-  screens/            Application screens
-  components/         Reusable UI components
-  ui/                 UI primitives
-  data/               SQLite schema, migrations, repositories
-  features/           PDF, audio, and backup integrations
-  theme/              Design tokens and theme provider
-modules/
-  waraq-native/       Android native PDF and OCR module
-assets/               Icons, splash artwork, fonts
+```bash
+flutter analyze
+flutter test
 ```
 
-## Tech Stack
+## Architecture
 
-| Layer | Technology |
-| --- | --- |
-| Framework | Expo, React Native |
-| Language | TypeScript (strict) |
-| Storage | SQLite |
-| Native | Custom Android module (PDF, OCR) |
-| Platforms | Android, Web |
+```
+lib/
+├── main.dart                 # boots SharedPreferences, seeds settings, runApp
+├── app.dart                  # MaterialApp, dynamic colour, locale, theme mode
+├── core/
+│   ├── theme/                # tokens, palette, page filters, ThemeData builders
+│   ├── l10n/                 # bilingual string catalogue
+│   ├── utils/                # formatters (pure, unit-tested)
+│   └── widgets/              # Reveal, PressableScale, PopIcon, sheets, covers…
+├── domain/
+│   ├── entities/             # PdfDocument, ReadingPosition, Bookmark, settings…
+│   └── repositories/         # abstract contracts
+├── data/
+│   ├── models/               # JSON mapping + tolerant readers
+│   ├── pdf/                  # the only place that knows about pdfx
+│   └── local/                # file storage + SharedPreferences
+└── presentation/
+    ├── providers/            # Riverpod: settings, library, bookmarks
+    ├── shell/                # NavigationBar shell
+    ├── screens/              # home, library, settings
+    ├── widgets/              # rows, continue card, import, delete flows
+    └── reader/               # controller, screen, route, canvas, chrome, sheets
+```
+
+Riverpod owns app-wide state (`AsyncNotifier`s for the library, positions and
+bookmarks). Reader state is deliberately *not* in Riverpod: `ReaderController`
+is a plain `ChangeNotifier` that lives exactly as long as the reader route, owns
+the scroll controllers, the render cache and the auto-scroll ticker, and keeps
+the scroll maths unit-testable.
+
+See [`docs/architecture.md`](docs/architecture.md) for the data flow, the reader
+lifecycle and the reasoning behind the render cache.
+
+## Privacy
+
+- No network permission is requested by the app code.
+- Imported PDFs are copied into the app's documents directory; thumbnails and
+  positions are stored beside them.
+- Settings live in `SharedPreferences`. "Clear reading data" in Settings wipes
+  positions and bookmarks; deleting a document removes its file and thumbnail.
+
+## Known limitations
+
+- **No text selection, copy, or in-document search yet.** `pdfx` hands back a
+  rasterised page, not a text layer. Adding search means bringing in a text
+  extraction engine (PDFium text APIs, or `pdftotext`-style bindings) — a
+  deliberate scope decision for this milestone rather than an oversight.
+- No annotation, highlighting or free-hand ink.
+- PDFs are rendered page by page; very large documents take a moment on first
+  open (the reader shows per-page preparation progress while it measures them).
+- The bundled sample (`assets/sample/waraq_sample.pdf`) is a synthetic document
+  written for this project — no third-party content is redistributed.
+
+## Credits
+
+| Package | Purpose | Licence |
+| --- | --- | --- |
+| [`pdfx`](https://pub.dev/packages/pdfx) | PDF rasterisation (PDFium / PDFKit) | BSD-3-Clause |
+| [`dynamic_color`](https://pub.dev/packages/dynamic_color) | Material You palette extraction | Apache-2.0 |
+| [`flutter_riverpod`](https://pub.dev/packages/flutter_riverpod) | State management | MIT |
+| [`shared_preferences`](https://pub.dev/packages/shared_preferences) | Settings persistence | BSD-3-Clause |
+| [`file_picker`](https://pub.dev/packages/file_picker) | System file picker | MIT |
+| [`path_provider`](https://pub.dev/packages/path_provider) | App directories | BSD-3-Clause |
+
+Typography uses the platform UI font (Roboto on Android, SF on iOS), tuned
+through the text theme. To bundle a brand face, drop `.ttf` files into
+`assets/fonts/` and uncomment the `fonts:` block in `pubspec.yaml`.
+
+## Roadmap
+
+1. Text layer: search, selection and copy.
+2. Highlights with notes, exported as Markdown.
+3. Table of contents from the PDF outline.
+4. Two-page landscape spread on tablets.
+5. Optional folder structure for larger shelves.

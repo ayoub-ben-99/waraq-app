@@ -1,0 +1,54 @@
+name: waraq
+description: Waraq — a calm, local-first PDF reader with Material You theming.
+publish_to: "none"
+version: 3.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.6.1
+
+  # Theming
+  dynamic_color: ^1.7.0
+
+  # PDF rendering (BSD-3-Clause, no commercial licence required)
+  pdfx: ^2.6.1
+
+  # Platform + persistence
+  file_picker: ^8.1.2
+  path_provider: ^2.1.4
+  path: ^1.9.0
+  shared_preferences: ^2.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/sample/
+
+  # Typography uses the platform UI font (Roboto / SF), tuned through the
+  # text theme in lib/core/theme/app_theme.dart. To bundle a brand face,
+  # drop the .ttf files into assets/fonts/ and uncomment:
+  #
+  # fonts:
+  #   - family: Plex
+  #     fonts:
+  #       - asset: assets/fonts/plex_regular.ttf
+  #         weight: 400
+  #       - asset: assets/fonts/plex_medium.ttf
+  #         weight: 500
+  #       - asset: assets/fonts/plex_semibold.ttf
+  #         weight: 600
