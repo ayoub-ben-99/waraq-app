@@ -31,7 +31,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.3'
+          flutter-version: '3.35.7'
           channel: stable
           cache: true
 
@@ -42,6 +42,9 @@ jobs:
           flutter create --platforms=android --project-name waraq --org com.waraq /tmp/scaffold
           cp -r /tmp/scaffold/android ./
           sed -i 's/android:label="waraq"/android:label="Waraq"/' android/app/src/main/AndroidManifest.xml
+          # pdfx and the rest of the plugin set are built against NDK 27.
+          sed -i 's/ndkVersion = flutter.ndkVersion/ndkVersion = "27.0.12077973"/' android/app/build.gradle.kts
+          grep -n 'ndkVersion\|applicationId' android/app/build.gradle.kts
 
       - name: Versions
         run: |

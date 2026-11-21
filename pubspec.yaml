@@ -5,7 +5,8 @@ version: 3.0.0+1
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.22.0"
+  # pdfx 2.11 uses the double-precision Matrix4 API that landed in 3.32.
+  flutter: ">=3.32.0"
 
 dependencies:
   flutter:
