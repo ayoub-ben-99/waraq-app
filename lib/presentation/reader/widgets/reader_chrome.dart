@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/l10n/app_strings.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/shape_motion.dart';
 import '../../../core/theme/tokens.dart';
 import '../../../core/theme/waraq_palette.dart';
 import '../../../core/widgets/pop_icon.dart';
@@ -58,11 +59,11 @@ class ReaderChrome extends StatelessWidget {
                 ignoring: !visible,
                 child: AnimatedSlide(
                   offset: visible ? Offset.zero : const Offset(0, -0.45),
-                  duration: Motion.base,
+                  duration: WaraqMotion.of(context).base,
                   curve: Motion.emphasized,
                   child: AnimatedOpacity(
                     opacity: visible ? 1 : 0,
-                    duration: Motion.base,
+                    duration: WaraqMotion.of(context).base,
                     curve: Motion.emphasized,
                     child: _TopBar(
                       document: document,
@@ -77,7 +78,7 @@ class ReaderChrome extends StatelessWidget {
               ),
             ),
             AnimatedPositioned(
-              duration: Motion.base,
+              duration: WaraqMotion.of(context).base,
               curve: Motion.emphasized,
               left: 0,
               right: 0,
@@ -108,11 +109,11 @@ class ReaderChrome extends StatelessWidget {
                 ignoring: !visible,
                 child: AnimatedSlide(
                   offset: visible ? Offset.zero : const Offset(0, 0.7),
-                  duration: Motion.base,
+                  duration: WaraqMotion.of(context).base,
                   curve: Motion.emphasized,
                   child: AnimatedOpacity(
                     opacity: visible ? 1 : 0,
-                    duration: Motion.base,
+                    duration: WaraqMotion.of(context).base,
                     curve: Motion.emphasized,
                     child: _ToolDock(
                       controller: controller,
@@ -132,7 +133,7 @@ class ReaderChrome extends StatelessWidget {
               child: IgnorePointer(
                 child: AnimatedOpacity(
                   opacity: visible ? 0 : 1,
-                  duration: Motion.base,
+                  duration: WaraqMotion.of(context).base,
                   child: _ImmersiveLine(
                     progress: controller.progress,
                     palette: palette,
@@ -179,7 +180,7 @@ class _TopBar extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: palette.chromeSurface,
-          borderRadius: BorderRadius.circular(Radii.lg),
+          borderRadius: WaraqShape.of(context).allLg,
           border: Border.all(color: palette.chromeBorder),
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -283,7 +284,7 @@ class _PagePill extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: Gap.l, vertical: Gap.s),
         decoration: BoxDecoration(
           color: palette.chromeSurface,
-          borderRadius: BorderRadius.circular(Radii.pill),
+          borderRadius: WaraqShape.of(context).allPill,
           border: Border.all(color: palette.chromeBorder),
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -326,7 +327,7 @@ class _ToolDock extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: palette.chromeSurface,
-        borderRadius: BorderRadius.circular(Radii.xl),
+        borderRadius: WaraqShape.of(context).allXl,
         border: Border.all(color: palette.chromeBorder),
         boxShadow: <BoxShadow>[
           BoxShadow(

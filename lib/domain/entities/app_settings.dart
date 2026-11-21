@@ -9,6 +9,30 @@ enum AccentSeed { indigo, jade, clay, plum, sand }
 /// Interface language. Arabic renders right-to-left.
 enum AppLanguage { system, english, arabic }
 
+/// Corner language of the interface, in the spirit of Material 3 shape scales.
+enum ShapeStyle {
+  /// Calm 10–16 dp corners. Default.
+  soft,
+
+  /// Generous 20–32 dp corners, closer to the Material 3 "expressive" scale.
+  rounded,
+
+  /// Near-square corners for a document, paper-like feel.
+  square,
+}
+
+/// How much the interface moves.
+enum MotionStyle {
+  /// Full motion: staggered reveals, sliding chrome, cross-faded themes.
+  full,
+
+  /// Shorter, straighter transitions with no staggering.
+  reduced,
+
+  /// Instant state changes. Also what "remove animations" accessibility users want.
+  off,
+}
+
 /// Everything the settings screen owns.
 class AppSettings {
   const AppSettings({
@@ -16,6 +40,8 @@ class AppSettings {
     this.useDynamicColor = true,
     this.accentSeed = AccentSeed.indigo,
     this.language = AppLanguage.system,
+    this.shapeStyle = ShapeStyle.soft,
+    this.motionStyle = MotionStyle.full,
     this.reader = const ReaderSettings(),
   });
 
@@ -23,6 +49,8 @@ class AppSettings {
   final bool useDynamicColor;
   final AccentSeed accentSeed;
   final AppLanguage language;
+  final ShapeStyle shapeStyle;
+  final MotionStyle motionStyle;
   final ReaderSettings reader;
 
   bool get isAmoled => themeMode == AppThemeMode.amoled;
@@ -35,6 +63,8 @@ class AppSettings {
     bool? useDynamicColor,
     AccentSeed? accentSeed,
     AppLanguage? language,
+    ShapeStyle? shapeStyle,
+    MotionStyle? motionStyle,
     ReaderSettings? reader,
   }) {
     return AppSettings(
@@ -42,6 +72,8 @@ class AppSettings {
       useDynamicColor: useDynamicColor ?? this.useDynamicColor,
       accentSeed: accentSeed ?? this.accentSeed,
       language: language ?? this.language,
+      shapeStyle: shapeStyle ?? this.shapeStyle,
+      motionStyle: motionStyle ?? this.motionStyle,
       reader: reader ?? this.reader,
     );
   }
@@ -53,10 +85,20 @@ class AppSettings {
         other.useDynamicColor == useDynamicColor &&
         other.accentSeed == accentSeed &&
         other.language == language &&
+        other.shapeStyle == shapeStyle &&
+        other.motionStyle == motionStyle &&
         other.reader == reader;
   }
 
   @override
   int get hashCode =>
-      Object.hash(themeMode, useDynamicColor, accentSeed, language, reader);
+      Object.hash(
+        themeMode,
+        useDynamicColor,
+        accentSeed,
+        language,
+        shapeStyle,
+        motionStyle,
+        reader,
+      );
 }

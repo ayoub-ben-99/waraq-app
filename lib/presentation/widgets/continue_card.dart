@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/shape_motion.dart';
 import '../../core/theme/tokens.dart';
 import '../../core/widgets/document_cover.dart';
 import '../../core/widgets/pressable_scale.dart';
@@ -24,11 +25,11 @@ class ContinueCard extends StatelessWidget {
       padding: const EdgeInsets.only(top: Gap.xl),
       child: PressableScale(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(Radii.xl),
+        borderRadius: WaraqShape.of(context).allXl,
         child: Container(
           padding: const EdgeInsets.all(Gap.xl),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Radii.xl),
+            borderRadius: WaraqShape.of(context).allXl,
             gradient: LinearGradient(
               begin: AlignmentDirectional.topStart,
               end: AlignmentDirectional.bottomEnd,

@@ -203,6 +203,54 @@ class AppStrings {
         'وَرَق قارئ يعمل محليًا. بلا حساب ولا مزامنة ولا تتبّع. عرض PDF بواسطة pdfx.',
       );
   String get versionLabel => _t('Version', 'الإصدار');
+
+  // ------------------------------------------------------ shape & motion ---
+  String get sectionShape => _t('Shape', 'الأشكال');
+  String get shapeTitle => _t('Corner style', 'شكل الزوايا');
+  String get shapeSubtitle => _t(
+        'How rounded cards, sheets and buttons are',
+        'مقدار استدارة البطاقات والألواح والأزرار',
+      );
+  String get shapeSoft => _t('Soft', 'هادئة');
+  String get shapeRounded => _t('Rounded', 'دائرية');
+  String get shapeSquare => _t('Square', 'حادة');
+  String get shapeHint => _t(
+        'Applies across the whole app, including the reader',
+        'يُطبَّق على التطبيق كاملًا بما فيه القارئ',
+      );
+  String get sectionMotion => _t('Motion', 'الحركة');
+  String get motionTitle => _t('Animation level', 'مستوى الحركة');
+  String get motionSubtitle => _t(
+        'Reveals, sliding chrome and theme cross-fades',
+        'الظهور التدريجي وحركة الأدوات وانتقال الثيم',
+      );
+  String get motionFull => _t('Full', 'كاملة');
+  String get motionReduced => _t('Reduced', 'مخفّفة');
+  String get motionOff => _t('Off', 'بدون');
+  String get motionHint => _t(
+        'Turn motion off for a still, distraction-free interface',
+        'أوقف الحركة لواجهة ساكنة بلا تشتيت',
+      );
+
+  // --------------------------------------------------------- statistics ---
+  String get sectionStats => _t('On your shelf', 'على رفّك');
+  String get statsDocuments => _t('Documents', 'ملفات');
+  String get statsPages => _t('Pages', 'صفحات');
+  String get statsBookmarks => _t('Bookmarks', 'علامات');
+  String get statsStorage => _t('Storage', 'تخزين');
+  String get statsReadPages => _t('Pages read', 'صفحات مقروءة');
+  String get statsProgress => _t('Average progress', 'متوسط التقدم');
+
+  // ----------------------------------------------------------- community ---
+  String get sectionCommunity => _t('Community', 'المجتمع');
+  String get whatsappGroup => _t('WhatsApp group', 'مجموعة واتساب');
+  String get whatsappGroupHint => _t(
+        'Ask questions and share what you are reading',
+        'اسأل وشارك ما تقرأه',
+      );
+  String get sourceCode => _t('Source code', 'الكود المصدري');
+  String get sourceCodeHint => _t('Waraq on GitHub', 'وَرَق على GitHub');
+  String get linkError => _t('Could not open the link', 'تعذّر فتح الرابط');
 }
 
 extension AppStringsBuildContext on BuildContext {

@@ -23,6 +23,8 @@ class AppSettingsDto {
       useDynamicColor: readBool(map['useDynamicColor'], true),
       accentSeed: readEnum(AccentSeed.values, map['accentSeed'], AccentSeed.indigo),
       language: readEnum(AppLanguage.values, map['language'], AppLanguage.system),
+      shapeStyle: readEnum(ShapeStyle.values, map['shapeStyle'], ShapeStyle.soft),
+      motionStyle: readEnum(MotionStyle.values, map['motionStyle'], MotionStyle.full),
       reader: ReaderSettings(
         scrollMode:
             readEnum(ScrollMode.values, reader['scrollMode'], ScrollMode.vertical),
@@ -39,6 +41,8 @@ class AppSettingsDto {
       'useDynamicColor': settings.useDynamicColor,
       'accentSeed': settings.accentSeed.name,
       'language': settings.language.name,
+      'shapeStyle': settings.shapeStyle.name,
+      'motionStyle': settings.motionStyle.name,
       'reader': <String, Object?>{
         'scrollMode': settings.reader.scrollMode.name,
         'pageFilter': settings.reader.pageFilter.name,

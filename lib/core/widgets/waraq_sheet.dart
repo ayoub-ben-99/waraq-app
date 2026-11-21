@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
+import '../theme/shape_motion.dart';
 import '../theme/tokens.dart';
 
 /// Shows a rounded, scrollable sheet. Bottom safe-area padding is applied here
@@ -52,8 +53,8 @@ class WaraqSheet extends StatelessWidget {
         constraints: BoxConstraints(maxHeight: maxHeight),
         decoration: BoxDecoration(
           color: scheme.surfaceContainerLow,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(Radii.xl),
+          borderRadius: BorderRadius.vertical(
+            top: WaraqShape.of(context).topXl,
           ),
           border: Border(
             top: BorderSide(color: scheme.outlineVariant.withFraction(0.5)),

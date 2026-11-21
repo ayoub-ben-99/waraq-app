@@ -6,7 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/shape_motion.dart';
 import '../../core/theme/tokens.dart';
+import '../../core/utils/links.dart';
+import '../../core/widgets/link_tile.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/widgets/section_header.dart';
 import '../../data/data_providers.dart';
@@ -20,7 +23,7 @@ import '../providers/settings_providers.dart';
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  static const String appVersion = '3.0.0';
+  static const String appVersion = '4.0.0';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -109,6 +112,66 @@ class SettingsScreen extends ConsumerWidget {
                       ),
                     ),
                   ],
+                ],
+              ),
+              SectionHeader(title: strings.sectionShape),
+              _SettingsCard(
+                children: <Widget>[
+                  _LabelRow(
+                    icon: Icons.rounded_corner_rounded,
+                    title: strings.shapeTitle,
+                    subtitle: strings.shapeSubtitle,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.l),
+                    child: _ShapePicker(
+                      selected: settings.shapeStyle,
+                      onSelected: (ShapeStyle style) => unawaited(
+                        ref.read(settingsProvider.notifier).setShapeStyle(style),
+                      ),
+                    ),
+                  ),
+                  const _CardDivider(),
+                  _Caption(text: strings.shapeHint),
+                ],
+              ),
+              SectionHeader(title: strings.sectionMotion),
+              _SettingsCard(
+                children: <Widget>[
+                  _LabelRow(
+                    icon: Icons.animation_rounded,
+                    title: strings.motionTitle,
+                    subtitle: strings.motionSubtitle,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.l),
+                    child: SegmentedButton<MotionStyle>(
+                      showSelectedIcon: false,
+                      segments: <ButtonSegment<MotionStyle>>[
+                        ButtonSegment<MotionStyle>(
+                          value: MotionStyle.full,
+                          label: Text(strings.motionFull),
+                        ),
+                        ButtonSegment<MotionStyle>(
+                          value: MotionStyle.reduced,
+                          label: Text(strings.motionReduced),
+                        ),
+                        ButtonSegment<MotionStyle>(
+                          value: MotionStyle.off,
+                          label: Text(strings.motionOff),
+                        ),
+                      ],
+                      selected: <MotionStyle>{settings.motionStyle},
+                      onSelectionChanged: (Set<MotionStyle> selection) =>
+                          unawaited(
+                        ref
+                            .read(settingsProvider.notifier)
+                            .setMotionStyle(selection.first),
+                      ),
+                    ),
+                  ),
+                  const _CardDivider(),
+                  _Caption(text: strings.motionHint),
                 ],
               ),
               SectionHeader(title: strings.sectionReading),
@@ -249,6 +312,25 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                 ],
               ),
+              SectionHeader(title: strings.sectionCommunity),
+              _SettingsCard(
+                children: <Widget>[
+                  LinkTile(
+                    icon: Icons.chat_rounded,
+                    title: strings.whatsappGroup,
+                    subtitle: strings.whatsappGroupHint,
+                    url: WaraqLinks.whatsapp,
+                    accent: const Color(0xFF25D366),
+                  ),
+                  const _CardDivider(),
+                  LinkTile(
+                    icon: Icons.code_rounded,
+                    title: strings.sourceCode,
+                    subtitle: strings.sourceCodeHint,
+                    url: WaraqLinks.github,
+                  ),
+                ],
+              ),
             ],
           );
         },
@@ -301,14 +383,16 @@ class _CardDivider extends StatelessWidget {
 }
 
 class _LabelRow extends StatelessWidget {
-  const _LabelRow({required this.icon, required this.title});
+  const _LabelRow({required this.icon, required this.title, this.subtitle});
 
   final IconData icon;
   final String title;
+  final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
     return Padding(
       padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, Gap.m),
       child: Row(
@@ -316,7 +400,21 @@ class _LabelRow extends StatelessWidget {
           _IconBubble(icon: icon),
           const SizedBox(width: Gap.m),
           Expanded(
-            child: Text(title, style: theme.textTheme.titleMedium),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(title, style: theme.textTheme.titleMedium),
+                if (subtitle != null) ...<Widget>[
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle!,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
         ],
       ),
@@ -645,6 +743,135 @@ class _AccentPicker extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+/// Three corner previews, so the choice is visible instead of described.
+class _ShapePicker extends StatelessWidget {
+  const _ShapePicker({required this.selected, required this.onSelected});
+
+  final ShapeStyle selected;
+  final ValueChanged<ShapeStyle> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        for (final ShapeStyle style in ShapeStyle.values) ...<Widget>[
+          Expanded(
+            child: _ShapeOption(
+              style: style,
+              selected: selected == style,
+              onTap: () => onSelected(style),
+            ),
+          ),
+          if (style != ShapeStyle.values.last) const SizedBox(width: Gap.s),
+        ],
+      ],
+    );
+  }
+}
+
+class _ShapeOption extends StatelessWidget {
+  const _ShapeOption({
+    required this.style,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final ShapeStyle style;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppStrings strings = AppStrings.of(context);
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
+    final WaraqShape preview = WaraqShape.forStyle(style);
+
+    final String label = switch (style) {
+      ShapeStyle.soft => strings.shapeSoft,
+      ShapeStyle.rounded => strings.shapeRounded,
+      ShapeStyle.square => strings.shapeSquare,
+    };
+
+    return Semantics(
+      selected: selected,
+      button: true,
+      label: label,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: preview.allMd,
+        child: AnimatedContainer(
+          duration: Motion.fast,
+          curve: Motion.emphasized,
+          padding: const EdgeInsets.symmetric(
+            horizontal: Gap.s,
+            vertical: Gap.m,
+          ),
+          decoration: BoxDecoration(
+            color: selected
+                ? scheme.secondaryContainer
+                : scheme.surfaceContainerHigh,
+            borderRadius: preview.allMd,
+            border: Border.all(
+              color: selected ? scheme.primary : scheme.outlineVariant,
+              width: selected ? 1.6 : 1,
+            ),
+          ),
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: selected
+                      ? scheme.onSecondaryContainer.withFraction(0.16)
+                      : scheme.onSurfaceVariant.withFraction(0.14),
+                  borderRadius: BorderRadius.circular(preview.md),
+                ),
+              ),
+              const SizedBox(height: Gap.s),
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  color: selected
+                      ? scheme.onSecondaryContainer
+                      : scheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Muted explanatory line under a setting.
+class _Caption extends StatelessWidget {
+  const _Caption({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(Gap.l, Gap.m, Gap.l, Gap.m),
+      child: Text(
+        text,
+        style: theme.textTheme.bodySmall?.copyWith(
+          color: scheme.onSurfaceVariant,
+          height: 1.4,
+        ),
+      ),
     );
   }
 }

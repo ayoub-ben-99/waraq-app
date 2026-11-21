@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../theme/shape_motion.dart';
 import '../theme/tokens.dart';
 
 /// Press feedback used by every tappable card: a soft spring down to 0.97 and
@@ -38,9 +39,10 @@ class _PressableScaleState extends State<PressableScale> {
   Widget build(BuildContext context) {
     final bool reduceMotion =
         MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+    final WaraqMotion motion = WaraqMotion.of(context);
     return AnimatedScale(
-      scale: _pressed ? widget.scale : 1,
-      duration: reduceMotion ? Duration.zero : Motion.tap,
+      scale: _pressed && motion.enabled ? widget.scale : 1,
+      duration: reduceMotion ? Duration.zero : motion.tap,
       curve: Motion.emphasized,
       child: Material(
         color: Colors.transparent,

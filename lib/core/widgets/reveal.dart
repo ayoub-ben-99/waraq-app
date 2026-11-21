@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../theme/shape_motion.dart';
 import '../theme/tokens.dart';
 
 /// The signature entrance: fade in and rise a few pixels, staggered by index.
@@ -47,11 +48,13 @@ class _RevealState extends State<Reveal> with SingleTickerProviderStateMixin {
     _started = true;
     final bool reduceMotion =
         MediaQuery.maybeDisableAnimationsOf(context) ?? false;
-    if (reduceMotion) {
+    final WaraqMotion motion = WaraqMotion.of(context);
+    if (reduceMotion || !motion.enabled) {
       _controller.value = 1;
       return;
     }
-    final Duration delay = Motion.stagger * widget.index.clamp(0, 8);
+    _controller.duration = motion.of(widget.duration ?? Motion.base);
+    final Duration delay = motion.stagger * widget.index.clamp(0, 8);
     if (delay == Duration.zero) {
       _controller.forward();
     } else {

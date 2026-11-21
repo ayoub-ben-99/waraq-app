@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/entities/app_settings.dart';
 import '../theme/tokens.dart';
+import 'shape_motion.dart';
 import 'waraq_palette.dart';
 
 /// Opacity helper that avoids the deprecated `withOpacity` while staying
@@ -39,6 +40,8 @@ abstract final class WaraqTheme {
     return _material(
       scheme: scheme,
       isArabic: _isArabic(settings),
+      shapeStyle: settings.shapeStyle,
+      motionStyle: settings.motionStyle,
       palette: WaraqPalette.light.copyWith(
         readerBackdrop: scheme.surfaceContainerLow,
         chromeSurface: scheme.surfaceContainerLowest.withFraction(0.94),
@@ -70,6 +73,8 @@ abstract final class WaraqTheme {
       palette: palette,
       amoled: amoled,
       isArabic: _isArabic(settings),
+      shapeStyle: settings.shapeStyle,
+      motionStyle: settings.motionStyle,
     );
   }
 
@@ -120,18 +125,23 @@ abstract final class WaraqTheme {
     required ColorScheme scheme,
     required WaraqPalette palette,
     required bool isArabic,
+    required ShapeStyle shapeStyle,
+    required MotionStyle motionStyle,
     bool amoled = false,
   }) {
     final ThemeData base = ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
+      fontFamily: 'Rubik',
       scaffoldBackgroundColor: amoled ? Colors.black : scheme.surface,
     );
     final TextTheme text = _textTheme(base.textTheme, isArabic: isArabic);
+    final WaraqShape shape = WaraqShape.forStyle(shapeStyle);
+    final WaraqMotion motion = WaraqMotion.forStyle(motionStyle);
 
     return base.copyWith(
       textTheme: text,
-      extensions: <ThemeExtension<dynamic>>[palette],
+      extensions: <ThemeExtension<dynamic>>[palette, shape, motion],
       canvasColor: scheme.surface,
       dividerTheme: DividerThemeData(
         color: scheme.outlineVariant.withFraction(0.6),
@@ -145,6 +155,9 @@ abstract final class WaraqTheme {
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         indicatorColor: scheme.secondaryContainer,
+        indicatorShape: shapeStyle == ShapeStyle.square
+            ? RoundedRectangleBorder(borderRadius: shape.allSm)
+            : const StadiumBorder(),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         labelTextStyle: WidgetStateProperty.resolveWith(
           (Set<WidgetState> states) {
@@ -186,15 +199,13 @@ abstract final class WaraqTheme {
           color: scheme.onInverseSurface,
         ),
         elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Radii.md),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: shape.allMd),
         insetPadding: const EdgeInsets.all(Gap.l),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Radii.pill),
+            borderRadius: BorderRadius.circular(shape.pill),
           ),
           padding: const EdgeInsets.symmetric(
             horizontal: Gap.xl,
@@ -207,7 +218,7 @@ abstract final class WaraqTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Radii.pill),
+            borderRadius: BorderRadius.circular(shape.pill),
           ),
           textStyle: text.labelLarge,
           minimumSize: const Size(0, 44),
@@ -215,7 +226,7 @@ abstract final class WaraqTheme {
       ),
       chipTheme: ChipThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Radii.pill),
+          borderRadius: BorderRadius.circular(shape.pill),
         ),
         side: BorderSide(color: scheme.outlineVariant),
         labelStyle: text.labelLarge,
@@ -228,8 +239,8 @@ abstract final class WaraqTheme {
         surfaceTintColor: Colors.transparent,
         modalBackgroundColor: Colors.transparent,
         elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(Radii.xl)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: shape.topXl),
         ),
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
@@ -241,51 +252,56 @@ abstract final class WaraqTheme {
   }
 
   static TextTheme _textTheme(TextTheme base, {required bool isArabic}) {
+    // Rubik has no Arabic coverage; Cairo picks those glyphs up per-character.
+    final TextTheme source = base.apply(
+      fontFamily: 'Rubik',
+      fontFamilyFallback: const <String>['Cairo'],
+    );
     double track(double value) => isArabic ? 0 : value;
-    return base.copyWith(
-      displaySmall: base.displaySmall?.copyWith(
+    return source.copyWith(
+      displaySmall: source.displaySmall?.copyWith(
         fontSize: 34,
         height: 1.12,
         fontWeight: FontWeight.w600,
         letterSpacing: track(-1.0),
       ),
-      headlineMedium: base.headlineMedium?.copyWith(
+      headlineMedium: source.headlineMedium?.copyWith(
         fontSize: 27,
         height: 1.18,
         fontWeight: FontWeight.w600,
         letterSpacing: track(-0.6),
       ),
-      headlineSmall: base.headlineSmall?.copyWith(
+      headlineSmall: source.headlineSmall?.copyWith(
         fontSize: 22,
         height: 1.25,
         fontWeight: FontWeight.w600,
         letterSpacing: track(-0.3),
       ),
-      titleLarge: base.titleLarge?.copyWith(
+      titleLarge: source.titleLarge?.copyWith(
         fontSize: 19,
         height: 1.3,
         fontWeight: FontWeight.w600,
         letterSpacing: track(-0.2),
       ),
-      titleMedium: base.titleMedium?.copyWith(
+      titleMedium: source.titleMedium?.copyWith(
         fontSize: 16,
         height: 1.35,
         fontWeight: FontWeight.w500,
       ),
-      bodyLarge: base.bodyLarge?.copyWith(fontSize: 16, height: 1.45),
-      bodyMedium: base.bodyMedium?.copyWith(fontSize: 14, height: 1.4),
-      bodySmall: base.bodySmall?.copyWith(fontSize: 12.5, height: 1.35),
-      labelLarge: base.labelLarge?.copyWith(
+      bodyLarge: source.bodyLarge?.copyWith(fontSize: 16, height: 1.45),
+      bodyMedium: source.bodyMedium?.copyWith(fontSize: 14, height: 1.4),
+      bodySmall: source.bodySmall?.copyWith(fontSize: 12.5, height: 1.35),
+      labelLarge: source.labelLarge?.copyWith(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         letterSpacing: 0,
       ),
-      labelMedium: base.labelMedium?.copyWith(
+      labelMedium: source.labelMedium?.copyWith(
         fontSize: 12,
         fontWeight: FontWeight.w500,
         letterSpacing: track(0.3),
       ),
-      labelSmall: base.labelSmall?.copyWith(
+      labelSmall: source.labelSmall?.copyWith(
         fontSize: 11,
         fontWeight: FontWeight.w600,
         letterSpacing: track(1.1),

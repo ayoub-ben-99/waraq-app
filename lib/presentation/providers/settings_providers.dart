@@ -39,6 +39,14 @@ class SettingsNotifier extends Notifier<AppSettings> {
     return _commit(state.copyWith(language: language));
   }
 
+  Future<void> setShapeStyle(ShapeStyle style) {
+    return _commit(state.copyWith(shapeStyle: style));
+  }
+
+  Future<void> setMotionStyle(MotionStyle style) {
+    return _commit(state.copyWith(motionStyle: style));
+  }
+
   Future<void> updateReader(ReaderSettings Function(ReaderSettings) transform) {
     return _commit(state.copyWith(reader: transform(state.reader)));
   }

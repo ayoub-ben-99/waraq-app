@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/app_theme.dart';
+import 'core/theme/shape_motion.dart';
 import 'core/theme/tokens.dart';
 import 'domain/entities/app_settings.dart';
 import 'presentation/providers/settings_providers.dart';
@@ -33,7 +34,8 @@ class WaraqApp extends ConsumerWidget {
             dynamicScheme: darkDynamic,
           ),
           // Material 3 cross-fades the whole palette when the mode changes.
-          themeAnimationDuration: Motion.theme,
+          themeAnimationDuration:
+              WaraqMotion.forStyle(settings.motionStyle).theme,
           themeAnimationCurve: Motion.emphasized,
           locale: locale,
           supportedLocales: const <Locale>[Locale('en'), Locale('ar')],

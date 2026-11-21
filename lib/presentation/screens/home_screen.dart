@@ -6,9 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/theme/shape_motion.dart';
 import '../../core/theme/tokens.dart';
 import '../../core/utils/formatters.dart';
+import '../../core/utils/links.dart';
 import '../../core/widgets/empty_state.dart';
+import '../../core/widgets/link_tile.dart';
 import '../../core/widgets/reveal.dart';
 import '../../core/widgets/round_icon_button.dart';
 import '../../core/widgets/section_header.dart';
@@ -20,6 +23,7 @@ import '../widgets/continue_card.dart';
 import '../widgets/delete_document.dart';
 import '../widgets/document_row.dart';
 import '../widgets/import_document.dart';
+import '../widgets/stats_grid.dart';
 
 /// Greeting, the resume card, and the most recent documents.
 class HomeScreen extends ConsumerWidget {
@@ -39,6 +43,7 @@ class HomeScreen extends ConsumerWidget {
         ref.watch(positionsProvider).valueOrNull ??
             const <String, ReadingPosition>{};
     final int librarySize = ref.watch(librarySizeProvider);
+    final LibraryStats stats = ref.watch(libraryStatsProvider);
     final bool importing = ref.watch(importBusyProvider);
     final bool loading = documentsAsync.isLoading && documents.isEmpty;
 
@@ -144,6 +149,21 @@ class HomeScreen extends ConsumerWidget {
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: horizontal),
                 sliver: SliverToBoxAdapter(
+                  child: Reveal(
+                    index: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        SectionHeader(title: strings.sectionStats),
+                        StatsGrid(stats: stats),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: horizontal),
+                sliver: SliverToBoxAdapter(
                   child: SectionHeader(
                     title: strings.sectionRecent,
                     trailing: documents.isEmpty
@@ -205,6 +225,52 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: horizontal),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      SectionHeader(title: strings.sectionCommunity),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Gap.m,
+                          vertical: Gap.xs,
+                        ),
+                        decoration: BoxDecoration(
+                          color: scheme.surfaceContainerLow,
+                          borderRadius: WaraqShape.of(context).allLg,
+                          border: Border.all(
+                            color: scheme.outlineVariant.withFraction(0.5),
+                          ),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            LinkTile(
+                              icon: Icons.chat_rounded,
+                              title: strings.whatsappGroup,
+                              subtitle: strings.whatsappGroupHint,
+                              url: WaraqLinks.whatsapp,
+                              accent: const Color(0xFF25D366),
+                            ),
+                            Divider(
+                              height: 1,
+                              color: scheme.outlineVariant.withFraction(0.4),
+                            ),
+                            LinkTile(
+                              icon: Icons.code_rounded,
+                              title: strings.sourceCode,
+                              subtitle: strings.sourceCodeHint,
+                              url: WaraqLinks.github,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: Gap.m),
+                    ],
+                  ),
+                ),
+              ),
               const SliverToBoxAdapter(child: SizedBox(height: Gap.xxxl * 2)),
             ],
           );

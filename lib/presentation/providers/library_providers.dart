@@ -3,9 +3,11 @@ import 'dart:typed_data';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/data_providers.dart';
+import '../../domain/entities/bookmark.dart';
 import '../../domain/entities/pdf_document.dart';
 import '../../domain/entities/reading_position.dart';
 import '../../domain/repositories/document_repository.dart';
+import 'bookmark_providers.dart';
 
 /// The library index, kept in sync with the filesystem repository.
 class DocumentsNotifier extends AsyncNotifier<List<PdfDocument>> {
@@ -130,4 +132,64 @@ final librarySizeProvider = Provider<int>((ref) {
     total += document.sizeBytes;
   }
   return total;
+});
+
+/// Numbers for the home dashboard: what the shelf holds and how far the reader
+/// has travelled through it.
+class LibraryStats {
+  const LibraryStats({
+    required this.documents,
+    required this.pages,
+    required this.bookmarks,
+    required this.storageBytes,
+    required this.pagesRead,
+    required this.averageProgress,
+  });
+
+  final int documents;
+  final int pages;
+  final int bookmarks;
+  final int storageBytes;
+  final int pagesRead;
+
+  /// 0..1, averaged over the documents that have a saved position.
+  final double averageProgress;
+
+  int get progressPercent => (averageProgress * 100).round();
+}
+
+final libraryStatsProvider = Provider<LibraryStats>((ref) {
+  final List<PdfDocument> documents =
+      ref.watch(documentsProvider).valueOrNull ?? const <PdfDocument>[];
+  final Map<String, ReadingPosition> positions =
+      ref.watch(positionsProvider).valueOrNull ??
+          const <String, ReadingPosition>{};
+  final List<Bookmark> bookmarks =
+      ref.watch(bookmarksProvider).valueOrNull ?? const <Bookmark>[];
+
+  int pages = 0;
+  int storage = 0;
+  int pagesRead = 0;
+  double progressSum = 0;
+  int tracked = 0;
+
+  for (final PdfDocument document in documents) {
+    pages += document.pageCount;
+    storage += document.sizeBytes;
+    final ReadingPosition? position = positions[document.id];
+    if (position != null) {
+      pagesRead += position.page.clamp(0, document.pageCount).toInt();
+      progressSum += position.progress.clamp(0.0, 1.0).toDouble();
+      tracked++;
+    }
+  }
+
+  return LibraryStats(
+    documents: documents.length,
+    pages: pages,
+    bookmarks: bookmarks.length,
+    storageBytes: storage,
+    pagesRead: pagesRead,
+    averageProgress: tracked == 0 ? 0 : progressSum / tracked,
+  );
 });
