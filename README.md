@@ -90,6 +90,10 @@ while you read.
   card that knows the exact spot.
 - **Shelf statistics** on Home: documents, pages, bookmarks, storage and the
   average progress across everything you have started.
+- **Backup & restore**: Settings → Storage → *Backup* exports the library, reading
+  positions, notes and settings into one `.waraq.zip` (PDFs included by default).
+  Restoring merges: new books are imported, existing ones are kept, and the newer
+  reading position wins.
 - **Notes**: mark a page, then attach a thought to it. Every note lives in the
   Notes tab, newest first, searchable by text or book title; tapping one reopens
   the reader on that exact page.

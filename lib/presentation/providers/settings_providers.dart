@@ -39,6 +39,11 @@ class SettingsNotifier extends Notifier<AppSettings> {
     return _commit(state.copyWith(language: language));
   }
 
+  /// Re-reads what is on disk (used after restoring a backup).
+  Future<void> reload() async {
+    state = await ref.read(settingsRepositoryProvider).load();
+  }
+
   Future<void> setShapeStyle(ShapeStyle style) {
     return _commit(state.copyWith(shapeStyle: style));
   }

@@ -273,6 +273,61 @@ class AppStrings {
   String get noteAddAction => _t('Add note', 'أضف ملاحظة');
   String get noteEditAction => _t('Edit note', 'تعديل الملاحظة');
 
+  // -------------------------------------------------------------- backup ---
+  String get backupTitle => _t('Backup', 'النسخ الاحتياطي');
+  String get backupSubtitle => _t(
+        'Export or restore everything as one file',
+        'صدّر كل شيء أو استعده في ملف واحد',
+      );
+  String get backupIntro => _t(
+        'One file holds your library, reading positions, notes and settings. Keep it in Drive or on your computer; nothing is uploaded anywhere.',
+        'ملف واحد يحمل مكتبتك ومواضع القراءة والملاحظات والإعدادات. احفظه في Drive أو على حاسوبك؛ لا يُرفع شيء إلى أي مكان.',
+      );
+  String get backupIncludePdfs => _t('Include PDF files', 'تضمين ملفات PDF');
+  String get backupIncludePdfsBody => _t(
+        'The backup can reopen every book on a new device. Turn off to get a small file with only data.',
+        'تتيح النسخة فتح كل الكتب على جهاز جديد. أوقفها لتحصل على ملف صغير للبيانات فقط.',
+      );
+  String backupContentsSummary(int documents, int notes) => _t(
+        '$documents documents · $notes notes',
+        '$documents ملفًا · $notes ملاحظة',
+      );
+  String get exportBackup => _t('Export', 'تصدير');
+  String get backupRestoreSection => _t('Restore', 'استعادة');
+  String get backupRestoreHint => _t(
+        'Adds what is missing and keeps the newer reading position. Nothing in your library is deleted.',
+        'يضيف الناقص ويحفظ أحدث موضع قراءة. لا يُحذف شيء من مكتبتك.',
+      );
+  String get restore => _t('Restore', 'استعادة');
+  String get backupRestoreTitle => _t('Restore from a file?', 'استعادة من ملف؟');
+  String get backupRestoreBody => _t(
+        'Pick a .waraq.zip file exported by Waraq. Existing books, notes and settings stay unless the file has a newer version of them.',
+        'اختر ملف ‎.waraq.zip‎ صدّره وَرَق. تبقى كتبك وملاحظاتك وإعداداتك الحالية إلا ما كان أحدث في الملف.',
+      );
+  String backupExported(String size, int documents) => _t(
+        'Backup saved · $size · $documents documents',
+        'حُفظت النسخة · $size · $documents ملفًا',
+      );
+  String backupRestored(int documents, int notes, int skipped) => _t(
+        'Restored $documents documents and $notes notes'
+            '${skipped > 0 ? ' · $skipped skipped (no PDF in the file)' : ''}',
+        'استُعيدت $documents ملفًا و$notes ملاحظة'
+            '${skipped > 0 ? ' · $skipped لم تُستعد (لا يوجد PDF في الملف)' : ''}',
+      );
+  String get backupFailed => _t('The backup failed', 'فشلت العملية');
+  String get backupNotAFile => _t(
+        'That file is not a Waraq backup',
+        'هذا الملف ليس نسخة احتياطية من وَرَق',
+      );
+  String get backupNewerVersion => _t(
+        'This backup was made by a newer version of Waraq',
+        'هذه النسخة أُنشئت بإصدار أحدث من وَرَق',
+      );
+  String get backupPrivacyNote => _t(
+        'Backups are written straight to the place you choose. Waraq has no servers and no account.',
+        'تُكتب النسخة مباشرة في المكان الذي تختاره. وَرَق بلا خوادم وبلا حساب.',
+      );
+
   // ----------------------------------------------------------- community ---
   String get sectionCommunity => _t('Community', 'المجتمع');
   String get whatsappGroup => _t('WhatsApp group', 'مجموعة واتساب');

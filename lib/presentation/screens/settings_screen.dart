@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/app_info.dart';
 import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/shape_motion.dart';
@@ -11,6 +12,7 @@ import '../../core/theme/tokens.dart';
 import '../../core/utils/links.dart';
 import '../../core/widgets/link_tile.dart';
 import '../../core/utils/formatters.dart';
+import 'backup_screen.dart';
 import '../../core/widgets/section_header.dart';
 import '../../data/data_providers.dart';
 import '../../domain/entities/app_settings.dart';
@@ -23,7 +25,7 @@ import '../providers/settings_providers.dart';
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  static const String appVersion = '4.1.0';
+  static const String appVersion = AppInfo.version;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -281,6 +283,20 @@ class SettingsScreen extends ConsumerWidget {
                     icon: Icons.sd_storage_outlined,
                     title: strings.storageUsed,
                     value: formatBytes(librarySize),
+                  ),
+                  const _CardDivider(),
+                  _ActionRow(
+                    icon: Icons.backup_outlined,
+                    title: strings.backupTitle,
+                    subtitle: strings.backupSubtitle,
+                    onTap: () => unawaited(
+                      Navigator.of(context).push<void>(
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) =>
+                              const BackupScreen(),
+                        ),
+                      ),
+                    ),
                   ),
                   const _CardDivider(),
                   _ActionRow(
