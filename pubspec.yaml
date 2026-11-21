@@ -17,7 +17,11 @@ dependencies:
   flutter_riverpod: ^2.6.1
 
   # Theming
-  dynamic_color: ^1.7.0
+  # Pinned: 1.9.0 moved its Android plugin to a Kotlin-DSL script that needs a
+  # newer AGP/Kotlin toolchain than the current Flutter stable scaffold and fails
+  # to compile (`Unresolved reference: compilerOptions`). Bump only together
+  # with a Flutter upgrade that ships Kotlin >= 2.2.
+  dynamic_color: 1.8.1
 
   # PDF rendering (BSD-3-Clause, no commercial licence required)
   pdfx: ^2.6.1
