@@ -1,0 +1,88 @@
+name: Android APK
+
+on:
+  push:
+    branches:
+      - arena/9417a58a-waraq-app
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    name: Build debug-signed release APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.3'
+          channel: stable
+          cache: true
+
+      # The repo ships only Dart sources: generate the Android host project in a
+      # scratch directory so nothing in lib/, test/ or pubspec.yaml is touched.
+      - name: Generate Android scaffold
+        run: |
+          flutter create --platforms=android --project-name waraq --org com.waraq /tmp/scaffold
+          cp -r /tmp/scaffold/android ./
+          sed -i 's/android:label="waraq"/android:label="Waraq"/' android/app/src/main/AndroidManifest.xml
+
+      - name: Versions
+        run: |
+          flutter --version
+          java -version
+
+      - run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Build APK
+        run: flutter build apk --release --no-pub
+
+      - name: Collect output
+        run: |
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-release.apk "dist/waraq-${GITHUB_SHA::7}.apk"
+          ls -lh dist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: waraq-apk
+          path: dist/*.apk
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish to "apk-latest" release
+        if: github.ref == 'refs/heads/arena/9417a58a-waraq-app'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          APK=$(ls dist/*.apk)
+          if gh release view apk-latest >/dev/null 2>&1; then
+            gh release upload apk-latest "$APK" --clobber
+          else
+            gh release create apk-latest "$APK" \
+              --title "Waraq — latest test build" \
+              --notes "Debug-signed release build of the Flutter rewrite.
+          Install on Android 5.0+ (arm64 / armv7 / x86_64).
+          Built from commit ${GITHUB_SHA}." \
+              --latest
+          fi
