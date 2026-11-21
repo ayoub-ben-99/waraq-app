@@ -64,6 +64,14 @@ only.
   `PositionedDirectional`, `AlignmentDirectional`, `start`/`end`). Mirror icons
   (`Icons.arrow_back_rounded` ↔ `arrow_forward_rounded`) when the direction
   flips; `Directionality.of(context) == TextDirection.rtl` is the test.
+- **Shape & motion are theme extensions.** Never hard-code a radius or duration in
+  a new widget: read `WaraqShape.of(context)` (`xs/sm/md/lg/xl`, `pill`, `allMd`,
+  `topXl`) and `WaraqMotion.of(context)` (`tap/fast/base/slow/theme`, `stagger`,
+  `enabled`). The user's Shape/Motion settings then apply everywhere for free.
+  `const` corners from `Radii` stay only where a value is genuinely fixed (for
+  example a 2 dp progress cap).
+- **Fonts**: Rubik carries Latin, Cairo is the `fontFamilyFallback` for Arabic.
+  Add weights by instancing the variable original, not by mixing families.
 - **Motion**: 120–360 ms, `Motion.emphasized` for transforms,
   `Motion.decelerate` for entrances. Everything animates with `Animated*`
   widgets or implicit `Tween`s — no janky `setState` position changes.

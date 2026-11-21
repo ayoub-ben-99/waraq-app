@@ -65,7 +65,15 @@ while you read.
 - **Sepia / night page tone**, **brightness dimming**, and **bookmark page** with a
   one-tap toggle plus a bookmarks sheet.
 
-### Theming
+### Theming & feel
+- **Rubik** for Latin text and **Cairo** for Arabic glyphs, both bundled (SIL OFL)
+  so typography is identical offline and on every device.
+- **Shape**: three corner languages — *soft*, *rounded* (Material 3 expressive) and
+  *square* — applied to cards, sheets, dialogs, buttons, chips and the reader
+  chrome through a `WaraqShape` theme extension.
+- **Motion**: *full*, *reduced* or *off*, scaling every reveal, slide and theme
+  cross-fade through `WaraqMotion`; "off" also stills press feedback and the
+  stagger, which is what reduce-motion users want.
 - **Dynamic colour** from the wallpaper via `dynamic_color`, with an animated
   cross-fade when the palette changes.
 - Three modes — **Light**, **Dark**, and **true-black AMOLED** — plus *follow the
@@ -80,7 +88,10 @@ while you read.
 - Import via the system file picker, with a bundled sample document on first run.
 - Recent files with rendered page thumbnails on Home, plus a *Continue reading*
   card that knows the exact spot.
+- **Shelf statistics** on Home: documents, pages, bookmarks, storage and the
+  average progress across everything you have started.
 - Search, sort by recent or title, long-press to delete, and a storage summary.
+- **Community links** (WhatsApp group, GitHub source) on Home and in Settings.
 
 ## Getting started
 
@@ -160,6 +171,7 @@ app that cannot upgrade the installed one.
 | APK signature | ✅ verified by `apksigner` in CI; fingerprint printed in the release notes |
 | Dart parse, imports, string keys, design tokens | ✅ clean (static checks) |
 | Physical-device behaviour, frame timings, gestures | ⚠️ needs a real device |
+| Bundled fonts (Rubik/Cairo) render Arabic + Latin | ⚠️ verify on device |
 
 `test/` covers the pure logic that does not need a device: page geometry and
 scrub maths, formatters, JSON mapping, and reading-position semantics.
@@ -239,9 +251,17 @@ lifecycle and the reasoning behind the render cache.
 | [`file_picker`](https://pub.dev/packages/file_picker) | System file picker | MIT |
 | [`path_provider`](https://pub.dev/packages/path_provider) | App directories | BSD-3-Clause |
 
-Typography uses the platform UI font (Roboto on Android, SF on iOS), tuned
-through the text theme. To bundle a brand face, drop `.ttf` files into
-`assets/fonts/` and uncomment the `fonts:` block in `pubspec.yaml`.
+### Fonts
+
+| Family | Use | Licence |
+| --- | --- | --- |
+| [Rubik](https://fonts.google.com/specimen/Rubik) | Latin UI text, 400/500/600/700 | SIL OFL 1.1 |
+| [Cairo](https://fonts.google.com/specimen/Cairo) | Arabic glyphs (fallback), 400/500/600/700 | SIL OFL 1.1 |
+
+Both ship as static instances of the Google Fonts variable originals
+(`fonttools varLib.instancer`), in `assets/fonts/`, with the licence texts next to
+them. Flutter falls back per-glyph, so an Arabic string inside an English UI still
+renders in Cairo.
 
 ## Roadmap
 

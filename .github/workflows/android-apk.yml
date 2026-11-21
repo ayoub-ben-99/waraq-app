@@ -61,11 +61,52 @@ jobs:
 
       - run: flutter pub get
 
+      # Analyze/test output is mirrored into a commit comment as well: action logs
+      # are not reachable from every environment, and these failures used to be
+      # silent.
       - name: Analyze
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+        id: analyze
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          flutter analyze --no-fatal-infos --no-fatal-warnings 2>&1 | tee /tmp/analyze.log
 
       - name: Unit tests
-        run: flutter test --reporter compact
+        id: test
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          flutter test --reporter compact 2>&1 | tee /tmp/test.log
+
+      - name: Report analysis or test failure
+        if: steps.analyze.outcome == 'failure' || steps.test.outcome == 'failure'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "CI check failure"
+            if [ "${{ steps.analyze.outcome }}" = "failure" ]; then
+              echo ""
+              echo "flutter analyze:"
+              echo '```'
+              tail -c 30000 /tmp/analyze.log
+              echo '```'
+            fi
+            if [ "${{ steps.test.outcome }}" = "failure" ]; then
+              echo ""
+              echo "flutter test:"
+              echo '```'
+              tail -c 30000 /tmp/test.log
+              echo '```'
+            fi
+          } > /tmp/report.md
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/comments" \
+            -f body="$(cat /tmp/report.md)" >/dev/null
+
+      - name: Fail when analysis or tests failed
+        if: steps.analyze.outcome == 'failure' || steps.test.outcome == 'failure'
+        run: exit 1
 
       - name: Build APK
         id: build
