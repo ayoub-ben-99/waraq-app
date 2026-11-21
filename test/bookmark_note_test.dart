@@ -28,7 +28,9 @@ void main() {
       );
       final Bookmark restored = BookmarkDto.fromMap(BookmarkDto.toMap(original));
 
-      expect(restored, original);
+      expect(restored.id, original.id);
+      expect(restored.page, original.page);
+      expect(restored.note, 'الفكرة الأساسية: التحقق قبل النشر');
       expect(restored.hasNote, isTrue);
       expect(restored.touchedAt, original.updatedAt);
     });

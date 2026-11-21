@@ -24,7 +24,7 @@ class BookmarkDto {
       'documentId': bookmark.documentId,
       'page': bookmark.page,
       'createdAt': bookmark.createdAt.toIso8601String(),
-      if (bookmark.hasNote) 'note': bookmark.note,
+      if (bookmark.hasNote) 'note': bookmark.note!.trim(),
       if (bookmark.updatedAt != null)
         'updatedAt': bookmark.updatedAt!.toIso8601String(),
     };
