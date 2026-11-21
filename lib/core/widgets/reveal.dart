@@ -53,7 +53,7 @@ class _RevealState extends State<Reveal> with SingleTickerProviderStateMixin {
       _controller.value = 1;
       return;
     }
-    _controller.duration = motion.of(widget.duration ?? Motion.base);
+    _controller.duration = motion.scaled(widget.duration ?? Motion.base);
     final Duration delay = motion.stagger * widget.index.clamp(0, 8);
     if (delay == Duration.zero) {
       _controller.forward();

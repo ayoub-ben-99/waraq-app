@@ -164,18 +164,19 @@ class WaraqMotion extends ThemeExtension<WaraqMotion> {
 
   bool get enabled => scale > 0;
 
-  Duration of(Duration base) {
+  /// Scales [base] by the user's motion setting (`Duration.zero` when off).
+  Duration scaled(Duration base) {
     if (scale <= 0) {
       return Duration.zero;
     }
     return Duration(microseconds: (base.inMicroseconds * scale).round());
   }
 
-  Duration get tap => of(Motion.tap);
-  Duration get fast => of(Motion.fast);
-  Duration get base => of(Motion.base);
-  Duration get slow => of(Motion.slow);
-  Duration get theme => of(Motion.theme);
+  Duration get tap => scaled(Motion.tap);
+  Duration get fast => scaled(Motion.fast);
+  Duration get base => scaled(Motion.base);
+  Duration get slow => scaled(Motion.slow);
+  Duration get theme => scaled(Motion.theme);
 
   @override
   WaraqMotion copyWith({
