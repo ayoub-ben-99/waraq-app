@@ -28,6 +28,7 @@ class ReaderController extends ChangeNotifier {
     required ReaderSettings initialSettings,
     required TickerProvider vsync,
     ReadingPosition? initialPosition,
+    this.startPage,
   })  : _pageCount = renderer.pageCount,
         _currentPage = initialPosition?.page ?? 1,
         _progress = initialPosition?.progress ?? 0,
@@ -55,6 +56,10 @@ class ReaderController extends ChangeNotifier {
 
   final ScrollController scrollController = ScrollController();
   final PageController pageController = PageController();
+
+  /// When set, the reader opens on this page instead of the saved position
+  /// (used when jumping from a note or bookmark).
+  final int? startPage;
 
   ReadingPosition? _initialPosition;
   late final Ticker _ticker;
@@ -171,6 +176,17 @@ class ReaderController extends ChangeNotifier {
       return;
     }
     _hasRestored = true;
+    final int? jump = startPage;
+    if (jump != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_disposed) {
+          return;
+        }
+        jumpToPage(jump);
+        _scheduleSave();
+      });
+      return;
+    }
     final ReadingPosition? position = _initialPosition;
     _initialPosition = null;
     if (position == null) {

@@ -241,6 +241,38 @@ class AppStrings {
   String get statsReadPages => _t('Pages read', 'صفحات مقروءة');
   String get statsProgress => _t('Average progress', 'متوسط التقدم');
 
+  // --------------------------------------------------------------- notes ---
+  String get navNotes => _t('Notes', 'ملاحظات');
+  String get notesTitle => _t('Notes', 'الملاحظات');
+  String get notesSearchHint => _t('Search notes', 'ابحث في الملاحظات');
+  String get notesEmptyTitle => _t('No notes yet', 'لا ملاحظات بعد');
+  String get notesEmptyBody => _t(
+        'Mark a page while reading, then tap "Add note" on the bookmark to keep a thought next to it.',
+        'علّم صفحة أثناء القراءة ثم اضغط «أضف ملاحظة» على العلامة لتحفظ فكرة بجانبها.',
+      );
+  String get notesNoMatchTitle => _t('Nothing matches', 'لا نتائج مطابقة');
+  String get notesNoMatchBody => _t(
+        'Try a different word.',
+        'جرّب كلمة أخرى.',
+      );
+  String get noteAddTitle => _t('New note', 'ملاحظة جديدة');
+  String get noteEditTitle => _t('Edit note', 'تعديل الملاحظة');
+  String get noteHint => _t(
+        'What do you want to remember about this page?',
+        'ماذا تريد أن تتذكّر عن هذه الصفحة؟',
+      );
+  String get noteSave => _t('Save', 'حفظ');
+  String get noteSaved => _t('Note saved', 'تم حفظ الملاحظة');
+  String get noteDelete => _t('Delete note', 'حذف الملاحظة');
+  String get noteDeleted => _t('Note deleted', 'تم حذف الملاحظة');
+  String get noteDeleteTitle => _t('Delete this note?', 'حذف هذه الملاحظة؟');
+  String get noteDeleteBody => _t(
+        'The page stays bookmarked and only the text is removed.',
+        'ستبقى الصفحة معلَّمة ويُحذف النص فقط.',
+      );
+  String get noteAddAction => _t('Add note', 'أضف ملاحظة');
+  String get noteEditAction => _t('Edit note', 'تعديل الملاحظة');
+
   // ----------------------------------------------------------- community ---
   String get sectionCommunity => _t('Community', 'المجتمع');
   String get whatsappGroup => _t('WhatsApp group', 'مجموعة واتساب');

@@ -9,6 +9,7 @@ import '../../../core/widgets/waraq_sheet.dart';
 import '../../../domain/entities/bookmark.dart';
 import '../../../domain/entities/pdf_document.dart';
 import '../../providers/bookmark_providers.dart';
+import '../../widgets/note_editor_sheet.dart';
 import '../reader_controller.dart';
 
 /// Every marked page of the open document.
@@ -82,12 +83,49 @@ class BookmarksSheet extends ConsumerWidget {
                               ),
                               const SizedBox(width: Gap.m),
                               Expanded(
-                                child: Text(
-                                  strings.pageOf(
-                                    bookmark.page,
-                                    controller.pageCount,
-                                  ),
-                                  style: theme.textTheme.titleMedium,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      strings.pageOf(
+                                        bookmark.page,
+                                        controller.pageCount,
+                                      ),
+                                      style: theme.textTheme.titleMedium,
+                                    ),
+                                    if (bookmark.hasNote) ...<Widget>[
+                                      const SizedBox(height: Gap.xxs),
+                                      Text(
+                                        bookmark.note!,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: theme.textTheme.bodySmall
+                                            ?.copyWith(
+                                          color: scheme.onSurfaceVariant,
+                                          height: 1.4,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                              IconButton(
+                                tooltip: bookmark.hasNote
+                                    ? strings.noteEditAction
+                                    : strings.noteAddAction,
+                                onPressed: () => showNoteEditor(
+                                  context,
+                                  documentId: document.id,
+                                  page: bookmark.page,
+                                  pageCount: controller.pageCount,
+                                  initialNote: bookmark.note,
+                                ),
+                                icon: Icon(
+                                  bookmark.hasNote
+                                      ? Icons.edit_note_rounded
+                                      : Icons.note_add_outlined,
+                                  size: 20,
+                                  color: scheme.onSurfaceVariant,
                                 ),
                               ),
                               IconButton(

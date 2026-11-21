@@ -5,11 +5,16 @@ class BookmarkDto {
   const BookmarkDto._();
 
   static Bookmark fromMap(Map<String, Object?> map) {
+    final String note = readString(map['note'], '');
     return Bookmark(
       id: readString(map['id'], ''),
       documentId: readString(map['documentId'], ''),
       page: readInt(map['page'], 1),
       createdAt: readDate(map['createdAt'], DateTime.now()),
+      note: note.isEmpty ? null : note,
+      updatedAt: map['updatedAt'] == null
+          ? null
+          : readDate(map['updatedAt'], DateTime.now()),
     );
   }
 
@@ -19,6 +24,9 @@ class BookmarkDto {
       'documentId': bookmark.documentId,
       'page': bookmark.page,
       'createdAt': bookmark.createdAt.toIso8601String(),
+      if (bookmark.hasNote) 'note': bookmark.note,
+      if (bookmark.updatedAt != null)
+        'updatedAt': bookmark.updatedAt!.toIso8601String(),
     };
   }
 }

@@ -5,9 +5,10 @@ import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_theme.dart';
 import '../screens/home_screen.dart';
 import '../screens/library_screen.dart';
+import '../screens/notes_screen.dart';
 import '../screens/settings_screen.dart';
 
-/// Three top-level destinations. Each keeps its scroll position because the
+/// Four top-level destinations. Each keeps its scroll position because the
 /// shell uses an [IndexedStack].
 class AppShell extends ConsumerStatefulWidget {
   const AppShell({super.key});
@@ -34,6 +35,7 @@ class _AppShellState extends ConsumerState<AppShell> {
         children: const <Widget>[
           HomeScreen(),
           LibraryScreen(),
+          NotesScreen(),
           SettingsScreen(),
         ],
       ),
@@ -84,6 +86,11 @@ class WaraqBottomDock extends StatelessWidget {
               icon: const Icon(Icons.library_books_outlined),
               selectedIcon: const Icon(Icons.library_books_rounded),
               label: strings.navLibrary,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.sticky_note_2_outlined),
+              selectedIcon: const Icon(Icons.sticky_note_2_rounded),
+              label: strings.navNotes,
             ),
             NavigationDestination(
               icon: const Icon(Icons.settings_outlined),

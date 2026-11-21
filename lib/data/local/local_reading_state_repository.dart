@@ -52,8 +52,13 @@ class LocalReadingStateRepository implements ReadingStateRepository {
   @override
   Future<void> saveBookmark(Bookmark bookmark) async {
     final List<Bookmark> bookmarks = await loadBookmarks();
-    final bool exists = bookmarks.any((Bookmark item) => item.id == bookmark.id);
-    if (!exists) {
+    // Upsert: editing a note rewrites the same id in place.
+    final int index = bookmarks.indexWhere(
+      (Bookmark item) => item.id == bookmark.id,
+    );
+    if (index >= 0) {
+      bookmarks[index] = bookmark;
+    } else {
       bookmarks.add(bookmark);
     }
     await _writeBookmarks(bookmarks);

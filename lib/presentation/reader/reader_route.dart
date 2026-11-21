@@ -9,7 +9,7 @@ import 'reader_screen.dart';
 /// Fade-and-settle transition into the reader, so opening a book feels like the
 /// page is coming forward rather than a hard cut.
 class ReaderRoute extends PageRouteBuilder<void> {
-  ReaderRoute({required PdfDocument document})
+  ReaderRoute({required PdfDocument document, int? startPage})
       : super(
           transitionDuration: Motion.slow,
           reverseTransitionDuration: Motion.base,
@@ -18,7 +18,7 @@ class ReaderRoute extends PageRouteBuilder<void> {
             Animation<double> animation,
             Animation<double> secondaryAnimation,
           ) =>
-              ReaderScreen(document: document),
+              ReaderScreen(document: document, startPage: startPage),
           transitionsBuilder: (
             BuildContext context,
             Animation<double> animation,
@@ -45,9 +45,12 @@ class ReaderRoute extends PageRouteBuilder<void> {
 Future<void> openReader(
   BuildContext context,
   WidgetRef ref,
-  PdfDocument document,
-) async {
-  await Navigator.of(context).push<void>(ReaderRoute(document: document));
+  PdfDocument document, {
+  int? startPage,
+}) async {
+  await Navigator.of(context).push<void>(
+    ReaderRoute(document: document, startPage: startPage),
+  );
   try {
     await ref.read(positionsProvider.notifier).refresh();
   } catch (_) {

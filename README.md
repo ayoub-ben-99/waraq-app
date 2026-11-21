@@ -90,6 +90,9 @@ while you read.
   card that knows the exact spot.
 - **Shelf statistics** on Home: documents, pages, bookmarks, storage and the
   average progress across everything you have started.
+- **Notes**: mark a page, then attach a thought to it. Every note lives in the
+  Notes tab, newest first, searchable by text or book title; tapping one reopens
+  the reader on that exact page.
 - Search, sort by recent or title, long-press to delete, and a storage summary.
 - **Community links** (WhatsApp group, GitHub source) on Home and in Settings.
 

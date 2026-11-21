@@ -23,7 +23,7 @@ import '../providers/settings_providers.dart';
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
-  static const String appVersion = '4.0.0';
+  static const String appVersion = '4.1.0';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

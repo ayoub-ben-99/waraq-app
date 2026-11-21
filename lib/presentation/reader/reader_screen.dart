@@ -26,14 +26,18 @@ import 'widgets/auto_scroll_sheet.dart';
 import 'widgets/bookmarks_sheet.dart';
 import 'widgets/display_sheet.dart';
 import 'widgets/pages_sheet.dart';
+import '../widgets/note_editor_sheet.dart';
 import 'widgets/reader_canvas.dart';
 import 'widgets/reader_chrome.dart';
 
 /// Full-screen reading surface: canvas plus floating chrome.
 class ReaderScreen extends ConsumerStatefulWidget {
-  const ReaderScreen({required this.document, super.key});
+  const ReaderScreen({required this.document, this.startPage, super.key});
 
   final PdfDocument document;
+
+  /// Opens the document on this page instead of the saved position.
+  final int? startPage;
 
   @override
   ConsumerState<ReaderScreen> createState() => _ReaderScreenState();
@@ -91,6 +95,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         readingState: ref.read(readingStateRepositoryProvider),
         initialSettings: settings.reader,
         initialPosition: positions[widget.document.id],
+        startPage: widget.startPage,
         vsync: this,
       );
       controller.addListener(_handleChromeChange);
@@ -179,9 +184,46 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       ..showSnackBar(
         SnackBar(
           content: Text(added ? strings.bookmarkAdded : strings.bookmarkRemoved),
-          duration: const Duration(milliseconds: 1500),
+          duration: Duration(milliseconds: added ? 4000 : 1500),
+          action: added
+              ? SnackBarAction(
+                  label: strings.noteAddAction,
+                  onPressed: () => unawaited(_editNoteForCurrentPage()),
+                )
+              : null,
         ),
       );
+  }
+
+  /// Writes (or edits) the note of the page currently on screen.
+  Future<void> _editNoteForCurrentPage() async {
+    final ReaderController? controller = _controller;
+    if (controller == null) {
+      return;
+    }
+    final int page = controller.currentPage;
+    String? existing;
+    for (final Bookmark bookmark
+        in ref.read(documentBookmarksProvider(widget.document.id))) {
+      if (bookmark.page == page) {
+        existing = bookmark.note;
+        break;
+      }
+    }
+    final AppStrings strings = AppStrings.of(context);
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    final Bookmark? saved = await showNoteEditor(
+      context,
+      documentId: widget.document.id,
+      page: page,
+      pageCount: controller.pageCount,
+      initialNote: existing,
+    );
+    if (saved != null) {
+      messenger
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(strings.noteSaved)));
+    }
   }
 
   Future<void> _openTool(int index) async {
