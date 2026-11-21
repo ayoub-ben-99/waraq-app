@@ -29,8 +29,14 @@ https://github.com/ayoub-ben-99/waraq-app/releases/download/apk-latest/waraq.apk
 ```
 
 Download it on the device, allow installation from unknown sources, and open it.
-Android 5.0+ (arm64, armv7 and x86_64 are all in the one APK). It is signed with
-a debug key, so it is for testing only — Play Store uploads need a real keystore.
+Android 5.0+ (arm64, armv7 and x86_64 are all in the one APK). The release notes
+state which certificate signed the build: once the project keystore is wired up
+(see [Release signing](#release-signing)) it is the real release key, otherwise
+CI falls back to the Android debug key so the pipeline still produces an APK.
+
+> Installing a release-signed build over an earlier debug-signed APK fails with
+> "App not installed" — Android refuses to update across different certificates.
+> Uninstall the old Waraq first.
 
 ## What it is
 
@@ -99,6 +105,51 @@ flutter run
 
 Minimum Android SDK: **21**. iOS: **12**.
 
+## Release signing
+
+The repository never contains key material. Release builds are signed in CI from
+a single encrypted secret:
+
+| Secret | Contents |
+| --- | --- |
+| `WARAQ_SIGNING_B64` | base64 of `{keystore_base64, store_password, key_alias, key_password}` |
+
+`tool/android/install_signing.py` decodes it into `android/keystore/release.p12`
+plus `android/key.properties`, and `tool/android/release-signing.gradle.kts` wires
+those into the release `signingConfig` (PKCS#12, v1+v2+v3 signatures). Without the
+secret the step logs a warning and the default debug signing stays in place, so
+forks keep building.
+
+The workflow runs `apksigner verify --print-certs` on the result and copies the
+certificate SHA-256 into the release notes, so a build can be checked at a glance.
+
+Local release build:
+
+```bash
+# 1. one-time keystore (or restore your backup)
+keytool -genkeypair -v -keystore android/keystore/release.p12 -storetype PKCS12 \
+  -alias waraq -keyalg RSA -keysize 4096 -validity 10000
+
+# 2. android/key.properties
+cat > android/key.properties <<'PROPS'
+storeFile=../keystore/release.p12
+storeType=PKCS12
+storePassword=…
+keyAlias=waraq
+keyPassword=…
+PROPS
+
+# 3. the same wiring the workflow applies
+cp tool/android/release-signing.gradle.kts android/app/
+echo 'apply(from = "release-signing.gradle.kts")' >> android/app/build.gradle.kts
+
+flutter build apk --release
+```
+
+**Keep the keystore and its password backed up.** Android only accepts an update
+signed with the same key; losing it turns every future build into a different
+app that cannot upgrade the installed one.
+
 ## Verification status
 
 | Check | Status |
@@ -106,6 +157,7 @@ Minimum Android SDK: **21**. iOS: **12**.
 | `flutter analyze` (Flutter 3.35.7) | ✅ passes in CI |
 | `flutter test` | ✅ passes in CI |
 | `flutter build apk --release` | ✅ passes in CI (APK published to the release) |
+| APK signature | ✅ verified by `apksigner` in CI; fingerprint printed in the release notes |
 | Dart parse, imports, string keys, design tokens | ✅ clean (static checks) |
 | Physical-device behaviour, frame timings, gestures | ⚠️ needs a real device |
 

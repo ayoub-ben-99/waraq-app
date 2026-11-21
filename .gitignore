@@ -35,3 +35,11 @@ Thumbs.db
 
 # Local env
 .env*.local
+
+# Signing material — never commit
+signing/
+/android/keystore/
+key.properties
+*.p12
+*.jks
+*.keystore

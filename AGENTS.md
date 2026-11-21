@@ -105,6 +105,22 @@ the scrub preview. The widget tree reads it through `AnimatedBuilder`.
   200 ms and cancelled by a second tap; double tap is only reported in vertical
   mode (paged mode zooms inside `ZoomablePage`).
 
+## Release signing
+
+- Key material lives **only** in the `WARAQ_SIGNING_B64` repository secret and in
+  `signing/` on a developer machine. `signing/` is git-ignored; never commit a
+  `.p12`, `.jks`, `key.properties` or a password.
+- `tool/android/install_signing.py` turns that secret into
+  `android/keystore/release.p12` + `android/key.properties` and applies
+  `tool/android/release-signing.gradle.kts` to the generated host project.
+- Missing secret ⇒ debug signing, with a `::warning::` in the log. Don't "fix"
+  that by hard-coding a key: forks must build without one.
+- The workflow verifies every APK with `apksigner --print-certs` and publishes the
+  certificate SHA-256 in the release notes. A build whose fingerprint changes
+  silently is a bug, not a detail.
+- Changing the key breaks in-place updates for installed APKs; that is a product
+  decision, not a CI tweak.
+
 ## Testing
 
 `test/` must stay runnable with `flutter test` and no device:

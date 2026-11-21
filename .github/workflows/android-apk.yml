@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   apk:
-    name: Build debug-signed release APK
+    name: Build release APK
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
@@ -45,7 +45,14 @@ jobs:
           sed -i 's/android:label="waraq"/android:label="Waraq"/' android/app/src/main/AndroidManifest.xml
           # pdfx and the rest of the plugin set are built against NDK 27.
           sed -i 's/ndkVersion = flutter.ndkVersion/ndkVersion = "27.0.12077973"/' android/app/build.gradle.kts
-          grep -n 'ndkVersion\|applicationId' android/app/build.gradle.kts
+
+      # Signs with the project keystore when WARAQ_SIGNING_B64 is configured,
+      # otherwise falls back to the debug key so forks still produce an APK.
+      - name: Configure release signing
+        id: signing
+        env:
+          SIGNING_B64: ${{ secrets.WARAQ_SIGNING_B64 }}
+        run: python3 tool/android/install_signing.py
 
       - name: Versions
         run: |
@@ -88,6 +95,14 @@ jobs:
           cp build/app/outputs/flutter-apk/app-release.apk dist/waraq.apk
           ls -lh dist
 
+      - name: Verify signature
+        run: |
+          BUILD_TOOLS=$(ls -d "$ANDROID_SDK_ROOT"/build-tools/* | sort -V | tail -1)
+          "$BUILD_TOOLS/apksigner" verify --print-certs dist/waraq.apk | tee /tmp/certs.txt
+          FINGERPRINT=$(grep -m1 'SHA-256 digest' /tmp/certs.txt | sed 's/.*: //')
+          echo "CERT_FINGERPRINT=$FINGERPRINT" >> "$GITHUB_ENV"
+          echo "Signing certificate SHA-256: $FINGERPRINT"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -101,15 +116,25 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          APK=$(ls dist/*.apk)
-          if gh release view apk-latest >/dev/null 2>&1; then
-            gh release upload apk-latest "$APK" --clobber
+          if [ "${{ steps.signing.outputs.signed }}" = "true" ]; then
+            KEY_NOTE="Signed with the project release key."
           else
-            gh release create apk-latest "$APK" \
+            KEY_NOTE="**Debug-signed** (no release key configured)."
+          fi
+          NOTES=$(printf '%s\n\n' \
+            "Release build of the Flutter app." \
+            "" \
+            "**Install:** download \`waraq.apk\`, allow installs from unknown sources, open it." \
+            "$KEY_NOTE" \
+            "Certificate SHA-256: \`${CERT_FINGERPRINT}\`" \
+            "" \
+            "Android 5.0+ · arm64 / armv7 / x86_64 · commit ${GITHUB_SHA}")
+          if gh release view apk-latest >/dev/null 2>&1; then
+            gh release upload apk-latest dist/waraq.apk --clobber
+            gh release edit apk-latest --notes "$NOTES"
+          else
+            gh release create apk-latest dist/waraq.apk \
               --title "Waraq — latest test build" \
-              --notes "Debug-signed release build of the Flutter rewrite.
-
-          **Install:** download \`waraq.apk\` below, allow installs from unknown sources, open it.
-          Android 5.0+ · arm64 / armv7 / x86_64 · built from ${GITHUB_SHA}." \
+              --notes "$NOTES" \
               --latest
           fi
