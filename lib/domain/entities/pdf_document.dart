@@ -10,6 +10,7 @@ class PdfDocument {
     required this.addedAt,
     this.thumbnailPath,
     this.lastOpenedAt,
+    this.category,
   });
 
   final String id;
@@ -21,6 +22,9 @@ class PdfDocument {
   final String? thumbnailPath;
   final DateTime? lastOpenedAt;
 
+  /// Free-form shelf label written by the reader ("روايات", "عمل"…).
+  final String? category;
+
   PdfDocument copyWith({
     String? title,
     String? filePath,
@@ -29,6 +33,8 @@ class PdfDocument {
     DateTime? addedAt,
     String? thumbnailPath,
     DateTime? lastOpenedAt,
+    String? category,
+    bool clearCategory = false,
   }) {
     return PdfDocument(
       id: id,
@@ -39,6 +45,7 @@ class PdfDocument {
       addedAt: addedAt ?? this.addedAt,
       thumbnailPath: thumbnailPath ?? this.thumbnailPath,
       lastOpenedAt: lastOpenedAt ?? this.lastOpenedAt,
+      category: clearCategory ? null : (category ?? this.category),
     );
   }
 
@@ -52,7 +59,8 @@ class PdfDocument {
         other.sizeBytes == sizeBytes &&
         other.addedAt == addedAt &&
         other.thumbnailPath == thumbnailPath &&
-        other.lastOpenedAt == lastOpenedAt;
+        other.lastOpenedAt == lastOpenedAt &&
+        other.category == category;
   }
 
   @override
@@ -65,5 +73,6 @@ class PdfDocument {
         addedAt,
         thumbnailPath,
         lastOpenedAt,
+        category,
       );
 }

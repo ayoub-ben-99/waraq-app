@@ -13,7 +13,7 @@ import '../../domain/entities/pdf_document.dart';
 import '../../domain/entities/reading_position.dart';
 import '../providers/library_providers.dart';
 import '../reader/reader_route.dart';
-import '../widgets/delete_document.dart';
+import '../widgets/book_details_sheet.dart';
 import '../widgets/document_row.dart';
 import '../widgets/import_document.dart';
 
@@ -31,6 +31,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   final TextEditingController _search = TextEditingController();
   _SortMode _sort = _SortMode.recent;
   String _query = '';
+  String? _category;
 
   @override
   void dispose() {
@@ -42,8 +43,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     final String query = _query.trim().toLowerCase();
     final List<PdfDocument> result = <PdfDocument>[
       for (final PdfDocument document in documents)
-        if (query.isEmpty || document.title.toLowerCase().contains(query))
-          document,
+        if (_category == null || document.category == _category)
+          if (query.isEmpty || document.title.toLowerCase().contains(query))
+            document,
     ];
     if (_sort == _SortMode.title) {
       result.sort(
@@ -73,6 +75,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         ref.watch(positionsProvider).valueOrNull ??
             const <String, ReadingPosition>{};
     final bool importing = ref.watch(importBusyProvider);
+    final List<String> categories = ref.watch(categoriesProvider);
     final List<PdfDocument> visible = _filter(documents);
 
     return SafeArea(
@@ -154,6 +157,44 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                   ),
                 ),
               ),
+              if (categories.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    horizontal,
+                    Gap.s,
+                    horizontal,
+                    0,
+                  ),
+                  child: SizedBox(
+                    height: 40,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(end: Gap.s),
+                          child: ChoiceChip(
+                            label: Text(strings.allCategories),
+                            selected: _category == null,
+                            onSelected: (_) => setState(() => _category = null),
+                          ),
+                        ),
+                        for (final String category in categories)
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.only(end: Gap.s),
+                            child: ChoiceChip(
+                              avatar: const Icon(Icons.layers_outlined, size: 16),
+                              label: Text(category),
+                              selected: _category == category,
+                              onSelected: (bool selected) => setState(
+                                () => _category = selected ? category : null,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: horizontal),
                 child: Row(
@@ -228,7 +269,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                                 openReader(context, ref, document),
                               ),
                               onLongPress: () => unawaited(
-                                confirmDeleteDocument(context, ref, document),
+                                showBookDetails(context, ref, document),
                               ),
                             ),
                           );

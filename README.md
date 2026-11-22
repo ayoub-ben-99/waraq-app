@@ -97,6 +97,11 @@ while you read.
   positions, notes and settings into one `.waraq.zip` (PDFs included by default).
   Restoring merges: new books are imported, existing ones are kept, and the newer
   reading position wins.
+- **Tags**: colour-coded labels you invent yourself (فكرة، اقتباس…). Attach them
+  in the note editor, filter the Notes tab by tag, long-press a chip to rename or
+  delete it everywhere.
+- **Shelf categories**: long-press any book to rename it or move it to a shelf
+  (روايات، عمل…), then filter the library by shelf.
 - **Notes**: mark a page, then attach a thought to it. Every note lives in the
   Notes tab, newest first, searchable by text or book title; tapping one reopens
   the reader on that exact page.

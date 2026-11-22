@@ -15,6 +15,7 @@ import '../providers/backup_providers.dart';
 import '../providers/bookmark_providers.dart';
 import '../providers/library_providers.dart';
 import '../providers/settings_providers.dart';
+import '../providers/tag_providers.dart';
 
 /// Export and restore the local library as one portable file.
 class BackupScreen extends ConsumerStatefulWidget {
@@ -102,6 +103,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
       }
       ref.invalidate(documentsProvider);
       ref.invalidate(bookmarksProvider);
+      ref.invalidate(tagsProvider);
       await ref.read(positionsProvider.notifier).refresh();
       if (result.settingsApplied) {
         await ref.read(settingsProvider.notifier).reload();

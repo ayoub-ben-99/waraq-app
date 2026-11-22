@@ -5,9 +5,11 @@ import '../domain/repositories/document_repository.dart';
 import '../domain/repositories/reading_state_repository.dart';
 import '../domain/repositories/review_repository.dart';
 import '../domain/repositories/settings_repository.dart';
+import '../domain/repositories/tag_repository.dart';
 import 'local/local_document_repository.dart';
 import 'local/local_reading_state_repository.dart';
 import 'local/local_review_repository.dart';
+import 'local/local_tag_repository.dart';
 import 'local/prefs_settings_repository.dart';
 
 /// Overridden in `main()` once [SharedPreferences] has been loaded.
@@ -35,4 +37,8 @@ final documentRepositoryProvider =
 
 final reviewRepositoryProvider = Provider<ReviewRepository>((ref) {
   return LocalReviewRepository(ref.watch(sharedPreferencesProvider));
+});
+
+final tagRepositoryProvider = Provider<TagRepository>((ref) {
+  return LocalTagRepository(ref.watch(sharedPreferencesProvider));
 });

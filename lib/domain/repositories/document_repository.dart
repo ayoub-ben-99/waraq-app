@@ -29,6 +29,14 @@ abstract interface class DocumentRepository {
 
   Future<void> deleteDocument(String documentId);
 
+  /// Renames a document and/or moves it to another shelf category.
+  Future<PdfDocument> updateMetadata(
+    String documentId, {
+    String? title,
+    String? category,
+    bool clearCategory = false,
+  });
+
   /// Records that the document was opened, for the "recent" ordering.
   Future<PdfDocument> markOpened(String documentId);
 

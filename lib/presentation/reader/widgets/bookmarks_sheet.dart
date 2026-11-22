@@ -119,6 +119,7 @@ class BookmarksSheet extends ConsumerWidget {
                                   page: bookmark.page,
                                   pageCount: controller.pageCount,
                                   initialNote: bookmark.note,
+                                  initialTags: bookmark.tagIds,
                                 ),
                                 icon: Icon(
                                   bookmark.hasNote

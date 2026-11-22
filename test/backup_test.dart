@@ -16,7 +16,9 @@ import 'package:waraq/domain/entities/pdf_document.dart';
 import 'package:waraq/domain/entities/reading_position.dart';
 import 'package:waraq/domain/repositories/document_repository.dart';
 import 'package:waraq/domain/repositories/reading_state_repository.dart';
+import 'package:waraq/domain/entities/note_tag.dart';
 import 'package:waraq/domain/repositories/settings_repository.dart';
+import 'package:waraq/domain/repositories/tag_repository.dart';
 
 void main() {
   final DateTime now = DateTime(2026, 11, 21, 12);
@@ -96,16 +98,19 @@ void main() {
     late _FakeDocuments documents;
     late _FakeReading reading;
     late _FakeSettings settings;
+    late _FakeTags tags;
     late BackupService service;
 
     setUp(() {
       documents = _FakeDocuments();
       reading = _FakeReading();
       settings = _FakeSettings();
+      tags = _FakeTags();
       service = BackupService(
         documents: documents,
         reading: reading,
         settings: settings,
+        tags: tags,
       );
     });
 
@@ -301,6 +306,24 @@ class _FakeDocuments implements DocumentRepository {
   }
 
   @override
+  Future<PdfDocument> updateMetadata(
+    String documentId, {
+    String? title,
+    String? category,
+    bool clearCategory = false,
+  }) async {
+    final int index =
+        documents.indexWhere((PdfDocument item) => item.id == documentId);
+    final PdfDocument updated = documents[index].copyWith(
+      title: title,
+      category: category,
+      clearCategory: clearCategory,
+    );
+    documents[index] = updated;
+    return updated;
+  }
+
+  @override
   Future<PdfDocument> markOpened(String documentId) async =>
       documents.firstWhere((PdfDocument document) => document.id == documentId);
 
@@ -351,6 +374,18 @@ class _FakeReading implements ReadingStateRepository {
   Future<void> clearAll() async {
     positions.clear();
     bookmarks.clear();
+  }
+}
+
+class _FakeTags implements TagRepository {
+  List<NoteTag> stored = <NoteTag>[];
+
+  @override
+  Future<List<NoteTag>> load() async => List<NoteTag>.of(stored);
+
+  @override
+  Future<void> save(List<NoteTag> tags) async {
+    stored = List<NoteTag>.of(tags);
   }
 }
 

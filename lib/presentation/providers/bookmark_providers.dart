@@ -104,6 +104,27 @@ class BookmarksNotifier extends AsyncNotifier<List<Bookmark>> {
     return updated;
   }
 
+  /// Replaces the tag list of an existing note.
+  Future<void> setTags(String bookmarkId, List<String> tagIds) async {
+    final ReadingStateRepository repository =
+        ref.read(readingStateRepositoryProvider);
+    final List<Bookmark> current = state.valueOrNull ?? const <Bookmark>[];
+    final int index =
+        current.indexWhere((Bookmark bookmark) => bookmark.id == bookmarkId);
+    if (index < 0) {
+      return;
+    }
+    final Bookmark updated = current[index].copyWith(
+      tagIds: List<String>.of(tagIds),
+      updatedAt: DateTime.now(),
+    );
+    await repository.saveBookmark(updated);
+    state = AsyncData<List<Bookmark>>(<Bookmark>[
+      for (final Bookmark bookmark in current)
+        if (bookmark.id == updated.id) updated else bookmark,
+    ]);
+  }
+
   /// Removes the note text but keeps the page marked.
   Future<void> clearNote(Bookmark bookmark) async {
     final ReadingStateRepository repository =

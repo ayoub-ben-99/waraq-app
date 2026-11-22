@@ -68,3 +68,14 @@ Map<String, Object?> readMap(Object? value) {
   }
   return <String, Object?>{};
 }
+
+/// Reads a list of non-empty ids, dropping anything unexpected.
+List<String> readStringList(Object? value) {
+  if (value is! List) {
+    return const <String>[];
+  }
+  return <String>[
+    for (final Object? item in value)
+      if (item is String && item.trim().isNotEmpty) item.trim(),
+  ];
+}

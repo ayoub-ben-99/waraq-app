@@ -12,6 +12,7 @@ class PdfDocumentDto {
     final DateTime? lastOpened = map['lastOpenedAt'] == null
         ? null
         : readDate(map['lastOpenedAt'], addedAt);
+    final String category = readString(map['category'], '');
     return PdfDocument(
       id: readString(map['id'], ''),
       title: readString(map['title'], 'Untitled'),
@@ -21,6 +22,7 @@ class PdfDocumentDto {
       addedAt: addedAt,
       thumbnailPath: thumbnail,
       lastOpenedAt: lastOpened,
+      category: category.isEmpty ? null : category,
     );
   }
 
@@ -34,6 +36,8 @@ class PdfDocumentDto {
       'addedAt': document.addedAt.toIso8601String(),
       'thumbnailPath': document.thumbnailPath,
       'lastOpenedAt': document.lastOpenedAt?.toIso8601String(),
+      if (document.category != null && document.category!.isNotEmpty)
+        'category': document.category,
     };
   }
 }

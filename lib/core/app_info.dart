@@ -1,4 +1,4 @@
 /// Single source of truth for the user-visible app version.
 abstract final class AppInfo {
-  static const String version = '4.3.0';
+  static const String version = '4.4.0';
 }

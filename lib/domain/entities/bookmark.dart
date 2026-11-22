@@ -1,3 +1,18 @@
+bool _sameTags(List<String> a, List<String> b) {
+  if (identical(a, b)) {
+    return true;
+  }
+  if (a.length != b.length) {
+    return false;
+  }
+  for (int index = 0; index < a.length; index++) {
+    if (a[index] != b[index]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 /// A page the reader wants to come back to, optionally carrying a note.
 ///
 /// A bookmark without a note is just a marker; once [note] is set the same
@@ -10,6 +25,7 @@ class Bookmark {
     required this.createdAt,
     this.note,
     this.updatedAt,
+    this.tagIds = const <String>[],
   });
 
   final String id;
@@ -25,6 +41,9 @@ class Bookmark {
   /// Last time the note text changed; falls back to [createdAt] when absent.
   final DateTime? updatedAt;
 
+  /// Ids of the tags attached to this note.
+  final List<String> tagIds;
+
   bool get hasNote {
     final String? text = note;
     return text != null && text.trim().isNotEmpty;
@@ -37,6 +56,7 @@ class Bookmark {
     String? note,
     bool clearNote = false,
     DateTime? updatedAt,
+    List<String>? tagIds,
   }) {
     return Bookmark(
       id: id,
@@ -45,6 +65,7 @@ class Bookmark {
       createdAt: createdAt,
       note: clearNote ? null : (note ?? this.note),
       updatedAt: updatedAt ?? this.updatedAt,
+      tagIds: tagIds ?? this.tagIds,
     );
   }
 
@@ -56,10 +77,18 @@ class Bookmark {
         other.page == page &&
         other.createdAt == createdAt &&
         other.note == note &&
-        other.updatedAt == updatedAt;
+        other.updatedAt == updatedAt &&
+        _sameTags(other.tagIds, tagIds);
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, documentId, page, createdAt, note, updatedAt);
+  int get hashCode => Object.hash(
+        id,
+        documentId,
+        page,
+        createdAt,
+        note,
+        updatedAt,
+        Object.hashAll(tagIds),
+      );
 }

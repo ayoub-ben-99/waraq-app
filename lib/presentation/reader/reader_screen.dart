@@ -203,10 +203,12 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     }
     final int page = controller.currentPage;
     String? existing;
+    List<String> existingTags = const <String>[];
     for (final Bookmark bookmark
         in ref.read(documentBookmarksProvider(widget.document.id))) {
       if (bookmark.page == page) {
         existing = bookmark.note;
+        existingTags = bookmark.tagIds;
         break;
       }
     }
@@ -218,6 +220,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
       page: page,
       pageCount: controller.pageCount,
       initialNote: existing,
+      initialTags: existingTags,
     );
     if (saved != null) {
       messenger

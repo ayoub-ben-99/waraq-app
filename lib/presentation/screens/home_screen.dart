@@ -20,7 +20,7 @@ import '../../domain/entities/reading_position.dart';
 import '../providers/library_providers.dart';
 import '../reader/reader_route.dart';
 import '../widgets/continue_card.dart';
-import '../widgets/delete_document.dart';
+import '../widgets/book_details_sheet.dart';
 import '../widgets/document_row.dart';
 import '../widgets/import_document.dart';
 import '../widgets/review_banner.dart';
@@ -226,7 +226,7 @@ class HomeScreen extends ConsumerWidget {
                               openReader(context, ref, document),
                             ),
                             onLongPress: () => unawaited(
-                              confirmDeleteDocument(context, ref, document),
+                              showBookDetails(context, ref, document),
                             ),
                           ),
                         );

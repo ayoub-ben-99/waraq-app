@@ -10,9 +10,12 @@ import '../../domain/entities/reading_position.dart';
 import '../../domain/repositories/document_repository.dart';
 import '../../domain/repositories/reading_state_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
+import '../../domain/repositories/tag_repository.dart';
+import '../../domain/entities/note_tag.dart';
 import '../models/app_settings_dto.dart';
 import '../models/bookmark_dto.dart';
 import '../models/json_utils.dart';
+import '../models/note_tag_dto.dart';
 import '../models/pdf_document_dto.dart';
 import '../models/reading_position_dto.dart';
 import 'backup_format.dart';
@@ -62,13 +65,16 @@ class BackupService {
     required DocumentRepository documents,
     required ReadingStateRepository reading,
     required SettingsRepository settings,
+    required TagRepository tags,
   })  : _documents = documents,
         _reading = reading,
-        _settings = settings;
+        _settings = settings,
+        _tags = tags;
 
   final DocumentRepository _documents;
   final ReadingStateRepository _reading;
   final SettingsRepository _settings;
+  final TagRepository _tags;
 
   Future<BackupExport> export({
     required bool includePdfs,
@@ -78,6 +84,7 @@ class BackupService {
     final Map<String, ReadingPosition> positions = await _reading.loadPositions();
     final List<Bookmark> bookmarks = await _reading.loadBookmarks();
     final AppSettings settings = await _settings.load();
+    final List<NoteTag> tags = await _tags.load();
 
     final Map<String, Uint8List> pdfs = <String, Uint8List>{};
     if (includePdfs) {
@@ -104,6 +111,9 @@ class BackupService {
         ],
         bookmarks: <Map<String, Object?>>[
           for (final Bookmark bookmark in bookmarks) BookmarkDto.toMap(bookmark),
+        ],
+        tags: <Map<String, Object?>>[
+          for (final NoteTag tag in tags) NoteTagDto.toMap(tag),
         ],
         pdfs: pdfs,
       ),
@@ -228,6 +238,24 @@ class BackupService {
           updatedAt: position.updatedAt,
         ),
       );
+    }
+
+    if (contents.tags.isNotEmpty) {
+      final List<NoteTag> localTags = await _tags.load();
+      final Set<String> known = <String>{
+        for (final NoteTag tag in localTags) tag.id,
+      };
+      final List<NoteTag> merged = <NoteTag>[...localTags];
+      for (final Map<String, Object?> map in contents.tags) {
+        final NoteTag tag = NoteTagDto.fromMap(map);
+        if (tag.id.isNotEmpty && tag.name.isNotEmpty && !known.contains(tag.id)) {
+          merged.add(tag);
+          known.add(tag.id);
+        }
+      }
+      if (merged.length != localTags.length) {
+        await _tags.save(merged);
+      }
     }
 
     final bool settingsApplied = contents.settings.isNotEmpty;

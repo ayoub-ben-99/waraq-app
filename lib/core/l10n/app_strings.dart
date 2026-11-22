@@ -24,6 +24,7 @@ class AppStrings {
   // --------------------------------------------------------------- common ---
   String get cancel => _t('Cancel', 'إلغاء');
   String get delete => _t('Delete', 'حذف');
+  String get save => _t('Save', 'حفظ');
   String get close => _t('Close', 'إغلاق');
   String get done => _t('Done', 'تم');
   String get open => _t('Open', 'فتح');
@@ -272,6 +273,33 @@ class AppStrings {
       );
   String get noteAddAction => _t('Add note', 'أضف ملاحظة');
   String get noteEditAction => _t('Edit note', 'تعديل الملاحظة');
+
+  // ---------------------------------------------------------------- tags ---
+  String get noteTagsLabel => _t('Tags', 'الوسوم');
+  String get tagNew => _t('New tag', 'وسم جديد');
+  String get tagNewTitle => _t('Name the tag', 'اسم الوسم');
+  String get tagNameHint => _t('e.g. Idea, Quote', 'مثل: فكرة، اقتباس');
+  String get tagCreate => _t('Create', 'إنشاء');
+  String get tagManageTitle => _t('Edit tag', 'تعديل الوسم');
+  String get notesAllTags => _t('All', 'الكل');
+  String get tagLongPressHint => _t(
+        'Long-press a tag to rename or delete it',
+        'اضغط مطوّلًا على الوسم لتعديله أو حذفه',
+      );
+
+  // ---------------------------------------------------------- categories ---
+  String get bookTitleLabel => _t('Title', 'العنوان');
+  String get bookCategoryLabel => _t('Shelf', 'الرف');
+  String get bookCategoryHint => _t(
+        'e.g. Novels, Work, Study',
+        'مثل: روايات، عمل، دراسة',
+      );
+  String get bookSaved => _t('Book updated', 'تم تحديث الكتاب');
+  String get allCategories => _t('All shelves', 'كل الأرفف');
+  String get bookDetailsHint => _t(
+        'Long-press a book to rename it or move it to a shelf',
+        'اضغط مطوّلًا على كتاب لتغيير اسمه أو نقله إلى رف',
+      );
 
   // -------------------------------------------------------------- review ---
   String get reviewTitle => _t('Review', 'المراجعة');

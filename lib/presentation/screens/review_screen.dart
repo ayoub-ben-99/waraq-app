@@ -94,6 +94,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
       page: entry.note.page,
       pageCount: entry.document.pageCount,
       initialNote: entry.note.note,
+      initialTags: entry.note.tagIds,
     );
     if (saved != null) {
       messenger

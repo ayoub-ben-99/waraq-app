@@ -41,6 +41,28 @@ class DocumentsNotifier extends AsyncNotifier<List<PdfDocument>> {
     state = AsyncData<List<PdfDocument>>(await repository.listDocuments());
   }
 
+  /// Renames a book or moves it to another shelf category.
+  Future<PdfDocument> updateMetadata(
+    PdfDocument document, {
+    String? title,
+    String? category,
+    bool clearCategory = false,
+  }) async {
+    final DocumentRepository repository = ref.read(documentRepositoryProvider);
+    final PdfDocument updated = await repository.updateMetadata(
+      document.id,
+      title: title,
+      category: category,
+      clearCategory: clearCategory,
+    );
+    final List<PdfDocument> current = state.valueOrNull ?? const <PdfDocument>[];
+    state = AsyncData<List<PdfDocument>>(<PdfDocument>[
+      for (final PdfDocument item in current)
+        if (item.id == updated.id) updated else item,
+    ]);
+    return updated;
+  }
+
   Future<void> markOpened(String documentId) async {
     final DocumentRepository repository = ref.read(documentRepositoryProvider);
     final PdfDocument updated = await repository.markOpened(documentId);
@@ -192,4 +214,21 @@ final libraryStatsProvider = Provider<LibraryStats>((ref) {
     pagesRead: pagesRead,
     averageProgress: tracked == 0 ? 0 : progressSum / tracked,
   );
+});
+
+/// Distinct shelf categories, in the order the reader created them.
+final categoriesProvider = Provider<List<String>>((ref) {
+  final List<PdfDocument> documents =
+      ref.watch(documentsProvider).valueOrNull ?? const <PdfDocument>[];
+  final List<String> categories = <String>[];
+  for (final PdfDocument document in documents) {
+    final String? category = document.category;
+    if (category != null &&
+        category.isNotEmpty &&
+        !categories.contains(category)) {
+      categories.add(category);
+    }
+  }
+  categories.sort();
+  return categories;
 });

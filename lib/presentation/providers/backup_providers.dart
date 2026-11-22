@@ -8,6 +8,7 @@ final backupServiceProvider = Provider<BackupService>((ref) {
     documents: ref.watch(documentRepositoryProvider),
     reading: ref.watch(readingStateRepositoryProvider),
     settings: ref.watch(settingsRepositoryProvider),
+    tags: ref.watch(tagRepositoryProvider),
   );
 });
 

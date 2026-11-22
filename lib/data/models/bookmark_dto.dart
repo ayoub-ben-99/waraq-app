@@ -11,6 +11,7 @@ class BookmarkDto {
       documentId: readString(map['documentId'], ''),
       page: readInt(map['page'], 1),
       createdAt: readDate(map['createdAt'], DateTime.now()),
+      tagIds: readStringList(map['tagIds']),
       note: note.isEmpty ? null : note,
       updatedAt: map['updatedAt'] == null
           ? null
@@ -25,6 +26,7 @@ class BookmarkDto {
       'page': bookmark.page,
       'createdAt': bookmark.createdAt.toIso8601String(),
       if (bookmark.hasNote) 'note': bookmark.note!.trim(),
+      if (bookmark.tagIds.isNotEmpty) 'tagIds': bookmark.tagIds,
       if (bookmark.updatedAt != null)
         'updatedAt': bookmark.updatedAt!.toIso8601String(),
     };

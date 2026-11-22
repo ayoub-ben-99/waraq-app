@@ -7,9 +7,12 @@ import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/shape_motion.dart';
 import '../../core/theme/tokens.dart';
+import '../../core/widgets/tag_chip.dart';
 import '../../core/widgets/waraq_sheet.dart';
+import '../../domain/entities/note_tag.dart';
 import '../../domain/entities/bookmark.dart';
 import '../providers/bookmark_providers.dart';
+import '../providers/tag_providers.dart';
 
 /// Opens the editor for the note attached to [page]; resolves to the saved
 /// bookmark, or `null` when the reader dismissed the sheet.
@@ -19,6 +22,7 @@ Future<Bookmark?> showNoteEditor(
   required int page,
   required int pageCount,
   String? initialNote,
+  List<String> initialTags = const <String>[],
 }) {
   return showWaraqSheet<Bookmark>(
     context: context,
@@ -27,8 +31,97 @@ Future<Bookmark?> showNoteEditor(
       page: page,
       pageCount: pageCount,
       initialNote: initialNote,
+      initialTags: initialTags,
     ),
   );
+}
+
+class _TagPicker extends ConsumerWidget {
+  const _TagPicker({required this.selected, required this.onChanged});
+
+  final Set<String> selected;
+  final ValueChanged<Set<String>> onChanged;
+
+  Future<void> _create(BuildContext context, WidgetRef ref) async {
+    final AppStrings strings = AppStrings.of(context);
+    final TextEditingController controller = TextEditingController();
+    final String? name = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(strings.tagNewTitle),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          textInputAction: TextInputAction.done,
+          decoration: InputDecoration(hintText: strings.tagNameHint),
+          onSubmitted: (String value) =>
+              Navigator.of(context).pop(value.trim()),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(strings.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(controller.text.trim()),
+            child: Text(strings.tagCreate),
+          ),
+        ],
+      ),
+    );
+    controller.dispose();
+    if (name == null || name.isEmpty) {
+      return;
+    }
+    final NoteTag tag = await ref.read(tagsProvider.notifier).create(name);
+    onChanged(<String>{...selected, tag.id});
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AppStrings strings = AppStrings.of(context);
+    final ThemeData theme = Theme.of(context);
+    final List<NoteTag> tags = ref.watch(tagsProvider).valueOrNull ??
+        const <NoteTag>[];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          strings.noteTagsLabel,
+          style: theme.textTheme.labelMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: Gap.xs),
+        Wrap(
+          spacing: Gap.s,
+          runSpacing: Gap.xs,
+          children: <Widget>[
+            for (final NoteTag tag in tags)
+              TagFilterChip(
+                tag: tag,
+                selected: selected.contains(tag.id),
+                onSelected: (bool isSelected) {
+                  final Set<String> next = <String>{...selected};
+                  if (isSelected) {
+                    next.add(tag.id);
+                  } else {
+                    next.remove(tag.id);
+                  }
+                  onChanged(next);
+                },
+              ),
+            ActionChip(
+              avatar: const Icon(Icons.add_rounded, size: 16),
+              label: Text(strings.tagNew),
+              onPressed: () => unawaited(_create(context, ref)),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
 class NoteEditorSheet extends ConsumerStatefulWidget {
@@ -37,6 +130,7 @@ class NoteEditorSheet extends ConsumerStatefulWidget {
     required this.page,
     required this.pageCount,
     this.initialNote,
+    this.initialTags = const <String>[],
     super.key,
   });
 
@@ -44,6 +138,7 @@ class NoteEditorSheet extends ConsumerStatefulWidget {
   final int page;
   final int pageCount;
   final String? initialNote;
+  final List<String> initialTags;
 
   @override
   ConsumerState<NoteEditorSheet> createState() => _NoteEditorSheetState();
@@ -54,6 +149,9 @@ class _NoteEditorSheetState extends ConsumerState<NoteEditorSheet> {
     text: widget.initialNote ?? '',
   );
   bool _saving = false;
+  late final Set<String> _tags = <String>{
+    for (final String id in widget.initialTags) id,
+  };
 
   @override
   void dispose() {
@@ -69,11 +167,15 @@ class _NoteEditorSheetState extends ConsumerState<NoteEditorSheet> {
     }
     setState(() => _saving = true);
     final NavigatorState navigator = Navigator.of(context);
-    final Bookmark? saved = await ref.read(bookmarksProvider.notifier).setNote(
-          documentId: widget.documentId,
-          page: widget.page,
-          note: _text.text,
-        );
+    final BookmarksNotifier bookmarks = ref.read(bookmarksProvider.notifier);
+    final Bookmark? saved = await bookmarks.setNote(
+      documentId: widget.documentId,
+      page: widget.page,
+      note: _text.text,
+    );
+    if (saved != null) {
+      await bookmarks.setTags(saved.id, _tags.toList(growable: false));
+    }
     if (!mounted) {
       return;
     }
@@ -131,7 +233,16 @@ class _NoteEditorSheetState extends ConsumerState<NoteEditorSheet> {
               ),
             ),
           ),
-          const SizedBox(height: Gap.l),
+          const SizedBox(height: Gap.m),
+          _TagPicker(
+            selected: _tags,
+            onChanged: (Set<String> next) => setState(() {
+              _tags
+                ..clear()
+                ..addAll(next);
+            }),
+          ),
+          const SizedBox(height: Gap.m),
           Row(
             children: <Widget>[
               if (editing) ...<Widget>[

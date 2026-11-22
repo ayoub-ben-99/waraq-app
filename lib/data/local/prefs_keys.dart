@@ -6,5 +6,6 @@ abstract final class PrefsKeys {
   static const String positions = 'waraq.positions.v2';
   static const String bookmarks = 'waraq.bookmarks.v2';
   static const String review = 'waraq.review.v1';
+  static const String tags = 'waraq.tags.v1';
   static const String sampleSeeded = 'waraq.sample-seeded.v2';
 }

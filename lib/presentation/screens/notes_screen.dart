@@ -11,12 +11,15 @@ import '../../core/theme/tokens.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/widgets/document_cover.dart';
 import '../../core/widgets/empty_state.dart';
+import '../../core/widgets/tag_chip.dart';
 import '../../core/widgets/reveal.dart';
 import '../../domain/entities/bookmark.dart';
+import '../../domain/entities/note_tag.dart';
 import '../../domain/entities/pdf_document.dart';
 import '../providers/bookmark_providers.dart';
 import '../providers/library_providers.dart';
 import '../providers/review_providers.dart';
+import '../providers/tag_providers.dart';
 import 'review_screen.dart';
 import '../reader/reader_route.dart';
 import '../widgets/note_editor_sheet.dart';
@@ -32,6 +35,7 @@ class NotesScreen extends ConsumerStatefulWidget {
 class _NotesScreenState extends ConsumerState<NotesScreen> {
   final TextEditingController _search = TextEditingController();
   String _query = '';
+  String? _tagFilter;
 
   @override
   void dispose() {
@@ -47,10 +51,11 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
     return <({Bookmark note, PdfDocument document})>[
       for (final Bookmark note in notes)
         if (byId[note.documentId] case final PdfDocument document)
-          if (query.isEmpty ||
-              (note.note ?? '').toLowerCase().contains(query) ||
-              document.title.toLowerCase().contains(query))
-            (note: note, document: document),
+          if (_tagFilter == null || note.tagIds.contains(_tagFilter))
+            if (query.isEmpty ||
+                (note.note ?? '').toLowerCase().contains(query) ||
+                document.title.toLowerCase().contains(query))
+              (note: note, document: document),
     ];
   }
 
@@ -67,6 +72,7 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
       page: note.page,
       pageCount: document.pageCount,
       initialNote: note.note,
+      initialTags: note.tagIds,
     );
     if (saved != null) {
       messenger
@@ -83,6 +89,11 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
 
     final List<Bookmark> notes = ref.watch(notesProvider);
     final int due = ref.watch(reviewDueCountProvider);
+    final Map<String, NoteTag> tagsById = ref.watch(tagsByIdProvider);
+    final List<NoteTag> tags = <NoteTag>[
+      for (final NoteTag tag in tagsById.values)
+        if (_countFor(notes, tag.id) > 0) tag,
+    ]..sort((NoteTag a, NoteTag b) => a.name.compareTo(b.name));
     final List<PdfDocument> documents =
         ref.watch(documentsProvider).valueOrNull ?? const <PdfDocument>[];
     final Map<String, PdfDocument> byId = <String, PdfDocument>{
@@ -195,6 +206,47 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
                   ),
                 ),
               ),
+              if (tags.isNotEmpty)
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    horizontal,
+                    Gap.m,
+                    horizontal,
+                    0,
+                  ),
+                  child: SizedBox(
+                    height: 40,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(end: Gap.s),
+                          child: ChoiceChip(
+                            label: Text(strings.notesAllTags),
+                            selected: _tagFilter == null,
+                            onSelected: (_) =>
+                                setState(() => _tagFilter = null),
+                          ),
+                        ),
+                        for (final NoteTag tag in tags)
+                          Padding(
+                            padding:
+                                const EdgeInsetsDirectional.only(end: Gap.s),
+                            child: TagFilterChip(
+                              tag: tag,
+                              count: _countFor(notes, tag.id),
+                              selected: _tagFilter == tag.id,
+                              onSelected: (bool selected) => setState(
+                                () => _tagFilter = selected ? tag.id : null,
+                              ),
+                              onLongPress: () =>
+                                  unawaited(_manageTag(context, tag)),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
               const SizedBox(height: Gap.l),
               Expanded(
                 child: visible.isEmpty
@@ -233,6 +285,10 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
                             child: _NoteTile(
                               note: item.note,
                               document: item.document,
+                              tags: <NoteTag>[
+                                for (final String id in item.note.tagIds)
+                                  if (tagsById[id] case final NoteTag tag) tag,
+                              ],
                               onTap: () => unawaited(
                                 openReader(
                                   context,
@@ -257,6 +313,60 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
         },
       ),
     );
+  }
+
+  int _countFor(List<Bookmark> notes, String tagId) {
+    return notes
+        .where((Bookmark note) => note.tagIds.contains(tagId))
+        .length;
+  }
+
+  /// Long-press on a tag chip: rename or delete the tag everywhere.
+  Future<void> _manageTag(BuildContext context, NoteTag tag) async {
+    final AppStrings strings = AppStrings.of(context);
+    final TextEditingController controller =
+        TextEditingController(text: tag.name);
+    final String? action = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(strings.tagManageTitle),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: InputDecoration(
+            labelText: strings.tagNameHint,
+            prefixIcon: Padding(
+              padding: const EdgeInsets.all(12),
+              child: TagDot(colorIndex: tag.colorIndex),
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop('delete'),
+            child: Text(strings.delete),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(strings.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop('save'),
+            child: Text(strings.save),
+          ),
+        ],
+      ),
+    );
+    final String name = controller.text.trim();
+    controller.dispose();
+    if (action == 'save' && name.isNotEmpty && name != tag.name) {
+      await ref.read(tagsProvider.notifier).rename(tag, name);
+    } else if (action == 'delete') {
+      await ref.read(tagsProvider.notifier).delete(tag);
+      if (mounted && _tagFilter == tag.id) {
+        setState(() => _tagFilter = null);
+      }
+    }
   }
 
   Future<void> _confirmDelete(BuildContext context, Bookmark note) async {
@@ -293,6 +403,7 @@ class _NoteTile extends StatelessWidget {
   const _NoteTile({
     required this.note,
     required this.document,
+    required this.tags,
     required this.onTap,
     required this.onEdit,
     required this.onDelete,
@@ -300,6 +411,7 @@ class _NoteTile extends StatelessWidget {
 
   final Bookmark note;
   final PdfDocument document;
+  final List<NoteTag> tags;
   final VoidCallback onTap;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
@@ -374,6 +486,19 @@ class _NoteTile extends StatelessWidget {
                   style: theme.textTheme.bodyLarge?.copyWith(height: 1.5),
                 ),
               ),
+              if (tags.isNotEmpty) ...<Widget>[
+                const SizedBox(height: Gap.s),
+                Padding(
+                  padding: const EdgeInsets.only(right: Gap.s),
+                  child: Wrap(
+                    spacing: Gap.xs,
+                    runSpacing: Gap.xxs,
+                    children: <Widget>[
+                      for (final NoteTag tag in tags) TagPill(tag: tag),
+                    ],
+                  ),
+                ),
+              ],
               const SizedBox(height: Gap.s),
               Padding(
                 padding: const EdgeInsets.only(right: Gap.s),

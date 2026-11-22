@@ -33,6 +33,7 @@ class BackupContents {
     required this.positions,
     required this.bookmarks,
     required this.pdfs,
+    this.tags = const <Map<String, Object?>>[],
   });
 
   final DateTime createdAt;
@@ -41,6 +42,9 @@ class BackupContents {
   final List<Map<String, Object?>> documents;
   final List<Map<String, Object?>> positions;
   final List<Map<String, Object?>> bookmarks;
+
+  /// The reader's tag vocabulary, so a restore keeps the same labels.
+  final List<Map<String, Object?>> tags;
 
   /// Document id → PDF bytes, empty for a data-only backup.
   final Map<String, Uint8List> pdfs;
@@ -64,6 +68,7 @@ Uint8List encodeBackup(BackupContents contents) {
     'documents': contents.documents,
     'positions': contents.positions,
     'bookmarks': contents.bookmarks,
+    'tags': contents.tags,
   };
   final Map<String, Object?> manifest = <String, Object?>{
     'schema': kBackupSchema,
@@ -76,6 +81,7 @@ Uint8List encodeBackup(BackupContents contents) {
       'positions': contents.positions.length,
       'bookmarks': contents.bookmarks.length,
       'notes': contents.noteCount,
+      'tags': contents.tags.length,
       'pdfs': contents.pdfs.length,
     },
   };
@@ -182,6 +188,7 @@ BackupContents decodeBackup(Uint8List bytes) {
     documents: listOf(data['documents']),
     positions: listOf(data['positions']),
     bookmarks: listOf(data['bookmarks']),
+    tags: listOf(data['tags']),
     pdfs: pdfs,
   );
 }

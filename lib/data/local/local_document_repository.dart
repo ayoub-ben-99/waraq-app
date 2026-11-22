@@ -132,6 +132,32 @@ class LocalDocumentRepository implements DocumentRepository {
   }
 
   @override
+  Future<PdfDocument> updateMetadata(
+    String documentId, {
+    String? title,
+    String? category,
+    bool clearCategory = false,
+  }) async {
+    final List<PdfDocument> documents = _readIndex();
+    final int index = documents.indexWhere(
+      (PdfDocument document) => document.id == documentId,
+    );
+    if (index < 0) {
+      throw DocumentException('Unknown document: $documentId');
+    }
+    final String trimmedTitle = (title ?? '').trim();
+    final String trimmedCategory = (category ?? '').trim();
+    final PdfDocument updated = documents[index].copyWith(
+      title: trimmedTitle.isEmpty ? null : trimmedTitle,
+      category: trimmedCategory.isEmpty ? null : trimmedCategory,
+      clearCategory: clearCategory || trimmedCategory.isEmpty,
+    );
+    documents[index] = updated;
+    await _writeIndex(documents);
+    return updated;
+  }
+
+  @override
   Future<PdfDocument> markOpened(String documentId) async {
     final List<PdfDocument> documents = _readIndex();
     final int index = documents.indexWhere((PdfDocument d) => d.id == documentId);
