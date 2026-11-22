@@ -98,8 +98,12 @@ class AppStrings {
         '$count صفحة',
       );
 
-  String pageOf(int page, int total) =>
-      _t('Page $page of $total', 'صفحة $page من $total');
+  String pageOf(int page, int total) => _t(
+        'Page $page of $total',
+        'صفحة $page من $total',
+        'Page $page sur $total',
+        'Página $page de $total',
+      );
 
   String percent(int value) => _t('$value%', '$value٪');
 
@@ -116,7 +120,9 @@ class AppStrings {
 
   String documentsCount(int count) => _t(
         '$count ${count == 1 ? 'document' : 'documents'}',
-        '$count ملفات',
+        '$count ${count == 1 ? 'ملف' : 'ملفات'}',
+        '$count ${count == 1 ? 'document' : 'documents'}',
+        '$count ${count == 1 ? 'documento' : 'documentos'}',
       );
 
   String get deleteDocumentTitle => _t('Delete this document?', 'حذف هذا الملف؟');
@@ -502,451 +508,774 @@ extension AppStringsBuildContext on BuildContext {
 
 /// French copy, keyed by the English source string.
 const Map<String, String> _fr = <String, String>{
-  'Waraq': 'Waraq',
-  'A quiet place to read PDFs': 'Un endroit calme pour lire des PDF',
-  'WARAQ': 'WARAQ',
-  'Cancel': 'Annuler',
-  'Delete': 'Supprimer',
-  'Save': 'Enregistrer',
-  'Close': 'Fermer',
-  'Done': 'Terminé',
-  'Open': 'Ouvrir',
-  'Try again': 'Réessayer',
-  'Import PDF': 'Importer un PDF',
-  'Importing…': 'Importation…',
-  'Back': 'Retour',
-  'Quick actions': 'Actions rapides',
-  'Home': 'Accueil',
-  'Library': 'Bibliothèque',
-  'Settings': 'Réglages',
-  'Good morning': 'Bonjour',
-  'Good afternoon': 'Bon après-midi',
-  'Good evening': 'Bonsoir',
-  'Still reading?': 'Encore en train de lire ?',
-  'Continue reading': 'Reprendre la lecture',
-  'Start reading': 'Commencer la lecture',
-  'Recent': 'Récents',
-  'Nothing read yet': 'Rien de lu pour le moment',
-  'Your shelf is empty': 'Votre étagère est vide',
+  'Waraq':
+      'Waraq',
+  'A quiet place to read PDFs':
+      'Un endroit calme pour lire des PDF',
+  'WARAQ':
+      'WARAQ',
+  'Cancel':
+      'Annuler',
+  'Delete':
+      'Supprimer',
+  'Save':
+      'Enregistrer',
+  'Close':
+      'Fermer',
+  'Done':
+      'Terminé',
+  'Open':
+      'Ouvrir',
+  'Try again':
+      'Réessayer',
+  'Import PDF':
+      'Importer un PDF',
+  'Importing…':
+      'Importation…',
+  'Back':
+      'Retour',
+  'Quick actions':
+      'Actions rapides',
+  'Home':
+      'Accueil',
+  'Library':
+      'Bibliothèque',
+  'Settings':
+      'Réglages',
+  'Good morning':
+      'Bonjour',
+  'Good afternoon':
+      'Bon après-midi',
+  'Good evening':
+      'Bonsoir',
+  'Still reading?':
+      'Encore en train de lire ?',
+  'Continue reading':
+      'Reprendre la lecture',
+  'Start reading':
+      'Commencer la lecture',
+  'Recent':
+      'Récents',
+  'Nothing read yet':
+      'Rien de lu pour le moment',
+  'Your shelf is empty':
+      'Votre étagère est vide',
   'Import a PDF to start reading. Everything stays on this device.':
       'Importez un PDF pour commencer. Tout reste sur cet appareil.',
   'Documents you open will appear here.':
       'Les documents que vous ouvrez apparaîtront ici.',
-  'Page $page of $total': 'Page $page sur $total',
-  'Last read $relative': 'Lu $relative',
-  'Search your library': 'Rechercher dans la bibliothèque',
-  'Title': 'Titre',
-  'Sort': 'Trier',
-  'No matches for “$query”': 'Aucun résultat pour « $query »',
-  'Delete this document?': 'Supprimer ce document ?',
+  'Search your library':
+      'Rechercher dans la bibliothèque',
+  'Title':
+      'Titre',
+  'Sort':
+      'Trier',
+  'Delete this document?':
+      'Supprimer ce document ?',
   'The PDF, its reading position and its bookmarks will be removed from this device.':
       'Le PDF, sa position de lecture et ses signets seront retirés de cet appareil.',
-  'Document deleted': 'Document supprimé',
-  '“$title” added to your library': '« $title » ajouté à votre bibliothèque',
-  'This file is no longer available': 'Ce fichier n’est plus disponible',
-  'Could not open this document': 'Impossible d’ouvrir ce document',
-  'That file could not be imported': 'Ce fichier n’a pas pu être importé',
-  'Pages': 'Pages',
-  'Marks': 'Signets',
-  'Auto': 'Auto',
-  'Display': 'Affichage',
-  'Bookmark this page': 'Marquer cette page',
-  'Remove bookmark': 'Retirer le signet',
-  'Bookmark saved': 'Signet enregistré',
-  'Bookmark removed': 'Signet retiré',
-  'No marks yet': 'Aucun signet',
+  'Document deleted':
+      'Document supprimé',
+  'This file is no longer available':
+      'Ce fichier n’est plus disponible',
+  'Could not open this document':
+      'Impossible d’ouvrir ce document',
+  'That file could not be imported':
+      'Ce fichier n’a pas pu être importé',
+  'Pages':
+      'Pages',
+  'Marks':
+      'Signets',
+  'Auto':
+      'Auto',
+  'Display':
+      'Affichage',
+  'Bookmark this page':
+      'Marquer cette page',
+  'Remove bookmark':
+      'Retirer le signet',
+  'Bookmark saved':
+      'Signet enregistré',
+  'Bookmark removed':
+      'Signet retiré',
+  'No marks yet':
+      'Aucun signet',
   'Tap the marker at the top to keep a page.':
       'Touchez le marqueur en haut pour garder une page.',
-  'All pages': 'Toutes les pages',
-  'Go to page': 'Aller à la page',
-  'Go': 'Aller',
-  'Page number': 'Numéro de page',
-  'Auto-scroll': 'Défilement auto',
-  'Start': 'Démarrer',
-  'Pause': 'Pause',
-  'Speed': 'Vitesse',
-  'Slow': 'Lent',
-  'Fast': 'Rapide',
+  'All pages':
+      'Toutes les pages',
+  'Go to page':
+      'Aller à la page',
+  'Go':
+      'Aller',
+  'Page number':
+      'Numéro de page',
+  'Auto-scroll':
+      'Défilement auto',
+  'Start':
+      'Démarrer',
+  'Pause':
+      'Pause',
+  'Speed':
+      'Vitesse',
+  'Slow':
+      'Lent',
+  'Fast':
+      'Rapide',
   'Scrolling stops the moment you touch the page.':
       'Le défilement s’arrête dès que vous touchez la page.',
-  'Page tone': 'Teinte de la page',
-  'Original': 'Original',
-  'Sepia': 'Sépia',
-  'Night': 'Nuit',
-  'Brightness': 'Luminosité',
+  'Page tone':
+      'Teinte de la page',
+  'Original':
+      'Original',
+  'Sepia':
+      'Sépia',
+  'Night':
+      'Nuit',
+  'Brightness':
+      'Luminosité',
   'Dims the page so it matches the room.':
       'Atténue la page pour l’adapter à la pièce.',
-  'Scrolling': 'Défilement',
-  'Continuous': 'Continu',
-  'Paged': 'Par page',
-  'One long column, like a scroll.': 'Une longue colonne, comme un parchemin.',
-  'One page at a time, swiped sideways.': 'Une page à la fois, balayée sur le côté.',
-  'Preparing pages': 'Préparation des pages',
+  'Scrolling':
+      'Défilement',
+  'Continuous':
+      'Continu',
+  'Paged':
+      'Par page',
+  'One long column, like a scroll.':
+      'Une longue colonne, comme un parchemin.',
+  'One page at a time, swiped sideways.':
+      'Une page à la fois, balayée sur le côté.',
+  'Preparing pages':
+      'Préparation des pages',
   'Measuring the document so scrolling stays smooth.':
       'Mesure du document pour un défilement fluide.',
-  'This document could not be opened': 'Ce document n’a pas pu être ouvert',
+  'This document could not be opened':
+      'Ce document n’a pas pu être ouvert',
   'The file may be damaged, password protected or not a PDF.':
       'Le fichier est peut-être endommagé, protégé par mot de passe ou n’est pas un PDF.',
-  'Appearance': 'Apparence',
-  'Theme': 'Thème',
-  'System': 'Système',
-  'Light': 'Clair',
-  'Dark': 'Sombre',
-  'AMOLED': 'AMOLED',
-  'Follows the device': 'Suit l’appareil',
-  'True black for OLED': 'Noir absolu pour OLED',
-  'Wallpaper colors': 'Couleurs du fond d’écran',
+  'Appearance':
+      'Apparence',
+  'Theme':
+      'Thème',
+  'System':
+      'Système',
+  'Light':
+      'Clair',
+  'Dark':
+      'Sombre',
+  'AMOLED':
+      'AMOLED',
+  'Follows the device':
+      'Suit l’appareil',
+  'True black for OLED':
+      'Noir absolu pour OLED',
+  'Wallpaper colors':
+      'Couleurs du fond d’écran',
   'Tint the app with the palette of your wallpaper':
       'Teinter l’application avec le fond d’écran',
-  'Not available on this device': 'Indisponible sur cet appareil',
-  'Accent color': 'Couleur d’accent',
-  'Reading': 'Lecture',
-  'Default scrolling': 'Défilement par défaut',
-  'Default page tone': 'Teinte de page par défaut',
-  'Language': 'Langue',
-  'Storage': 'Stockage',
-  'Used by your library': 'Utilisé par votre bibliothèque',
-  'Forget reading positions': 'Oublier les positions de lecture',
+  'Not available on this device':
+      'Indisponible sur cet appareil',
+  'Accent color':
+      'Couleur d’accent',
+  'Reading':
+      'Lecture',
+  'Default scrolling':
+      'Défilement par défaut',
+  'Default page tone':
+      'Teinte de page par défaut',
+  'Language':
+      'Langue',
+  'Storage':
+      'Stockage',
+  'Used by your library':
+      'Utilisé par votre bibliothèque',
+  'Forget reading positions':
+      'Oublier les positions de lecture',
   'Positions and bookmarks are removed. Documents stay.':
       'Les positions et signets sont retirés. Les documents restent.',
-  'Reading data cleared': 'Données de lecture effacées',
-  'About': 'À propos',
+  'Reading data cleared':
+      'Données de lecture effacées',
+  'About':
+      'À propos',
   'Waraq is a local-first reader. No account, no sync, no tracking. PDF rendering by pdfx.':
       'Waraq est un lecteur local. Sans compte, sans synchronisation, sans pistage. Rendu PDF par pdfx.',
-  'Version': 'Version',
-  'Shape': 'Formes',
-  'Corner style': 'Style des coins',
+  'Version':
+      'Version',
+  'Shape':
+      'Formes',
+  'Corner style':
+      'Style des coins',
   'How rounded cards, sheets and buttons are':
       'Arrondi des cartes, feuilles et boutons',
-  'Soft': 'Doux',
-  'Rounded': 'Arrondi',
-  'Square': 'Carré',
+  'Soft':
+      'Doux',
+  'Rounded':
+      'Arrondi',
+  'Square':
+      'Carré',
   'Applies across the whole app, including the reader':
       'S’applique à toute l’application, y compris le lecteur',
-  'Motion': 'Animations',
-  'Animation level': 'Niveau d’animation',
+  'Motion':
+      'Animations',
+  'Animation level':
+      'Niveau d’animation',
   'Reveals, sliding chrome and theme cross-fades':
       'Apparitions, barres coulissantes et fondus de thème',
-  'Full': 'Complètes',
-  'Reduced': 'Réduites',
-  'Off': 'Aucune',
+  'Full':
+      'Complètes',
+  'Reduced':
+      'Réduites',
+  'Off':
+      'Aucune',
   'Turn motion off for a still, distraction-free interface':
       'Désactivez les animations pour une interface immobile',
-  'On your shelf': 'Sur votre étagère',
-  'Documents': 'Documents',
-  'Bookmarks': 'Signets',
-  'Pages read': 'Pages lues',
-  'Average progress': 'Progression moyenne',
-  'Notes': 'Notes',
-  'Search notes': 'Rechercher dans les notes',
-  'No notes yet': 'Aucune note',
+  'On your shelf':
+      'Sur votre étagère',
+  'Documents':
+      'Documents',
+  'Bookmarks':
+      'Signets',
+  'Pages read':
+      'Pages lues',
+  'Average progress':
+      'Progression moyenne',
+  'Notes':
+      'Notes',
+  'Search notes':
+      'Rechercher dans les notes',
+  'No notes yet':
+      'Aucune note',
   'Mark a page while reading, then tap "Add note" on the bookmark to keep a thought next to it.':
       'Marquez une page pendant la lecture, puis touchez « Ajouter une note ».',
-  'Nothing matches': 'Aucun résultat',
-  'Try a different word.': 'Essayez un autre mot.',
-  'New note': 'Nouvelle note',
-  'Edit note': 'Modifier la note',
+  'Nothing matches':
+      'Aucun résultat',
+  'Try a different word.':
+      'Essayez un autre mot.',
+  'New note':
+      'Nouvelle note',
+  'Edit note':
+      'Modifier la note',
   'What do you want to remember about this page?':
       'Que voulez-vous retenir de cette page ?',
-  'Note saved': 'Note enregistrée',
-  'Delete note': 'Supprimer la note',
-  'Note deleted': 'Note supprimée',
-  'Delete this note?': 'Supprimer cette note ?',
+  'Note saved':
+      'Note enregistrée',
+  'Delete note':
+      'Supprimer la note',
+  'Note deleted':
+      'Note supprimée',
+  'Delete this note?':
+      'Supprimer cette note ?',
   'The page stays bookmarked and only the text is removed.':
       'La page reste marquée, seul le texte est retiré.',
-  'Add note': 'Ajouter une note',
-  'Reading stats': 'Statistiques de lecture',
-  'No streak yet': 'Pas encore de série',
+  'Add note':
+      'Ajouter une note',
+  'Reading stats':
+      'Statistiques de lecture',
+  'No streak yet':
+      'Pas encore de série',
   'Read a little every day to keep it going':
       'Lisez un peu chaque jour pour la maintenir',
-  'Last 7 days': '7 derniers jours',
-  'Today': 'Aujourd’hui',
-  'This week': 'Cette semaine',
-  'Pages turned': 'Pages tournées',
-  'Pace': 'Rythme',
-  'Total time': 'Temps total',
-  'Sessions': 'Sessions',
-  'No reading yet': 'Aucune lecture',
+  'Last 7 days':
+      '7 derniers jours',
+  'Today':
+      'Aujourd’hui',
+  'This week':
+      'Cette semaine',
+  'Pages turned':
+      'Pages tournées',
+  'Pace':
+      'Rythme',
+  'Total time':
+      'Temps total',
+  'Sessions':
+      'Sessions',
+  'No reading yet':
+      'Aucune lecture',
   'Open a book and stay a little while; every session shows up here.':
       'Ouvrez un livre et restez un moment ; chaque session apparaîtra ici.',
-  'Search': 'Rechercher',
-  'Books, notes and tags': 'Livres, notes et étiquettes',
+  'Search':
+      'Rechercher',
+  'Books, notes and tags':
+      'Livres, notes et étiquettes',
   'Type any word from a book title, a note, or a tag. Arabic is matched regardless of diacritics and alef forms.':
       'Tapez un mot d’un titre, d’une note ou d’une étiquette. L’arabe est comparé sans diacritiques.',
-  'Tags': 'Étiquettes',
-  'Nothing found': 'Rien trouvé',
-  'New tag': 'Nouvelle étiquette',
-  'Name the tag': 'Nom de l’étiquette',
-  'e.g. Idea, Quote': 'ex. Idée, Citation',
-  'Create': 'Créer',
-  'Edit tag': 'Modifier l’étiquette',
-  'All': 'Tout',
+  'Tags':
+      'Étiquettes',
+  'Nothing found':
+      'Rien trouvé',
+  'New tag':
+      'Nouvelle étiquette',
+  'Name the tag':
+      'Nom de l’étiquette',
+  'e.g. Idea, Quote':
+      'ex. Idée, Citation',
+  'Create':
+      'Créer',
+  'Edit tag':
+      'Modifier l’étiquette',
+  'All':
+      'Tout',
   'Long-press a tag to rename or delete it':
       'Appui long sur une étiquette pour la renommer ou la supprimer',
-  'Shelf': 'Étagère',
-  'e.g. Novels, Work, Study': 'ex. Romans, Travail, Études',
-  'Book updated': 'Livre mis à jour',
-  'All shelves': 'Toutes les étagères',
+  'Shelf':
+      'Étagère',
+  'e.g. Novels, Work, Study':
+      'ex. Romans, Travail, Études',
+  'Book updated':
+      'Livre mis à jour',
+  'All shelves':
+      'Toutes les étagères',
   'Long-press a book to rename it or move it to a shelf':
       'Appui long sur un livre pour le renommer ou le déplacer',
-  'Review': 'Révision',
-  'Due now': 'À réviser',
-  'Coming up': 'À venir',
-  'Start review': 'Commencer la révision',
-  'Nothing to review': 'Rien à réviser',
-  'Forgot': 'Oublié',
-  'Almost': 'Presque',
-  'I know it': 'Je sais',
-  'Skip': 'Passer',
-  'Session complete': 'Session terminée',
-  'Postpone': 'Reporter',
-  '1 day': '1 jour',
-  '3 days': '3 jours',
-  '1 week': '1 semaine',
-  'Tomorrow': 'Demain',
-  'Today’s review': 'Révision du jour',
-  'Nothing is due. Keep writing notes.': 'Rien à réviser. Continuez à écrire.',
-  'Open the page': 'Ouvrir la page',
-  'Backup': 'Sauvegarde',
+  'Review':
+      'Révision',
+  'Due now':
+      'À réviser',
+  'Coming up':
+      'À venir',
+  'Start review':
+      'Commencer la révision',
+  'Nothing to review':
+      'Rien à réviser',
+  'Forgot':
+      'Oublié',
+  'Almost':
+      'Presque',
+  'I know it':
+      'Je sais',
+  'Skip':
+      'Passer',
+  'Session complete':
+      'Session terminée',
+  'Postpone':
+      'Reporter',
+  '1 day':
+      '1 jour',
+  '3 days':
+      '3 jours',
+  '1 week':
+      '1 semaine',
+  'Tomorrow':
+      'Demain',
+  'Today’s review':
+      'Révision du jour',
+  'Nothing is due. Keep writing notes.':
+      'Rien à réviser. Continuez à écrire.',
+  'Open the page':
+      'Ouvrir la page',
+  'Backup':
+      'Sauvegarde',
   'Export or restore everything as one file':
       'Exporter ou restaurer tout en un fichier',
-  'Include PDF files': 'Inclure les fichiers PDF',
-  'Export': 'Exporter',
-  'Restore': 'Restaurer',
-  'Restore from a file?': 'Restaurer depuis un fichier ?',
-  'The backup failed': 'La sauvegarde a échoué',
-  'That file is not a Waraq backup': 'Ce fichier n’est pas une sauvegarde Waraq',
+  'Include PDF files':
+      'Inclure les fichiers PDF',
+  'Export':
+      'Exporter',
+  'Restore':
+      'Restaurer',
+  'Restore from a file?':
+      'Restaurer depuis un fichier ?',
+  'The backup failed':
+      'La sauvegarde a échoué',
+  'That file is not a Waraq backup':
+      'Ce fichier n’est pas une sauvegarde Waraq',
   'This backup was made by a newer version of Waraq':
       'Cette sauvegarde vient d’une version plus récente de Waraq',
-  'Community': 'Communauté',
-  'WhatsApp group': 'Groupe WhatsApp',
+  'Community':
+      'Communauté',
+  'WhatsApp group':
+      'Groupe WhatsApp',
   'Ask questions and share what you are reading':
       'Posez vos questions et partagez vos lectures',
-  'Source code': 'Code source',
-  'Waraq on GitHub': 'Waraq sur GitHub',
-  'Could not open the link': 'Impossible d’ouvrir le lien',
+  'Source code':
+      'Code source',
+  'Waraq on GitHub':
+      'Waraq sur GitHub',
+  'Could not open the link':
+      'Impossible d’ouvrir le lien',
 };
 
 /// Spanish copy, keyed by the English source string.
 const Map<String, String> _es = <String, String>{
-  'A quiet place to read PDFs': 'Un lugar tranquilo para leer PDF',
-  'Cancel': 'Cancelar',
-  'Delete': 'Eliminar',
-  'Save': 'Guardar',
-  'Close': 'Cerrar',
-  'Done': 'Listo',
-  'Open': 'Abrir',
-  'Try again': 'Reintentar',
-  'Import PDF': 'Importar PDF',
-  'Importing…': 'Importando…',
-  'Back': 'Atrás',
-  'Quick actions': 'Acciones rápidas',
-  'Home': 'Inicio',
-  'Library': 'Biblioteca',
-  'Settings': 'Ajustes',
-  'Good morning': 'Buenos días',
-  'Good afternoon': 'Buenas tardes',
-  'Good evening': 'Buenas noches',
-  'Still reading?': '¿Sigues leyendo?',
-  'Continue reading': 'Continuar leyendo',
-  'Start reading': 'Empezar a leer',
-  'Recent': 'Recientes',
-  'Nothing read yet': 'Nada leído todavía',
-  'Your shelf is empty': 'Tu estantería está vacía',
+  'A quiet place to read PDFs':
+      'Un lugar tranquilo para leer PDF',
+  'Cancel':
+      'Cancelar',
+  'Delete':
+      'Eliminar',
+  'Save':
+      'Guardar',
+  'Close':
+      'Cerrar',
+  'Done':
+      'Listo',
+  'Open':
+      'Abrir',
+  'Try again':
+      'Reintentar',
+  'Import PDF':
+      'Importar PDF',
+  'Importing…':
+      'Importando…',
+  'Back':
+      'Atrás',
+  'Quick actions':
+      'Acciones rápidas',
+  'Home':
+      'Inicio',
+  'Library':
+      'Biblioteca',
+  'Settings':
+      'Ajustes',
+  'Good morning':
+      'Buenos días',
+  'Good afternoon':
+      'Buenas tardes',
+  'Good evening':
+      'Buenas noches',
+  'Still reading?':
+      '¿Sigues leyendo?',
+  'Continue reading':
+      'Continuar leyendo',
+  'Start reading':
+      'Empezar a leer',
+  'Recent':
+      'Recientes',
+  'Nothing read yet':
+      'Nada leído todavía',
+  'Your shelf is empty':
+      'Tu estantería está vacía',
   'Import a PDF to start reading. Everything stays on this device.':
       'Importa un PDF para empezar. Todo se queda en este dispositivo.',
   'Documents you open will appear here.':
       'Los documentos que abras aparecerán aquí.',
-  'Page $page of $total': 'Página $page de $total',
-  'Last read $relative': 'Leído $relative',
-  'Search your library': 'Buscar en la biblioteca',
-  'Title': 'Título',
-  'Sort': 'Ordenar',
-  'No matches for “$query”': 'Sin resultados para «$query»',
-  'Delete this document?': '¿Eliminar este documento?',
+  'Search your library':
+      'Buscar en la biblioteca',
+  'Title':
+      'Título',
+  'Sort':
+      'Ordenar',
+  'Delete this document?':
+      '¿Eliminar este documento?',
   'The PDF, its reading position and its bookmarks will be removed from this device.':
       'El PDF, su posición de lectura y sus marcadores se quitarán del dispositivo.',
-  'Document deleted': 'Documento eliminado',
-  '“$title” added to your library': '«$title» añadido a tu biblioteca',
-  'This file is no longer available': 'Este archivo ya no está disponible',
-  'Could not open this document': 'No se pudo abrir este documento',
-  'That file could not be imported': 'No se pudo importar ese archivo',
-  'Pages': 'Páginas',
-  'Marks': 'Marcadores',
-  'Auto': 'Auto',
-  'Display': 'Visualización',
-  'Bookmark this page': 'Marcar esta página',
-  'Remove bookmark': 'Quitar marcador',
-  'Bookmark saved': 'Marcador guardado',
-  'Bookmark removed': 'Marcador quitado',
-  'No marks yet': 'Aún no hay marcadores',
+  'Document deleted':
+      'Documento eliminado',
+  'This file is no longer available':
+      'Este archivo ya no está disponible',
+  'Could not open this document':
+      'No se pudo abrir este documento',
+  'That file could not be imported':
+      'No se pudo importar ese archivo',
+  'Pages':
+      'Páginas',
+  'Marks':
+      'Marcadores',
+  'Auto':
+      'Auto',
+  'Display':
+      'Visualización',
+  'Bookmark this page':
+      'Marcar esta página',
+  'Remove bookmark':
+      'Quitar marcador',
+  'Bookmark saved':
+      'Marcador guardado',
+  'Bookmark removed':
+      'Marcador quitado',
+  'No marks yet':
+      'Aún no hay marcadores',
   'Tap the marker at the top to keep a page.':
       'Toca el marcador de arriba para guardar una página.',
-  'All pages': 'Todas las páginas',
-  'Go to page': 'Ir a la página',
-  'Go': 'Ir',
-  'Page number': 'Número de página',
-  'Auto-scroll': 'Desplazamiento automático',
-  'Start': 'Iniciar',
-  'Pause': 'Pausa',
-  'Speed': 'Velocidad',
-  'Slow': 'Lento',
-  'Fast': 'Rápido',
+  'All pages':
+      'Todas las páginas',
+  'Go to page':
+      'Ir a la página',
+  'Go':
+      'Ir',
+  'Page number':
+      'Número de página',
+  'Auto-scroll':
+      'Desplazamiento automático',
+  'Start':
+      'Iniciar',
+  'Pause':
+      'Pausa',
+  'Speed':
+      'Velocidad',
+  'Slow':
+      'Lento',
+  'Fast':
+      'Rápido',
   'Scrolling stops the moment you touch the page.':
       'El desplazamiento se detiene al tocar la página.',
-  'Page tone': 'Tono de página',
-  'Original': 'Original',
-  'Sepia': 'Sepia',
-  'Night': 'Noche',
-  'Brightness': 'Brillo',
+  'Page tone':
+      'Tono de página',
+  'Original':
+      'Original',
+  'Sepia':
+      'Sepia',
+  'Night':
+      'Noche',
+  'Brightness':
+      'Brillo',
   'Dims the page so it matches the room.':
       'Atenúa la página para adaptarla a la habitación.',
-  'Scrolling': 'Desplazamiento',
-  'Continuous': 'Continuo',
-  'Paged': 'Por página',
-  'One long column, like a scroll.': 'Una columna larga, como un pergamino.',
-  'One page at a time, swiped sideways.': 'Una página a la vez, deslizando.',
-  'Preparing pages': 'Preparando páginas',
+  'Scrolling':
+      'Desplazamiento',
+  'Continuous':
+      'Continuo',
+  'Paged':
+      'Por página',
+  'One long column, like a scroll.':
+      'Una columna larga, como un pergamino.',
+  'One page at a time, swiped sideways.':
+      'Una página a la vez, deslizando.',
+  'Preparing pages':
+      'Preparando páginas',
   'Measuring the document so scrolling stays smooth.':
       'Midiendo el documento para un desplazamiento fluido.',
-  'This document could not be opened': 'No se pudo abrir este documento',
+  'This document could not be opened':
+      'No se pudo abrir este documento',
   'The file may be damaged, password protected or not a PDF.':
       'El archivo puede estar dañado, protegido o no ser un PDF.',
-  'Appearance': 'Apariencia',
-  'Theme': 'Tema',
-  'System': 'Sistema',
-  'Light': 'Claro',
-  'Dark': 'Oscuro',
-  'Follows the device': 'Sigue al dispositivo',
-  'True black for OLED': 'Negro real para OLED',
-  'Wallpaper colors': 'Colores del fondo',
+  'Appearance':
+      'Apariencia',
+  'Theme':
+      'Tema',
+  'System':
+      'Sistema',
+  'Light':
+      'Claro',
+  'Dark':
+      'Oscuro',
+  'Follows the device':
+      'Sigue al dispositivo',
+  'True black for OLED':
+      'Negro real para OLED',
+  'Wallpaper colors':
+      'Colores del fondo',
   'Tint the app with the palette of your wallpaper':
       'Tiñe la app con los colores de tu fondo',
-  'Not available on this device': 'No disponible en este dispositivo',
-  'Accent color': 'Color de acento',
-  'Reading': 'Lectura',
-  'Default scrolling': 'Desplazamiento predeterminado',
-  'Default page tone': 'Tono de página predeterminado',
-  'Language': 'Idioma',
-  'Storage': 'Almacenamiento',
-  'Used by your library': 'Usado por tu biblioteca',
-  'Forget reading positions': 'Olvidar posiciones de lectura',
+  'Not available on this device':
+      'No disponible en este dispositivo',
+  'Accent color':
+      'Color de acento',
+  'Reading':
+      'Lectura',
+  'Default scrolling':
+      'Desplazamiento predeterminado',
+  'Default page tone':
+      'Tono de página predeterminado',
+  'Language':
+      'Idioma',
+  'Storage':
+      'Almacenamiento',
+  'Used by your library':
+      'Usado por tu biblioteca',
+  'Forget reading positions':
+      'Olvidar posiciones de lectura',
   'Positions and bookmarks are removed. Documents stay.':
       'Se quitan posiciones y marcadores. Los documentos se quedan.',
-  'Reading data cleared': 'Datos de lectura borrados',
-  'About': 'Acerca de',
+  'Reading data cleared':
+      'Datos de lectura borrados',
+  'About':
+      'Acerca de',
   'Waraq is a local-first reader. No account, no sync, no tracking. PDF rendering by pdfx.':
       'Waraq es un lector local. Sin cuenta, sin sincronización, sin rastreo. PDF con pdfx.',
-  'Version': 'Versión',
-  'Shape': 'Formas',
-  'Corner style': 'Estilo de esquinas',
+  'Version':
+      'Versión',
+  'Shape':
+      'Formas',
+  'Corner style':
+      'Estilo de esquinas',
   'How rounded cards, sheets and buttons are':
       'Cuánto se redondean tarjetas, hojas y botones',
-  'Soft': 'Suave',
-  'Rounded': 'Redondeado',
-  'Square': 'Recto',
+  'Soft':
+      'Suave',
+  'Rounded':
+      'Redondeado',
+  'Square':
+      'Recto',
   'Applies across the whole app, including the reader':
       'Se aplica a toda la app, incluido el lector',
-  'Motion': 'Movimiento',
-  'Animation level': 'Nivel de animación',
+  'Motion':
+      'Movimiento',
+  'Animation level':
+      'Nivel de animación',
   'Reveals, sliding chrome and theme cross-fades':
       'Apariciones, barras deslizantes y fundidos de tema',
-  'Full': 'Completo',
-  'Reduced': 'Reducido',
-  'Off': 'Sin',
+  'Full':
+      'Completo',
+  'Reduced':
+      'Reducido',
+  'Off':
+      'Sin',
   'Turn motion off for a still, distraction-free interface':
       'Desactiva el movimiento para una interfaz quieta',
-  'On your shelf': 'En tu estantería',
-  'Documents': 'Documentos',
-  'Bookmarks': 'Marcadores',
-  'Pages read': 'Páginas leídas',
-  'Average progress': 'Progreso medio',
-  'Notes': 'Notas',
-  'Search notes': 'Buscar en las notas',
-  'No notes yet': 'Aún no hay notas',
+  'On your shelf':
+      'En tu estantería',
+  'Documents':
+      'Documentos',
+  'Bookmarks':
+      'Marcadores',
+  'Pages read':
+      'Páginas leídas',
+  'Average progress':
+      'Progreso medio',
+  'Notes':
+      'Notas',
+  'Search notes':
+      'Buscar en las notas',
+  'No notes yet':
+      'Aún no hay notas',
   'Mark a page while reading, then tap "Add note" on the bookmark to keep a thought next to it.':
       'Marca una página mientras lees y toca «Añadir nota».',
-  'Nothing matches': 'Sin coincidencias',
-  'Try a different word.': 'Prueba otra palabra.',
-  'New note': 'Nota nueva',
-  'Edit note': 'Editar nota',
+  'Nothing matches':
+      'Sin coincidencias',
+  'Try a different word.':
+      'Prueba otra palabra.',
+  'New note':
+      'Nota nueva',
+  'Edit note':
+      'Editar nota',
   'What do you want to remember about this page?':
       '¿Qué quieres recordar de esta página?',
-  'Note saved': 'Nota guardada',
-  'Delete note': 'Eliminar nota',
-  'Note deleted': 'Nota eliminada',
-  'Delete this note?': '¿Eliminar esta nota?',
+  'Note saved':
+      'Nota guardada',
+  'Delete note':
+      'Eliminar nota',
+  'Note deleted':
+      'Nota eliminada',
+  'Delete this note?':
+      '¿Eliminar esta nota?',
   'The page stays bookmarked and only the text is removed.':
       'La página sigue marcada y solo se quita el texto.',
-  'Add note': 'Añadir nota',
-  'Reading stats': 'Estadísticas de lectura',
-  'No streak yet': 'Aún sin racha',
+  'Add note':
+      'Añadir nota',
+  'Reading stats':
+      'Estadísticas de lectura',
+  'No streak yet':
+      'Aún sin racha',
   'Read a little every day to keep it going':
       'Lee un poco cada día para mantenerla',
-  'Last 7 days': 'Últimos 7 días',
-  'Today': 'Hoy',
-  'This week': 'Esta semana',
-  'Pages turned': 'Páginas pasadas',
-  'Pace': 'Ritmo',
-  'Total time': 'Tiempo total',
-  'Sessions': 'Sesiones',
-  'No reading yet': 'Aún sin lectura',
+  'Last 7 days':
+      'Últimos 7 días',
+  'Today':
+      'Hoy',
+  'This week':
+      'Esta semana',
+  'Pages turned':
+      'Páginas pasadas',
+  'Pace':
+      'Ritmo',
+  'Total time':
+      'Tiempo total',
+  'Sessions':
+      'Sesiones',
+  'No reading yet':
+      'Aún sin lectura',
   'Open a book and stay a little while; every session shows up here.':
       'Abre un libro y quédate un rato; cada sesión aparecerá aquí.',
-  'Search': 'Buscar',
-  'Books, notes and tags': 'Libros, notas y etiquetas',
+  'Search':
+      'Buscar',
+  'Books, notes and tags':
+      'Libros, notas y etiquetas',
   'Type any word from a book title, a note, or a tag. Arabic is matched regardless of diacritics and alef forms.':
       'Escribe una palabra de un título, una nota o una etiqueta. El árabe se compara sin diacríticos.',
-  'Tags': 'Etiquetas',
-  'Nothing found': 'Nada encontrado',
-  'New tag': 'Etiqueta nueva',
-  'Name the tag': 'Nombre de la etiqueta',
-  'e.g. Idea, Quote': 'p. ej. Idea, Cita',
-  'Create': 'Crear',
-  'Edit tag': 'Editar etiqueta',
-  'All': 'Todo',
+  'Tags':
+      'Etiquetas',
+  'Nothing found':
+      'Nada encontrado',
+  'New tag':
+      'Etiqueta nueva',
+  'Name the tag':
+      'Nombre de la etiqueta',
+  'e.g. Idea, Quote':
+      'p. ej. Idea, Cita',
+  'Create':
+      'Crear',
+  'Edit tag':
+      'Editar etiqueta',
+  'All':
+      'Todo',
   'Long-press a tag to rename or delete it':
       'Mantén pulsada una etiqueta para renombrarla o borrarla',
-  'Shelf': 'Estante',
-  'e.g. Novels, Work, Study': 'p. ej. Novelas, Trabajo, Estudio',
-  'Book updated': 'Libro actualizado',
-  'All shelves': 'Todos los estantes',
+  'Shelf':
+      'Estante',
+  'e.g. Novels, Work, Study':
+      'p. ej. Novelas, Trabajo, Estudio',
+  'Book updated':
+      'Libro actualizado',
+  'All shelves':
+      'Todos los estantes',
   'Long-press a book to rename it or move it to a shelf':
       'Mantén pulsado un libro para renombrarlo o moverlo',
-  'Review': 'Repaso',
-  'Due now': 'Para hoy',
-  'Coming up': 'Próximas',
-  'Start review': 'Empezar repaso',
-  'Nothing to review': 'Nada que repasar',
-  'Forgot': 'Olvidé',
-  'Almost': 'Casi',
-  'I know it': 'Lo sé',
-  'Skip': 'Saltar',
-  'Session complete': 'Sesión completada',
-  'Postpone': 'Posponer',
-  '1 day': '1 día',
-  '3 days': '3 días',
-  '1 week': '1 semana',
-  'Tomorrow': 'Mañana',
-  'Today’s review': 'Repaso de hoy',
-  'Nothing is due. Keep writing notes.': 'Nada pendiente. Sigue escribiendo.',
-  'Open the page': 'Abrir la página',
-  'Backup': 'Copia de seguridad',
+  'Review':
+      'Repaso',
+  'Due now':
+      'Para hoy',
+  'Coming up':
+      'Próximas',
+  'Start review':
+      'Empezar repaso',
+  'Nothing to review':
+      'Nada que repasar',
+  'Forgot':
+      'Olvidé',
+  'Almost':
+      'Casi',
+  'I know it':
+      'Lo sé',
+  'Skip':
+      'Saltar',
+  'Session complete':
+      'Sesión completada',
+  'Postpone':
+      'Posponer',
+  '1 day':
+      '1 día',
+  '3 days':
+      '3 días',
+  '1 week':
+      '1 semana',
+  'Tomorrow':
+      'Mañana',
+  'Today’s review':
+      'Repaso de hoy',
+  'Nothing is due. Keep writing notes.':
+      'Nada pendiente. Sigue escribiendo.',
+  'Open the page':
+      'Abrir la página',
+  'Backup':
+      'Copia de seguridad',
   'Export or restore everything as one file':
       'Exporta o restaura todo en un archivo',
-  'Include PDF files': 'Incluir archivos PDF',
-  'Export': 'Exportar',
-  'Restore': 'Restaurar',
-  'Restore from a file?': '¿Restaurar desde un archivo?',
-  'The backup failed': 'La copia falló',
-  'That file is not a Waraq backup': 'Ese archivo no es una copia de Waraq',
+  'Include PDF files':
+      'Incluir archivos PDF',
+  'Export':
+      'Exportar',
+  'Restore':
+      'Restaurar',
+  'Restore from a file?':
+      '¿Restaurar desde un archivo?',
+  'The backup failed':
+      'La copia falló',
+  'That file is not a Waraq backup':
+      'Ese archivo no es una copia de Waraq',
   'This backup was made by a newer version of Waraq':
       'Esta copia viene de una versión más reciente de Waraq',
-  'Community': 'Comunidad',
-  'WhatsApp group': 'Grupo de WhatsApp',
+  'Community':
+      'Comunidad',
+  'WhatsApp group':
+      'Grupo de WhatsApp',
   'Ask questions and share what you are reading':
       'Pregunta y comparte lo que lees',
-  'Source code': 'Código fuente',
-  'Waraq on GitHub': 'Waraq en GitHub',
-  'Could not open the link': 'No se pudo abrir el enlace',
+  'Source code':
+      'Código fuente',
+  'Waraq on GitHub':
+      'Waraq en GitHub',
+  'Could not open the link':
+      'No se pudo abrir el enlace',
 };
