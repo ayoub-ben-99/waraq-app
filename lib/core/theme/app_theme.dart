@@ -115,7 +115,7 @@ abstract final class WaraqTheme {
   static bool _isArabic(AppSettings settings) {
     return switch (settings.language) {
       AppLanguage.arabic => true,
-      AppLanguage.english => false,
+      AppLanguage.english || AppLanguage.french || AppLanguage.spanish => false,
       AppLanguage.system =>
         WidgetsBinding.instance.platformDispatcher.locale.languageCode == 'ar',
     };

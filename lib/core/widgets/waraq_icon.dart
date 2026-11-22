@@ -21,7 +21,8 @@ class WaraqIcon extends StatelessWidget {
   /// Defaults to the muted on-surface colour of the theme.
   final Color? color;
 
-  /// Directional glyphs are mirrored by the framework when this is true.
+  /// Directional glyphs are flipped horizontally under a right-to-left
+  /// text direction when this is true.
   final bool mirrorInRtl;
 
   final String? semanticLabel;
@@ -29,12 +30,20 @@ class WaraqIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = Theme.of(context).colorScheme;
-    return Icon(
+    final bool flip =
+        mirrorInRtl && Directionality.of(context) == TextDirection.rtl;
+    final Widget glyph = Icon(
       icon,
       size: size,
       color: color ?? scheme.onSurfaceVariant,
       semanticLabel: semanticLabel,
-      matchTextDirection: mirrorInRtl,
     );
+    return flip
+        ? Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.diagonal3Values(-1, 1, 1),
+            child: glyph,
+          )
+        : glyph;
   }
 }
