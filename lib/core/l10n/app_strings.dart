@@ -274,6 +274,25 @@ class AppStrings {
   String get noteAddAction => _t('Add note', 'أضف ملاحظة');
   String get noteEditAction => _t('Edit note', 'تعديل الملاحظة');
 
+  // -------------------------------------------------------------- search ---
+  String get searchEverything => _t('Search', 'بحث');
+  String get searchEverythingHint => _t(
+        'Books, notes and tags',
+        'الكتب والملاحظات والوسوم',
+      );
+  String get searchIntro => _t(
+        'Type any word from a book title, a note, or a tag. Arabic is matched regardless of diacritics and alef forms.',
+        'اكتب أي كلمة من عنوان كتاب أو ملاحظة أو وسم. تُطابَق العربية بصرف النظر عن التشكيل وشكل الألف.',
+      );
+  String searchBooks(int count) => _t('Books · $count', 'كتب · $count');
+  String searchNotes(int count) => _t('Notes · $count', 'ملاحظات · $count');
+  String get searchTags => _t('Tags', 'الوسوم');
+  String get searchNoResultsTitle => _t('Nothing found', 'لا نتائج');
+  String searchNoResultsBody(String query) => _t(
+        'No book, note or tag matches “$query”.',
+        'لا كتاب ولا ملاحظة ولا وسم يطابق «$query».',
+      );
+
   // ---------------------------------------------------------------- tags ---
   String get noteTagsLabel => _t('Tags', 'الوسوم');
   String get tagNew => _t('New tag', 'وسم جديد');

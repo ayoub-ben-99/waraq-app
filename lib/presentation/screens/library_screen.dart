@@ -16,6 +16,7 @@ import '../reader/reader_route.dart';
 import '../widgets/book_details_sheet.dart';
 import '../widgets/document_row.dart';
 import '../widgets/import_document.dart';
+import 'search_screen.dart';
 
 enum _SortMode { recent, title }
 
@@ -104,6 +105,19 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                         style: theme.textTheme.displaySmall,
                       ),
                     ),
+                    RoundIconButton(
+                      icon: Icons.search_rounded,
+                      tooltip: strings.searchEverything,
+                      onPressed: () => unawaited(
+                        Navigator.of(context).push<void>(
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const SearchScreen(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: Gap.s),
                     RoundIconButton(
                       icon: importing
                           ? Icons.hourglass_top_rounded

@@ -24,6 +24,7 @@ import '../widgets/book_details_sheet.dart';
 import '../widgets/document_row.dart';
 import '../widgets/import_document.dart';
 import '../widgets/review_banner.dart';
+import 'search_screen.dart';
 import '../widgets/stats_grid.dart';
 
 /// Greeting, the resume card, and the most recent documents.
@@ -112,7 +113,20 @@ class HomeScreen extends ConsumerWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(width: Gap.m),
+                        const SizedBox(width: Gap.s),
+                        RoundIconButton(
+                          icon: Icons.search_rounded,
+                          tooltip: strings.searchEverything,
+                          onPressed: () => unawaited(
+                            Navigator.of(context).push<void>(
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) =>
+                                    const SearchScreen(),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: Gap.s),
                         RoundIconButton(
                           icon: importing
                               ? Icons.hourglass_top_rounded
