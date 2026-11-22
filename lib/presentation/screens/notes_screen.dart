@@ -16,6 +16,8 @@ import '../../domain/entities/bookmark.dart';
 import '../../domain/entities/pdf_document.dart';
 import '../providers/bookmark_providers.dart';
 import '../providers/library_providers.dart';
+import '../providers/review_providers.dart';
+import 'review_screen.dart';
 import '../reader/reader_route.dart';
 import '../widgets/note_editor_sheet.dart';
 
@@ -80,6 +82,7 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
     final ColorScheme scheme = theme.colorScheme;
 
     final List<Bookmark> notes = ref.watch(notesProvider);
+    final int due = ref.watch(reviewDueCountProvider);
     final List<PdfDocument> documents =
         ref.watch(documentsProvider).valueOrNull ?? const <PdfDocument>[];
     final Map<String, PdfDocument> byId = <String, PdfDocument>{
@@ -114,6 +117,23 @@ class _NotesScreenState extends ConsumerState<NotesScreen> {
                         style: theme.textTheme.displaySmall,
                       ),
                     ),
+                    if (notes.isNotEmpty)
+                      IconButton(
+                        tooltip: strings.reviewTitle,
+                        onPressed: () => unawaited(
+                          Navigator.of(context).push<void>(
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  const ReviewScreen(),
+                            ),
+                          ),
+                        ),
+                        icon: Badge(
+                          isLabelVisible: due > 0,
+                          label: Text('$due'),
+                          child: const Icon(Icons.event_repeat_rounded),
+                        ),
+                      ),
                     if (notes.isNotEmpty)
                       Container(
                         padding: const EdgeInsets.symmetric(

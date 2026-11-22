@@ -273,6 +273,64 @@ class AppStrings {
   String get noteAddAction => _t('Add note', 'أضف ملاحظة');
   String get noteEditAction => _t('Edit note', 'تعديل الملاحظة');
 
+  // -------------------------------------------------------------- review ---
+  String get reviewTitle => _t('Review', 'المراجعة');
+  String get reviewDueSection => _t('Due now', 'مستحقة الآن');
+  String get reviewUpcoming => _t('Coming up', 'قادمة');
+  String get reviewStart => _t('Start review', 'ابدأ المراجعة');
+  String get reviewEmptyTitle => _t('Nothing to review', 'لا شيء للمراجعة');
+  String get reviewEmptyBody => _t(
+        'Write a note on any page first. Notes then come back on their own schedule: 1, 3, 7, 16, then 35 days.',
+        'اكتب ملاحظة على أي صفحة أولًا. بعدها تعود الملاحظات وفق جدولها: يوم، ٣، ٧، ١٦ ثم ٣٥ يومًا.',
+      );
+  String reviewDueCount(int count, int total) => _t(
+        '$count of $total notes are due',
+        '$count من $total ملاحظة مستحقة',
+      );
+  String reviewProgress(int index, int total) => _t(
+        '$index / $total',
+        '$index / $total',
+      );
+  String get reviewForgot => _t('Forgot', 'لم أتذكّر');
+  String get reviewPartial => _t('Almost', 'تقريبًا');
+  String get reviewGood => _t('I know it', 'أتذكّرها');
+  String get reviewSkip => _t('Skip', 'تخطّي');
+  String get reviewDoneTitle => _t('Session complete', 'انتهت المراجعة');
+  String reviewDoneBody(int total, int known) => _t(
+        '$total notes reviewed · $known known well',
+        '$total ملاحظة راجعتها · $known متقنة',
+      );
+  String get reviewDone => _t('Done', 'تم');
+  String get reviewPostpone => _t('Postpone', 'تأجيل');
+  String get reviewPostponeDay => _t('1 day', 'يوم');
+  String get reviewPostponeThree => _t('3 days', '٣ أيام');
+  String get reviewPostponeWeek => _t('1 week', 'أسبوع');
+  String reviewPostponed(int days) => _t(
+        'Postponed $days days',
+        'أُجّلت $days أيام',
+      );
+  String reviewNextIn(int days) {
+    if (days <= 0) {
+      return _t('Due now', 'مستحقة الآن');
+    }
+    if (days == 1) {
+      return _t('Tomorrow', 'غدًا');
+    }
+    return _t('In $days days', 'بعد $days يوم');
+  }
+
+  String get homeReviewTitle => _t('Today’s review', 'مراجعة اليوم');
+  String homeReviewBody(int count) => count == 0
+      ? _t(
+          'Nothing is due. Keep writing notes.',
+          'لا شيء مستحق. واصل تدوين الملاحظات.',
+        )
+      : _t(
+          '$count notes are ready to revisit',
+          '$count ملاحظة جاهزة للمراجعة',
+        );
+  String get reviewOpenPage => _t('Open the page', 'افتح الصفحة');
+
   // -------------------------------------------------------------- backup ---
   String get backupTitle => _t('Backup', 'النسخ الاحتياطي');
   String get backupSubtitle => _t(

@@ -90,6 +90,9 @@ while you read.
   card that knows the exact spot.
 - **Shelf statistics** on Home: documents, pages, bookmarks, storage and the
   average progress across everything you have started.
+- **Review**: notes return on a spaced ladder (1, 3, 7, 16, then 35 days).
+  Home shows today's due count, and a session walks through the notes one card at
+  a time with *Forgot · Almost · I know it*, plus a one-tap postpone.
 - **Backup & restore**: Settings → Storage → *Backup* exports the library, reading
   positions, notes and settings into one `.waraq.zip` (PDFs included by default).
   Restoring merges: new books are imported, existing ones are kept, and the newer

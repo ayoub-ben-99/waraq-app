@@ -23,6 +23,7 @@ import '../widgets/continue_card.dart';
 import '../widgets/delete_document.dart';
 import '../widgets/document_row.dart';
 import '../widgets/import_document.dart';
+import '../widgets/review_banner.dart';
 import '../widgets/stats_grid.dart';
 
 /// Greeting, the resume card, and the most recent documents.
@@ -151,6 +152,15 @@ class HomeScreen extends ConsumerWidget {
                 sliver: SliverToBoxAdapter(
                   child: Reveal(
                     index: 2,
+                    child: const ReviewBanner(),
+                  ),
+                ),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: horizontal),
+                sliver: SliverToBoxAdapter(
+                  child: Reveal(
+                    index: 3,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
