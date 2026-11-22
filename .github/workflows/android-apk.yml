@@ -216,6 +216,9 @@ jobs:
             printf -- '- Reader: paged and continuous modes, bookmarks, page notes\n'
             printf -- '- Notes tab: search every note, jump back to its page\n'
             printf -- '- Backup & restore as a single `.waraq.zip`\n'
+            printf -- '- Spaced review, categories & tags, global search, reading stats\n'
+            printf -- '- Launch intro, quick-action dial, custom launcher icon\n'
+            printf -- '- English, العربية, Français, Español\n'
           } > /tmp/release-notes.md
           gh release create "$GITHUB_REF_NAME" "$ASSET" \
             --title "Waraq $VERSION" \
