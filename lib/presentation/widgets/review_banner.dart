@@ -7,6 +7,7 @@ import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/shape_motion.dart';
 import '../../core/theme/tokens.dart';
+import '../../core/widgets/waraq_icon.dart';
 import '../providers/bookmark_providers.dart';
 import '../providers/review_providers.dart';
 import '../screens/review_screen.dart';
@@ -97,8 +98,9 @@ class ReviewBanner extends ConsumerWidget {
                     ),
                   ),
                 ),
-              Icon(
+              WaraqIcon(
                 Icons.chevron_right_rounded,
+                mirrorInRtl: true,
                 color: scheme.onPrimaryContainer.withFraction(0.7),
               ),
             ],

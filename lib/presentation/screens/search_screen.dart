@@ -7,6 +7,7 @@ import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/shape_motion.dart';
 import '../../core/theme/tokens.dart';
+import '../../core/widgets/waraq_icon.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/widgets/document_cover.dart';
 import '../../core/widgets/empty_state.dart';
@@ -297,8 +298,9 @@ class _BookHit extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
+              WaraqIcon(
                 Icons.chevron_right_rounded,
+                mirrorInRtl: true,
                 color: scheme.onSurfaceVariant.withFraction(0.6),
               ),
             ],

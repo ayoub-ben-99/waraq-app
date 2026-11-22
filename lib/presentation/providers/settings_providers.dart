@@ -77,5 +77,7 @@ final localeProvider = Provider<Locale?>((ref) {
     AppLanguage.system => null,
     AppLanguage.english => const Locale('en'),
     AppLanguage.arabic => const Locale('ar'),
+    AppLanguage.french => const Locale('fr'),
+    AppLanguage.spanish => const Locale('es'),
   };
 });

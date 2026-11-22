@@ -49,6 +49,13 @@ jobs:
           # pdfx and the rest of the plugin set are built against NDK 27.
           sed -i 's/ndkVersion = flutter.ndkVersion/ndkVersion = "27.0.12077973"/' android/app/build.gradle.kts
 
+      # `flutter create` writes its own launcher icons, so Waraq's icon (and the
+      # adaptive variant) is installed into the generated project here.
+      - name: Install launcher icon
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 tool/android/install_icons.py
+
       # Signs with the project keystore when WARAQ_SIGNING_B64 is configured,
       # otherwise falls back to the debug key so forks still produce an APK.
       - name: Configure release signing

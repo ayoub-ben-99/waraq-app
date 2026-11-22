@@ -9,6 +9,7 @@ import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/shape_motion.dart';
 import '../../core/theme/tokens.dart';
+import '../../core/widgets/waraq_icon.dart';
 import '../../core/utils/links.dart';
 import '../../core/widgets/link_tile.dart';
 import '../../core/utils/formatters.dart';
@@ -243,35 +244,32 @@ class SettingsScreen extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: Gap.m),
+              SectionHeader(title: strings.languageTitle),
               _SettingsCard(
                 children: <Widget>[
-                  _LabelRow(
-                    icon: Icons.translate_rounded,
-                    title: strings.languageTitle,
-                  ),
+                  for (int index = 0;
+                      index < AppLanguage.values.length;
+                      index++) ...<Widget>[
+                    _LanguageRow(
+                      language: AppLanguage.values[index],
+                      selected: settings.language == AppLanguage.values[index],
+                      onTap: () => unawaited(
+                        ref
+                            .read(settingsProvider.notifier)
+                            .setLanguage(AppLanguage.values[index]),
+                      ),
+                    ),
+                    if (index < AppLanguage.values.length - 1)
+                      const _CardDivider(),
+                  ],
+                  const _CardDivider(),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(Gap.l, 0, Gap.l, Gap.l),
-                    child: Wrap(
-                      spacing: Gap.s,
-                      runSpacing: Gap.s,
-                      children: <Widget>[
-                        for (final AppLanguage language in AppLanguage.values)
-                          ChoiceChip(
-                            label: Text(
-                              switch (language) {
-                                AppLanguage.system => strings.languageSystem,
-                                AppLanguage.english => strings.languageEnglish,
-                                AppLanguage.arabic => strings.languageArabic,
-                              },
-                            ),
-                            selected: settings.language == language,
-                            onSelected: (bool _) => unawaited(
-                              ref
-                                  .read(settingsProvider.notifier)
-                                  .setLanguage(language),
-                            ),
-                          ),
-                      ],
+                    child: Text(
+                      strings.languageHint,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
                     ),
                   ),
                 ],
@@ -362,6 +360,57 @@ class SettingsScreen extends ConsumerWidget {
     ref.invalidate(bookmarksProvider);
     messenger.showSnackBar(
       SnackBar(content: Text(strings.readingDataCleared)),
+    );
+  }
+}
+
+class _LanguageRow extends StatelessWidget {
+  const _LanguageRow({
+    required this.language,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final AppLanguage language;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppStrings strings = AppStrings.of(context);
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme scheme = theme.colorScheme;
+
+    final String native = switch (language) {
+      AppLanguage.system => strings.languageSystem,
+      AppLanguage.english => strings.languageEnglishNative,
+      AppLanguage.arabic => strings.languageArabicNative,
+      AppLanguage.french => strings.languageFrenchNative,
+      AppLanguage.spanish => strings.languageSpanishNative,
+    };
+
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Gap.l,
+          vertical: Gap.m,
+        ),
+        child: Row(
+          children: <Widget>[
+            WaraqIcon(Icons.translate_rounded, size: 20, color: scheme.onSurfaceVariant),
+            const SizedBox(width: Gap.m),
+            Expanded(
+              child: Text(native, style: theme.textTheme.titleMedium),
+            ),
+            Icon(
+              selected ? Icons.check_circle_rounded : Icons.circle_outlined,
+              size: 20,
+              color: selected ? scheme.primary : scheme.outlineVariant,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -510,9 +559,10 @@ class _ActionRow extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(
+            WaraqIcon(
               Icons.chevron_right_rounded,
               size: 20,
+              mirrorInRtl: true,
               color: theme.colorScheme.onSurfaceVariant.withFraction(0.7),
             ),
           ],

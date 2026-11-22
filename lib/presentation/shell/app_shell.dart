@@ -7,6 +7,7 @@ import '../screens/home_screen.dart';
 import '../screens/library_screen.dart';
 import '../screens/notes_screen.dart';
 import '../screens/settings_screen.dart';
+import '../widgets/feature_fab.dart';
 
 /// Four top-level destinations. Each keeps its scroll position because the
 /// shell uses an [IndexedStack].
@@ -30,13 +31,18 @@ class _AppShellState extends ConsumerState<AppShell> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _index,
-        children: const <Widget>[
-          HomeScreen(),
-          LibraryScreen(),
-          NotesScreen(),
-          SettingsScreen(),
+      body: Stack(
+        children: <Widget>[
+          IndexedStack(
+            index: _index,
+            children: const <Widget>[
+              HomeScreen(),
+              LibraryScreen(),
+              NotesScreen(),
+              SettingsScreen(),
+            ],
+          ),
+          if (_index != 3) const FeatureFab(),
         ],
       ),
       bottomNavigationBar: WaraqBottomDock(

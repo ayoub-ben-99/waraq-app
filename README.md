@@ -65,6 +65,19 @@ while you read.
 - **Sepia / night page tone**, **brightness dimming**, and **bookmark page** with a
   one-tap toggle plus a bookmarks sheet.
 
+### First impression
+- A **launch intro**: the mark springs in, the name rises, and the shell opens on
+  its own after ~2 s. Shown once per launch; still when motion is off or the
+  system asks for reduced animations.
+- One **floating action dial** at the end of the screen (RTL-aware) unfolds
+  import, search, review, stats and backup with a staggered entrance; tap
+  outside or press again to close. The list is one config array
+  (`presentation/shell/feature_actions.dart`).
+- The launcher icon (legacy + adaptive, background `#F5EFDF`) is installed into
+  the generated Android project at build time from `assets/icon.png`.
+- Four interface languages: English, العربية, Français, Español — each listed in
+  its own name, applied at startup, RTL for Arabic only.
+
 ### Theming & feel
 - **Rubik** for Latin text and **Cairo** for Arabic glyphs, both bundled (SIL OFL)
   so typography is identical offline and on every device.

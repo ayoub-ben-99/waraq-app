@@ -7,7 +7,7 @@ enum AppThemeMode { system, light, dark, amoled }
 enum AccentSeed { indigo, jade, clay, plum, sand }
 
 /// Interface language. Arabic renders right-to-left.
-enum AppLanguage { system, english, arabic }
+enum AppLanguage { system, english, arabic, french, spanish }
 
 /// Corner language of the interface, in the spirit of Material 3 shape scales.
 enum ShapeStyle {

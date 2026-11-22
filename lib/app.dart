@@ -8,6 +8,7 @@ import 'core/theme/shape_motion.dart';
 import 'core/theme/tokens.dart';
 import 'domain/entities/app_settings.dart';
 import 'presentation/providers/settings_providers.dart';
+import 'presentation/screens/intro_screen.dart';
 import 'presentation/shell/app_shell.dart';
 
 class WaraqApp extends ConsumerWidget {
@@ -38,7 +39,12 @@ class WaraqApp extends ConsumerWidget {
               WaraqMotion.forStyle(settings.motionStyle).theme,
           themeAnimationCurve: Motion.emphasized,
           locale: locale,
-          supportedLocales: const <Locale>[Locale('en'), Locale('ar')],
+          supportedLocales: const <Locale>[
+            Locale('en'),
+            Locale('ar'),
+            Locale('fr'),
+            Locale('es'),
+          ],
           localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
@@ -56,9 +62,29 @@ class WaraqApp extends ConsumerWidget {
               child: child ?? const SizedBox.shrink(),
             );
           },
-          home: const AppShell(),
+          home: const _RootGate(),
         );
       },
     );
+  }
+}
+
+/// Shows the intro once per process launch, then hands over to the shell.
+class _RootGate extends StatefulWidget {
+  const _RootGate();
+
+  @override
+  State<_RootGate> createState() => _RootGateState();
+}
+
+class _RootGateState extends State<_RootGate> {
+  bool _ready = false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (_ready) {
+      return const AppShell();
+    }
+    return IntroScreen(onDone: () => setState(() => _ready = true));
   }
 }

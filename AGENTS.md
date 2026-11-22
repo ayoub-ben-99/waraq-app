@@ -64,6 +64,12 @@ only.
   `PositionedDirectional`, `AlignmentDirectional`, `start`/`end`). Mirror icons
   (`Icons.arrow_back_rounded` ↔ `arrow_forward_rounded`) when the direction
   flips; `Directionality.of(context) == TextDirection.rtl` is the test.
+- **Icons go through `WaraqIcon`** (`core/widgets/waraq_icon.dart`) whenever a
+  size or colour is set explicitly. Pass `mirrorInRtl: true` for directional
+  glyphs (chevrons, arrows); the framework then flips them in Arabic.
+- **Strings** live in `AppStrings` with English + Arabic inline and French/Spanish
+  overlays keyed by the English text. A new string falls back to English until it
+  is added to `_fr`/`_es`.
 - **Shape & motion are theme extensions.** Never hard-code a radius or duration in
   a new widget: read `WaraqShape.of(context)` (`xs/sm/md/lg/xl`, `pill`, `allMd`,
   `topXl`) and `WaraqMotion.of(context)` (`tap/fast/base/slow/theme`, `stagger`,
