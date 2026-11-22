@@ -107,3 +107,16 @@ double clampDouble(double value, double min, double max) {
   }
   return value;
 }
+
+/// `0` → `0m`, `45` → `45m`, `80` → `1h 20m`.
+String formatMinutes(int minutes) {
+  if (minutes <= 0) {
+    return '0m';
+  }
+  final int hours = minutes ~/ 60;
+  final int rest = minutes % 60;
+  if (hours == 0) {
+    return '${rest}m';
+  }
+  return rest == 0 ? '${hours}h' : '${hours}h ${rest}m';
+}

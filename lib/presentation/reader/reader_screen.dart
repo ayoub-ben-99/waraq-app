@@ -20,6 +20,7 @@ import '../../domain/entities/pdf_document.dart';
 import '../../domain/entities/reading_position.dart';
 import '../providers/bookmark_providers.dart';
 import '../providers/library_providers.dart';
+import '../providers/session_providers.dart';
 import '../providers/settings_providers.dart';
 import 'reader_controller.dart';
 import 'widgets/auto_scroll_sheet.dart';
@@ -53,6 +54,8 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   bool _opening = true;
   bool _systemUiHidden = false;
   int _toolIndex = 0;
+  DateTime? _sessionStart;
+  int _sessionStartPage = 1;
 
   @override
   void initState() {
@@ -99,6 +102,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         vsync: this,
       );
       controller.addListener(_handleChromeChange);
+
+      _sessionStart = DateTime.now();
+      _sessionStartPage = controller.currentPage;
 
       setState(() {
         _renderer = renderer;
@@ -276,6 +282,16 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   @override
   void dispose() {
     final ReaderController? controller = _controller;
+    final DateTime? startedAt = _sessionStart;
+    if (startedAt != null && controller != null) {
+      unawaited(
+        ref.read(sessionsProvider.notifier).record(
+              documentId: widget.document.id,
+              startedAt: startedAt,
+              pages: controller.currentPage - _sessionStartPage,
+            ),
+      );
+    }
     if (controller != null) {
       controller.removeListener(_handleChromeChange);
       controller.dispose();

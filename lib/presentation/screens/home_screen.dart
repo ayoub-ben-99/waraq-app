@@ -25,6 +25,7 @@ import '../widgets/document_row.dart';
 import '../widgets/import_document.dart';
 import '../widgets/review_banner.dart';
 import 'search_screen.dart';
+import 'stats_screen.dart';
 import '../widgets/stats_grid.dart';
 
 /// Greeting, the resume card, and the most recent documents.
@@ -179,7 +180,17 @@ class HomeScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         SectionHeader(title: strings.sectionStats),
-                        StatsGrid(stats: stats),
+                        StatsGrid(
+                          stats: stats,
+                          onTap: () => unawaited(
+                            Navigator.of(context).push<void>(
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) =>
+                                    const StatsScreen(),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

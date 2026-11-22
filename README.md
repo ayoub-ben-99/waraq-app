@@ -96,6 +96,9 @@ while you read.
 - **Global search**: one field over books (title, shelf), notes (text and tag
   names) and tags, with Arabic-aware matching — diacritics, alef/ya/ta-marbuta
   forms and Latin case are all folded, so «الأهداف» finds «الاهداف».
+- **Reading stats**: every visit to the reader is recorded (from 20 seconds up),
+  feeding a streak, today/this-week minutes, a seven-day bar chart, lifetime
+  pages and reading pace. Reachable by tapping the shelf stats on Home.
 - **Backup & restore**: Settings → Storage → *Backup* exports the library, reading
   positions, notes and settings into one `.waraq.zip` (PDFs included by default).
   Restoring merges: new books are imported, existing ones are kept, and the newer

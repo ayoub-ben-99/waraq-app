@@ -9,6 +9,7 @@ import '../domain/repositories/tag_repository.dart';
 import 'local/local_document_repository.dart';
 import 'local/local_reading_state_repository.dart';
 import 'local/local_review_repository.dart';
+import 'local/local_session_repository.dart';
 import 'local/local_tag_repository.dart';
 import 'local/prefs_settings_repository.dart';
 
@@ -41,4 +42,8 @@ final reviewRepositoryProvider = Provider<ReviewRepository>((ref) {
 
 final tagRepositoryProvider = Provider<TagRepository>((ref) {
   return LocalTagRepository(ref.watch(sharedPreferencesProvider));
+});
+
+final sessionRepositoryProvider = Provider<LocalSessionRepository>((ref) {
+  return LocalSessionRepository(ref.watch(sharedPreferencesProvider));
 });

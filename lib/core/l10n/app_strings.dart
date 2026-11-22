@@ -274,6 +274,30 @@ class AppStrings {
   String get noteAddAction => _t('Add note', 'أضف ملاحظة');
   String get noteEditAction => _t('Edit note', 'تعديل الملاحظة');
 
+  // --------------------------------------------------------- reading stats ---
+  String get statsTitle => _t('Reading stats', 'إحصاءات القراءة');
+  String statsStreak(int days) => days == 1
+      ? _t('1 day streak', 'يوم واحد متتالٍ')
+      : _t('$days day streak', '$days أيام متتالية');
+  String get statsStreakNone => _t('No streak yet', 'لا سلسلة بعد');
+  String get statsStreakBody => _t(
+        'Read a little every day to keep it going',
+        'اقرأ قليلًا كل يوم لتبقيها مستمرة',
+      );
+  String get statsLastSevenDays => _t('Last 7 days', 'آخر ٧ أيام');
+  String get statsToday => _t('Today', 'اليوم');
+  String get statsThisWeek => _t('This week', 'هذا الأسبوع');
+  String get statsPagesRead => _t('Pages turned', 'صفحات مقروءة');
+  String get statsSpeed => _t('Pace', 'السرعة');
+  String statsPagesPerHour(int pages) => _t('$pages p/h', '$pages ص/س');
+  String get statsTotalTime => _t('Total time', 'إجمالي الوقت');
+  String get statsSessions => _t('Sessions', 'جلسات');
+  String get statsEmptyTitle => _t('No reading yet', 'لا قراءة بعد');
+  String get statsEmptyBody => _t(
+        'Open a book and stay a little while; every session shows up here.',
+        'افتح كتابًا واقرأ قليلًا؛ ستظهر كل جلسة هنا.',
+      );
+
   // -------------------------------------------------------------- search ---
   String get searchEverything => _t('Search', 'بحث');
   String get searchEverythingHint => _t(
