@@ -1,61 +1,46 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:waraq/core/l10n/app_strings.dart';
 
-/// Builds [AppStrings] for a locale by looking it up from a real context.
-Future<AppStrings> _stringsFor(
-  WidgetTester tester,
-  Locale locale,
-) async {
-  late AppStrings captured;
-  await tester.pumpWidget(
-    MaterialApp(
-      locale: locale,
-      home: Builder(
-        builder: (BuildContext context) {
-          captured = AppStrings.of(context);
-          return const SizedBox.shrink();
-        },
-      ),
-    ),
-  );
-  return captured;
-}
+/// The catalog only needs a locale, so it is exercised without a widget tree.
+AppStrings strings(Locale locale) => AppStrings(locale);
 
 void main() {
-  testWidgets('English stays the source language', (WidgetTester tester) async {
-    final AppStrings strings = await _stringsFor(tester, const Locale('en'));
-    expect(strings.libraryTitle, 'Library');
-    expect(strings.isArabic, isFalse);
+  test('English stays the source language', () {
+    final AppStrings en = strings(const Locale('en'));
+    expect(en.libraryTitle, 'Library');
+    expect(en.pageOf(3, 12), 'Page 3 of 12');
+    expect(en.isArabic, isFalse);
   });
 
-  testWidgets('Arabic is translated and flagged right-to-left',
-      (WidgetTester tester) async {
-    final AppStrings strings = await _stringsFor(tester, const Locale('ar'));
-    expect(strings.libraryTitle, 'المكتبة');
-    expect(strings.isArabic, isTrue);
+  test('Arabic is translated and flagged right-to-left', () {
+    final AppStrings ar = strings(const Locale('ar'));
+    expect(ar.libraryTitle, 'المكتبة');
+    expect(ar.pageOf(3, 12), 'صفحة 3 من 12');
+    expect(ar.isArabic, isTrue);
   });
 
-  testWidgets('French reads from the overlay', (WidgetTester tester) async {
-    final AppStrings strings = await _stringsFor(tester, const Locale('fr'));
-    expect(strings.libraryTitle, 'Bibliothèque');
-    expect(strings.navSettings, 'Réglages');
-    expect(strings.pageOf(3, 12), 'Page 3 sur 12');
-    expect(strings.isArabic, isFalse);
+  test('French reads from the overlay', () {
+    final AppStrings fr = strings(const Locale('fr'));
+    expect(fr.libraryTitle, 'Bibliothèque');
+    expect(fr.navSettings, 'Réglages');
+    expect(fr.backupTitle, 'Sauvegarde');
+    expect(fr.pageOf(3, 12), 'Page 3 sur 12');
+    expect(fr.isArabic, isFalse);
   });
 
-  testWidgets('Spanish reads from the overlay', (WidgetTester tester) async {
-    final AppStrings strings = await _stringsFor(tester, const Locale('es'));
-    expect(strings.libraryTitle, 'Biblioteca');
-    expect(strings.pageOf(3, 12), 'Página 3 de 12');
-    expect(strings.isArabic, isFalse);
+  test('Spanish reads from the overlay', () {
+    final AppStrings es = strings(const Locale('es'));
+    expect(es.libraryTitle, 'Biblioteca');
+    expect(es.navSettings, 'Ajustes');
+    expect(es.pageOf(3, 12), 'Página 3 de 12');
+    expect(es.isArabic, isFalse);
   });
 
-  testWidgets('An untranslated string falls back to English',
-      (WidgetTester tester) async {
-    final AppStrings strings = await _stringsFor(tester, const Locale('fr'));
-    // Deliberately long copy that was translated: both paths return text.
-    expect(strings.deleteDocumentTitle, isNotEmpty);
-    expect(strings.backupTitle, 'Sauvegarde');
+  test('An untranslated string falls back to English', () {
+    final AppStrings fr = strings(const Locale('fr'));
+    expect(fr.documentsCount(1), '1 document');
+    expect(fr.deleteDocumentTitle, isNotEmpty);
   });
 }
